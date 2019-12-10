@@ -1,0 +1,12 @@
+{
+    "author": "Qiufeng",
+    "music_author": "Toby Fox",
+    "version": "0.0.0.1",
+    "name": "Determination Easy",
+    "root": "/williamye/program/pyxel_projects/muser/test/",
+    "midi": "DeterminationEasy.mid",
+    "music": "Toby Fox - Determination.flac",
+    "output": "DeterminationEasy.sheet",
+    "tempo_index": 1,
+    "indexes": [2]
+}
