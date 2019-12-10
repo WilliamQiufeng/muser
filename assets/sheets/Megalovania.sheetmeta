@@ -1,0 +1,17 @@
+{
+    "name": "Megalovania",
+    "root": "/williamye/program/pyxel_projects/muser/assets/sheets/",
+    "output": "Megalovania.sheet",
+    "sheets": [
+        {
+            "author": "Qiufeng",
+            "music_author": "Toby Fox",
+            "version": "0.0.0.1",
+            "midi": "Undertale_-_Megalovania.mid",
+            "music": "Toby Fox - MEGALOVANIA.flac",
+            "tempo_index": 1,
+            "indexes": [3],
+            "level": "normal"
+        }
+    ]
+}

@@ -16,6 +16,7 @@ class SourceSheetInput:
         self.music_author = self.preprocess["music_author"] if "music_author" in self.preprocess.keys() else "Unknown"
         self.version = self.preprocess["version"] if "version" in self.preprocess.keys() else "0.0.0.0"
         self.name = self.preprocess["name"] if "name" in self.preprocess.keys() else "Unknown"
+        self.level = self.preprocess["level"] if "level" in self.preprocess.keys() else "Normal"
         self.music = self.preprocess["music"] if "music" in self.preprocess.keys(
         ) else "/Unknown"
         self.tempo = self.preprocess["tempo"] if "tempo" in self.preprocess.keys() else 60

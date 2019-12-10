@@ -26,9 +26,23 @@ class Frames:
         LEFT_PRESSED = Frame(48, 24, 16, 16)
         RIGHT_UNPRESSED = Frame(32, 24, 16, 16)
         RIGHT_PRESSED = Frame(64, 24, 16, 16)
+        UP_UNPRESSED, DOWN_UNPRESSED, UP_PRESSED, DOWN_PRESSED = (Frame(80 + 16 * x, 24, 16, 16) for x in range(4))
         PLAY_UNPRESSED = Frame(0, 64, 16, 16)
         PLAY_PRESSED = Frame(16, 64, 16, 16)
     class PlayThrough:
         DIRECTIONS = [Frame(1 + x * 8, 5, 6, 6) for x in range(4)]
         INDICATOR_CIRCLE = Frame(32, 48, 32, 32)
         INDICATOR_RES = [Frame(x * 8, 16, 8, 8) for x in range(5)]
+    class Result:
+        S, A, B, C, D, F = (Frame(x * 16, 112, 16, 16) for x in range(6))
+        
+        @staticmethod
+        def GRADES():
+            return [
+                Frames.Result.S,
+                Frames.Result.A,
+                Frames.Result.B,
+                Frames.Result.C,
+                Frames.Result.D,
+                Frames.Result.F
+            ]

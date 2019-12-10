@@ -5,10 +5,21 @@ class AbsSheetOutput:
         self.rel_in = rel_in
     def __repr__(self):
         NEWLINE = "\n"
-        return f"""{self.rel_in.author}/{self.rel_in.music_author}/{self.rel_in.version}/{self.rel_in.name}/{self.rel_in.music}/{self.rel_in.music_offset}/{NEWLINE.join([str(x) for x in self.rel_in.abs_notes])}"""
+        return "#".join(
+            [str(ele) for ele in [
+                self.rel_in.author,
+                self.rel_in.music_author,
+                self.rel_in.version,
+                self.rel_in.name,
+                self.rel_in.music,
+                self.rel_in.music_offset,
+                self.rel_in.level,
+                NEWLINE.join([str(x) for x in self.rel_in.abs_notes])
+            ]]
+        )
 
 class AbsNote:
-    def __init__(self, offset, beat, pass_time, absolutified = False, side = random.randint(0, 3)):
+    def __init__(self, offset, beat = 0, pass_time = 2000, absolutified = False, side = random.randint(0, 3)):
         self.offset = offset
         self.beat = beat
         self.pass_time = pass_time

@@ -4,6 +4,7 @@ from game.widgets import *
 from game.config import *
 from game.playthrough.note_manager import *
 from sheet.reader.sheet_reader import *
+from game.sounds import *
 import util
 import pyxel
 import pygame
@@ -46,7 +47,10 @@ class Casts:
         BUTTONS = [
             Button(16, Constants.Cast.center(16, 16)[1], pyxel.KEY_LEFT,Frames.LevelSelection.LEFT_PRESSED, Frames.LevelSelection.LEFT_UNPRESSED, lambda: Casts.LevelSelection.increase(Config.CAST, -1)),
             Button(Constants.Cast.WIDTH - 32, Constants.Cast.center(16, 16)[1], pyxel.KEY_RIGHT,Frames.LevelSelection.RIGHT_PRESSED, Frames.LevelSelection.RIGHT_UNPRESSED, lambda: Casts.LevelSelection.increase(Config.CAST, 1)),
-            Button(Constants.Cast.center(16, 16)[0], Constants.Cast.HEIGHT - 32, pyxel.KEY_SPACE, Frames.LevelSelection.PLAY_PRESSED, Frames.LevelSelection.PLAY_UNPRESSED, lambda: Casts.LevelSelection.select(Config.CAST))
+            Button(Constants.Cast.center(16, 16)[0], Constants.Cast.HEIGHT - 32, pyxel.KEY_SPACE, Frames.LevelSelection.PLAY_PRESSED, Frames.LevelSelection.PLAY_UNPRESSED, lambda: Casts.LevelSelection.select(Config.CAST)),
+            KeyListener(pyxel.KEY_UP, on_click=lambda: Casts.LevelSelection.increaseLevel(Config.CAST, 1)),
+            KeyListener(pyxel.KEY_DOWN, on_click=lambda: Casts.LevelSelection.increaseLevel(
+                Config.CAST, -1))
         ]
         @staticmethod
         def increase(obj, inc):
@@ -56,11 +60,20 @@ class Casts:
             if obj.selection < 0:
                 obj.selection = len(obj.sheets) - 1
             obj.update_meta()
+
+        @staticmethod
+        def increaseLevel(obj, inc):
+            obj.level_selection += inc
+            if obj.level_selection >= len(obj.sheet):
+                obj.level_selection = 0
+            if obj.level_selection < 0:
+                obj.level_selection = len(obj.sheet) - 1
         @staticmethod
         def select(obj):
             obj.finished = True
         def __init__(self):
             self.selection = 0
+            self.level_selection = 0
             self.finished = False
             self.sheets = []
             for path in Config.SHEET_PATHS:
@@ -70,29 +83,31 @@ class Casts:
             print(self.sheets)
             self.update_meta()
         def update_meta(self):
-            self.sheet = SheetReader(self.sheets[self.selection])
-            self.sheet.read_all()
-            self.music_source = "/".join(self.sheets[self.selection].split("/")[:-1]) + "/" + self.sheet.metadata["music"]
+            self.level_selection = 0
+            self.sheet = SheetReader.from_sheets(self.sheets[self.selection])
+            self.music_source = self.sheet[self.level_selection].metadata["music"]
             pygame.mixer.music.stop()
             pygame.mixer.music.load(self.music_source)
-                
             pygame.mixer.music.play()
         def update(self):
             for btn in Casts.LevelSelection.BUTTONS:
                 btn.update()
         def draw(self):
             for btn in Casts.LevelSelection.BUTTONS:
-                btn.draw()
+                if "draw" in dir(btn):
+                    btn.draw()
             positions = [
-                util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 3, 6, 1, x + 1) for x in range(4)]
-            pyxel.text(*positions[0], f'{self.sheet.metadata["name"]}', 12)
-            pyxel.text(*positions[1], f'author:       {self.sheet.metadata["author"]}', 11)
-            pyxel.text(*positions[2], f'music author: {self.sheet.metadata["music_author"]}', 10)
-            pyxel.text(*positions[3], f'version:      {self.sheet.metadata["version"]}', 9)
+                util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 3, 7, 1, x + 1) for x in range(5)]
+            level = self.sheet[self.level_selection]
+            pyxel.text(*positions[0], f'{level.metadata["name"]}', 12)
+            pyxel.text(*positions[1], f'author:       {level.metadata["author"]}', 11)
+            pyxel.text(*positions[2], f'music author: {level.metadata["music_author"]}', 10)
+            pyxel.text(*positions[3], f'version:      {level.metadata["version"]}', 9)
+            pyxel.text(*positions[4], f'Level:        {level.metadata["level"]}', 8)
         def is_finished(self):
             return self.finished
         def next_cast(self):
-            return Casts.PlayThrough(self.sheet, self.music_source)
+            return Casts.PlayThrough(self.sheet[self.level_selection], self.music_source)
     class PlayThrough(Cast):
         UPDATES = [
             KeyListener(pyxel.KEY_S, on_touch=lambda: Casts.PlayThrough.touch(0)),
@@ -122,15 +137,48 @@ class Casts:
             # print(f"last: {Config.TOUCHED}")
             self.note_manager.update()
             # print(f"cur: {Config.TOUCHED}")
-            self.finished = self.note_manager.finished or pyxel.btn(pyxel.KEY_Q)
+            self.finished = self.note_manager.finished
+            self.quit = pyxel.btn(pyxel.KEY_Q)
         def draw(self):
             Frames.PlayThrough.INDICATOR_CIRCLE.draw(*Constants.Cast.center(Frames.PlayThrough.INDICATOR_CIRCLE.width, Frames.PlayThrough.INDICATOR_CIRCLE.height))
             self.note_manager.draw()
         def is_finished(self):
+            return self.finished or self.quit
+        def next_cast(self):
+            return Casts.Result(self) if self.finished else Casts.LevelSelection()
+    class Result(Cast):
+        UPDATES = [
+            KeyListener(pyxel.KEY_ENTER, on_click=lambda: Casts.Result.finish(Config.CAST))
+        ]
+        @staticmethod
+        def finish(obj):
+            obj.finished = True
+        def __init__(self, play_through):
+            self.play_through = play_through
+            self.finished = False
+            self.score_percentage = self.play_through.note_manager.score / Constants.PlayThrough.Score.TOTAL_SCORE * 100
+            self.grade_frame = Constants.Result.Grade.getGradeFrame(self.score_percentage)
+            self.count = NoteManager.count(self.play_through.note_manager)
+            if self.score_percentage >= Constants.Result.Grade.A:
+                Sounds.Grade.A.play()
+            else:
+                Sounds.Grade.C.play()
+            
+        def update(self):
+            for upd in Casts.Result.UPDATES:
+                upd.update()
+        def draw(self):
+            pyxel.cls(2 if self.score_percentage >= Constants.Result.Grade.A else 3)
+            counter_positions = [util.grid(
+                Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 1 + (x % 2) * 2, 12 + (0 if x < 2 else 1)) for x in range(4)]
+            count_prop = self.count.get_prop()
+            for x in range(4):
+                key = list(count_prop.keys())[x]
+                pyxel.text(*counter_positions[x], f"{key}: {count_prop[key]}", 12 - x)
+            self.grade_frame.draw(*Constants.Cast.center(self.grade_frame.width, self.grade_frame.height))
+        def is_finished(self):
             return self.finished
         def next_cast(self):
             return Casts.LevelSelection()
-
-
 
 Config.CAST = Casts.Intro()

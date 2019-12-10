@@ -24,7 +24,7 @@ class PositionedNote:
         else:
             return False
     def move(self, total_time: float):
-        pixels = (Constants.PlayThrough.DISTANCES()[self.note.side] * (total_time - self.note.offset)) / self.note.beat
+        pixels = (Constants.PlayThrough.DISTANCES()[self.note.side] * (total_time - self.note.offset)) / self.note.pass_time
         self.pos[0] = self.initial_pos[0] + self.direction[0] * pixels
         self.pos[1] = self.initial_pos[1] + self.direction[1] * pixels
         #print(f"Move {self.note} {pixels} pixels to {self.pos} from {self.initial_pos}")
@@ -41,7 +41,7 @@ class PositionedNote:
                 # print(
                 #     f"This note is in bound and is touched at {self.pos}, distance to center: {Constants.PlayThrough.DistanceToCenter(self.pos)}: {self.note}, result: {Constants.PlayThrough.NoteIndicator.INDICATOR_NAME[result]}")
             if result != Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND:
-                print(f"{self.note} {Config.TOUCHED}, {Constants.PlayThrough.NoteIndicator.INDICATOR_NAME[result]}")
+                # print(f"{self.note} {Config.TOUCHED}, {Constants.PlayThrough.NoteIndicator.INDICATOR_NAME[result]}")
                 if Config.TOUCHED[self.note.side] or result == Constants.PlayThrough.NoteIndicator.MISS:
                     self.finished = True
                     self.in_scene = False

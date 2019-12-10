@@ -48,9 +48,9 @@ To calculate how many pixels per millisecond:
 px/ms = l / t
 """
 class NoteSpeed:
-    SLOW = 2
-    MEDIUM = 1
-    FAST = 0.5
+    SLOW = 2000
+    MEDIUM = 1000
+    FAST = 500
 
     @staticmethod
     def to_speed(length: int, time: int):

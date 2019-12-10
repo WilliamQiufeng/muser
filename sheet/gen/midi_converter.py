@@ -128,8 +128,8 @@ def to_json(file, tempo_index = 0, indexes = [1], simulate = False):
             face = face_dict[tmp[INDEX_NOTE]]
             abs_notes.append(
                 AbsNote(tmp[INDEX_OFFSET] * 1000,
-                2000,# tmp["length"],
-                NoteSpeed.MEDIUM, True, face))
+                0,# tmp["length"],
+                NoteSpeed.SLOW, True, face))
     abs_notes.sort(key=lambda t: t.offset)
     if simulate:
         #NEWLINE = "\n"

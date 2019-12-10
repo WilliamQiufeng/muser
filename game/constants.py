@@ -92,3 +92,28 @@ class Constants:
                 return Constants.PlayThrough.NoteIndicator.MISS
             else:
                 return Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
+            
+    class Result:
+        class Grade:
+            FAIL = 0
+            D = 60
+            C = 70
+            B = 80
+            A = 90
+            S = 95
+            @staticmethod
+            def getGradeFrame(score: int) -> Frame:
+                res = Frames.Result.F
+                if score >= Constants.Result.Grade.FAIL:
+                    res = Frames.Result.F
+                if score >= Constants.Result.Grade.D:
+                    res = Frames.Result.D
+                if score >= Constants.Result.Grade.C:
+                    res = Frames.Result.C
+                if score >= Constants.Result.Grade.B:
+                    res = Frames.Result.B
+                if score >= Constants.Result.Grade.A:
+                    res = Frames.Result.A
+                if score >= Constants.Result.Grade.S:
+                    res = Frames.Result.S
+                return res
