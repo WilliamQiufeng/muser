@@ -1,0 +1,171 @@
+#!/usr/bin/env python3
+# -*- coding:utf-8 -*-
+'''
+*------------------------------------------------------------------------------*
+# File: /williamye/program/pyxel_projects/muser/sheet/gen/midi_converter.py    #
+# Project: /williamye/program/pyxel_projects/muser/sheet/gen                   #
+# Created Date: Tuesday, December 3rd 2019, 12:05:52 pm                        #
+# Author : Qiufeng54321                                                        #
+# Email : williamcraft@163.com                                                 #
+#                                                                              #
+# Copyright (C) 2019  Qiufeng54321                                             #
+# This program is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU General Public License as published by         #
+# the Free Software Foundation, either version 3 of the License, or            #
+# (at your option) any later version.                                          #
+# This program is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of               #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                #
+# GNU General Public License for more details.                                 #
+# You should have received a copy of the GNU General Public License            #
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.       #
+# -----                                                                        #
+# Description:                                                                 #
+#   Converts midi file to muser sheet format.                                  #
+#                                                                              #
+*------------------------------------------------------------------------------*
+'''
+
+
+import sys
+import json
+import mido
+from mido import MidiFile
+import io
+from sheet.gen.abs_output import *
+import time
+from .rel_input import *
+
+out = io.open("/williamye/program/pyxel_projects/muser/test/out.txt", "w")
+debug = io.open("/williamye/program/pyxel_projects/muser/test/debug.txt", "w")
+
+def midifile_to_dict(mid, tempo_index, indexes):
+    tracks = []
+    for track in mid.tracks:
+        tracks.append([vars(msg).copy() for msg in track])
+
+    res = {}
+    for x in [tempo_index] + indexes:
+        tempo = 500000 if len(res) == 0 or len(res[tempo_index]) == 0 else res[tempo_index][0]["tempo"]
+        newTracks = []
+        expanded = []
+        buffer = {}
+        tick = 0
+        setbpm_index = 0
+        for tmp in tracks[x]:
+            tick_ms = mido.tick2second(tick, mid.ticks_per_beat, tempo) * 1000 if tmp["type"] in ["set_tempo", "note_on", "note_off"] else 0
+            tempo_change_ms = 0
+            tempo_change_tick = 0
+            #debug.write(
+            #    f"Tempo Index: {tempo_index}, SetBPM Index: {setbpm_index}, x: {x}\n")
+            if x != tempo_index:
+                if setbpm_index < len(res[tempo_index]) - 1:
+                    #debug.write(
+                    #    f"NextTempo: {res[tempo_index][setbpm_index + 1]['offset']}, TickSec: {tick_sec}\n")
+                    offset = res[tempo_index][setbpm_index + 1]["offset"]
+                    if offset <= tick_ms:
+                        setbpm_index += 1
+                        tempo = res[tempo_index][setbpm_index]["tempo"]
+                        bpm = mido.tempo2bpm(tempo)
+                        tempo_change_ms = tick_ms - offset
+                        tempo_tick = mido.second2tick(tempo_change_ms, mid.ticks_per_beat, tempo)
+                        debug.write(f"Tempo changed to {tempo}, Tempo change: {tempo_change_ms}ms\n")
+            if tmp["type"] == "set_tempo":
+                tick += tmp["time"]
+                tempo = tmp["tempo"]
+                newTracks.append({
+                    "type": "set_bpm",
+                    "time": tmp["time"],
+                    "tempo": tempo,
+                    "bpm": mido.tempo2bpm(tempo),
+                    "offset": tick_ms
+                })
+                debug.write(f"bpm: {mido.tempo2bpm(tempo)}\n")
+            if tmp["type"] == "note_on":
+                tick += tmp["time"]
+                new_tick_sec_interval = mido.tick2second(
+                    tmp["time"] - tempo_change_tick, mid.ticks_per_beat, tempo) * 1000
+                new_tick_sec = tick_ms + tempo_change_ms + new_tick_sec_interval
+                if tmp["time"] > 0:
+                    expanded.append({
+                        "type": "wait",
+                        "time": tmp["time"],
+                        "offset": new_tick_sec
+                    })
+                if tmp["note"] not in buffer.keys():
+                    buffer[tmp["note"]] = []
+                buffer[tmp["note"]].append(tick)
+                debug.write(f"note on: {tmp}, buffer: {buffer[tmp['note']]}\n")
+            elif tmp["type"] == "note_off":
+                tick += tmp["time"]
+                length = mido.tick2second(tick - buffer[tmp["note"]][len(buffer[tmp["note"]]) - 1], mid.ticks_per_beat, tempo) * 1000
+                offs = mido.tick2second(
+                    buffer[tmp["note"]][len(buffer[tmp["note"]]) - 1], mid.ticks_per_beat, tempo) * 1000
+                note = {
+                    "type": "note",
+                    "offset": offs,
+                    "length": length,
+                    "note": tmp["note"]
+                }
+                newTracks.append(note)
+                buffer[tmp["note"]].pop()
+                debug.write(f"note off:{tmp}, buffer: {buffer[tmp['note']]}\n")
+                debug.write(f"note:    {note}\n")
+        newTracks.sort(key=lambda t: t["offset"])
+        res[x] = newTracks
+    return res
+
+
+def to_json(file, tempo_index = 0, indexes = [1], simulate = False):
+    mid = mido.MidiFile(file)
+    res: dict = midifile_to_dict(mid, tempo_index, indexes)
+    out.write(json.dumps(res, indent=2))
+    face_dict = {}
+    face_gen_ind = 0
+    abs_notes = []
+    print(res)
+    for ind in indexes:
+        x = res[ind]
+        for tmp in x:
+            if not tmp["type"] == "note":
+                continue
+            face = 0
+            if tmp["note"] not in face_dict:
+                face_dict[tmp["note"]] = face_gen_ind
+                face_gen_ind += 1
+                if face_gen_ind > 3:
+                    face_gen_ind = 0
+            face = face_dict[tmp["note"]]
+            abs_notes.append(
+                AbsNote(tmp["offset"],
+                2000,# tmp["length"],
+                NoteSpeed.MEDIUM, True, face))
+    abs_notes.sort(key=lambda t: t.offset)
+    if simulate:
+        #NEWLINE = "\n"
+        #print(NEWLINE.join([str(x) for x in abs_notes]))
+        print("Start simulating...")
+        for x in range(len(abs_notes)):
+            print(abs_notes[x])
+            if x < len(abs_notes) - 1:
+                time.sleep((abs_notes[x + 1].offset - abs_notes[x].offset) / 1000)
+    return abs_notes
+def print_json(file):
+
+    midi_file = MidiFile(file)
+
+    for i, track in enumerate(midi_file.tracks):
+        out.write('=== Track {}\n'.format(i))
+        for message in track:
+            out.write('  {!r}\n'.format(message))
+
+class MidiToAbsSheet:
+    def __init__(self, filename, tempo_index = 0, indexes = [1], simulate = False):
+        self.abs_notes = to_json(filename, tempo_index, indexes, simulate)
+    def to_abs_sheet(self, meta = {}):
+        self.sheet = SourceSheetInput()
+        self.sheet.preprocess = meta
+        self.sheet.process()
+        self.sheet.abs_notes = self.abs_notes
+        self.sheet.music_offset = 2000
+        return self.sheet.to_abs()
