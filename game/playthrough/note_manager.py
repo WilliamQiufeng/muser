@@ -7,7 +7,35 @@ from game.constants import *
 import util
 
 pygame.mixer.init()
+
+
+class Counter:
+    def __init__(self):
+        self.misses = 0
+        self.bads = 0
+        self.greats = 0
+        self.perfects = 0
+    def get_prop(self):
+        return {
+            "Perfects": self.perfects,
+            "Greats": self.greats,
+            "Bads": self.bads,
+            "Misses": self.misses
+        }
 class NoteManager:
+    @staticmethod
+    def count(manager):
+        counter = Counter()
+        for note in manager.notes:
+            if note.result == Constants.PlayThrough.NoteIndicator.PERFECT:
+                counter.perfects += 1
+            elif note.result == Constants.PlayThrough.NoteIndicator.GREAT:
+                counter.greats += 1
+            elif note.result == Constants.PlayThrough.NoteIndicator.BAD:
+                counter.bads += 1
+            elif note.result == Constants.PlayThrough.NoteIndicator.MISS:
+                counter.misses += 1
+        return counter
     def __init__(self, sheet: SheetReader, side_distances : list, music_source : str):
         self.meta: dict = sheet.metadata
         self.notes: list = [PositionedNote(x) for x in sheet.notes]

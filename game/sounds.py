@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/sheet/sheet_constants.py       #
-# Project: /williamye/program/pyxel_projects/muser/sheet                       #
-# Created Date: Monday, December 2nd 2019, 07:48:59 pm                         #
+# File: /williamye/program/pyxel_projects/muser/game/sounds.py                 #
+# Project: /williamye/program/pyxel_projects/muser/game                        #
+# Created Date: Tuesday, December 10th 2019, 06:28:33 pm                       #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -27,31 +27,18 @@
 '''
 
 
-class NoteType:
-    NOTE = 0
-    WAIT = 1
-    TEMPO = 2
+import pygame.mixer_music
+pygame.mixer.init()
+class Sound:
+    def __init__(self, path):
+        self.path = path
+    def play(self):
+        pygame.mixer.music.load(self.path)
+        pygame.mixer.music.play()
 
-class NoteAction:
-    IN = 0
-    OUT = 1
-
-# Length from the note to the center: l (px)
-# Beat: b (beat)
-# Time: t (ms)
-# Beat Interval: s (ms / beat)
-# t = b * s
-# 
-# Note Speed stores the time (beat)
-"""
-To calculate how many pixels per millisecond:
-px/ms = l / t
-"""
-class NoteSpeed:
-    SLOW = 2000
-    MEDIUM = 1000
-    FAST = 500
-
-    @staticmethod
-    def to_speed(length: int, time: int):
-        return length / time
+class Sounds:
+    class Grade:
+        A = Sound(
+            "/williamye/program/pyxel_projects/muser/assets/sounds/A.flac")
+        C = Sound(
+            "/williamye/program/pyxel_projects/muser/assets/sounds/C.flac")

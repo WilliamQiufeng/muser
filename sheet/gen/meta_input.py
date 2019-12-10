@@ -39,20 +39,27 @@ class MetaInput:
     def __init__(self, meta):
         self.meta = meta
     def proc(self):
+        sheets = []
         root = self.meta["root"]
-        abs_midi = root + self.meta["midi"]
-        abs_music = root + self.meta["music"]
+        name = self.meta["name"]
         abs_output = root + self.meta["output"]
-        tempo_index = self.meta["tempo_index"]
-        indexes = self.meta["indexes"]
-        mtas = MidiToAbsSheet(
-            abs_midi, tempo_index, indexes, False)
-        abs_sheet = mtas.to_abs_sheet({
-            "author": self.meta["author"],
-            "music_author": self.meta["music_author"],
-            "version": self.meta["version"],
-            "name": self.meta["name"],
-            "music": self.meta["music"]
-        })
-        io.open(abs_output, "w").write(abs_sheet)
+        for sheet in self.meta["sheets"]:
+            print(sheet)
+            abs_midi = root + sheet["midi"]
+            abs_music = root + sheet["music"]
+            tempo_index = sheet["tempo_index"]
+            indexes = sheet["indexes"]
+            mtas = MidiToAbsSheet(
+                abs_midi, tempo_index, indexes, False)
+            abs_sheet = mtas.to_abs_sheet({
+                "author": sheet["author"],
+                "music_author": sheet["music_author"],
+                "version": sheet["version"],
+                "name": name,
+                "music": abs_music,
+                "level": sheet["level"]
+            })
+            #print(abs_sheet)
+            sheets.append(abs_sheet)
+        io.open(abs_output, "w").write("|".join(sheets))
         
