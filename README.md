@@ -38,17 +38,15 @@ Press Space to start the playthrough.
 > + **great**: 2
 > + **bad**: 1
 + For each note pressed by the player, the score will be increased by:  
-$$
-s = \frac{100000}{weight\times noteCount}
-$$  
+> + scoreToAdd = 100000 / (weight * noteCount)
 ### Result
 The player gets various grades in different ranges of score percentage:  
-$S: score >= 95$  
-$A: 90 <= score < 95$  
-$B: 80 <= score < 90$  
-$C: 70 <= score < 80$  
-$D: 60 <= score < 70$  
-$F: 0 <= score < 60$  
+S: score >= 95  
+A: 90 <= score < 95  
+B: 80 <= score < 90  
+C: 70 <= score < 80  
+D: 60 <= score < 70  
+F: 0 <= score < 60  
 The grade is shown in the center of the screen.  
 There are counters of **perfects**, **greats**, **bads**, and **misses** under the grade.  
 Press **Enter** to return to the sheet selection cast.
