@@ -1,7 +1,7 @@
 from sheet.gen.meta_input import *
 import os
 
-root = "/williamye/program/pyxel_projects/muser/assets/sheets/"
+root = "assets/sheets/"
 
 file_list = os.listdir(root)
 for file in file_list:
