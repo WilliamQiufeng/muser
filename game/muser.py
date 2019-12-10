@@ -6,9 +6,6 @@ from game.casts import *
 
 class Muser:
     def __init__(self):
-        pyxel.init(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, caption="Muser", scale=48)
-        pyxel.load("../assets/resources.pyxres")
-        
         pyxel.run(self.update, self.draw)
     def update(self):
         if Config.CAST.is_finished():
