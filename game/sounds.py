@@ -33,12 +33,15 @@ class Sound:
     def __init__(self, path):
         self.path = path
     def play(self):
-        pygame.mixer.music.load(self.path)
-        pygame.mixer.music.play()
+        try:
+            pygame.mixer.music.load(self.path)
+            pygame.mixer.music.play()
+        except:
+            print("Error loading sound")
 
 class Sounds:
     class Grade:
         A = Sound(
-            "/williamye/program/pyxel_projects/muser/assets/sounds/A.flac")
+            "assets/sounds/A.flac")
         C = Sound(
-            "/williamye/program/pyxel_projects/muser/assets/sounds/C.flac")
+            "assets/sounds/C.flac")
