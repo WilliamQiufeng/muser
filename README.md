@@ -1,10 +1,11 @@
 # Muser
 ------
 ## Introduction
-This is a musical game which is made using [pyxel](https://github.com/kitao/pyxel).
+This is a musical game which is made using [pyxel](https://github.com/kitao/pyxel) and [pygame](https://github.com/pygame/pygame.git).
 
 ## Requirements
 + [pyxel](https://github.com/kitao/pyxel)
++ [pygame](https://github.com/pygame/pygame)
 
 ## Installation
 ```bash
