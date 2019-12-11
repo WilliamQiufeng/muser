@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/game/sounds.py                 #
-# Project: /williamye/program/pyxel_projects/muser/game                        #
-# Created Date: Tuesday, December 10th 2019, 06:28:33 pm                       #
+# File: /williamye/program/pyxel_projects/muser/install.py                     #
+# Project: /williamye/program/pyxel_projects/muser                             #
+# Created Date: Wednesday, December 11th 2019, 07:57:05 am                     #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -27,22 +27,45 @@
 '''
 
 
-import pygame.mixer_music
-import game_config
-pygame.mixer.init()
-class Sound:
-    def __init__(self, path):
-        self.path = path
-    def play(self):
-        try:
-            pygame.mixer.music.load(self.path)
-            pygame.mixer.music.play()
-        except:
-            print("Error loading sound")
+import io, os, sys
+import json
 
-class Sounds:
-    class Grade:
-        A = Sound(
-            game_config.GLOB_CONFIG.assets.get("sounds/A.flac"))
-        C = Sound(
-            game_config.GLOB_CONFIG.assets.get("assets/sounds/C.flac"))
+print(sys.argv)
+if not(len(sys.argv) > 1 and sys.argv[1] == "-n"):
+    print("Packaging...")
+    os.system("pyxelpackager main.py")
+    print("Packaging Complete.")
+
+install_path: str = input("Installation Path[path/n]: ")
+if install_path == "n":
+    print("No installation. Process complete")
+    exit()
+else:
+    print("Copying Executable...")
+    separator = "/"
+    if os.path.exists("dist/main"):
+        print("Unix installation")
+        try:
+            os.mkdir(f"{install_path}{separator}muser")
+        except :
+            print("Directory already exists")
+        os.system(f"cp dist/main {install_path}{separator}muser{separator}muser")
+    elif os.path.exists("dist/main.exe"):
+        print("Non-unix installation")
+        separator = "\\"
+        try:
+            os.mkdir(f"{install_path}{separator}muser")
+        except:
+            print("Directory already exists")
+        os.system(f"cp dist/main.exe {install_path}{separator}muser{separator}Muser.exe")
+    print("Copying Assets...")
+    os.system(f"cp -r assets {install_path}{separator}muser{separator}assets")
+    print("Generating Config...")
+    config_file = io.open(f"{install_path}{separator}muser{separator}muser_config.json", "w")
+    config_json = {
+        "asset_path": f"{install_path}{separator}muser{separator}assets",
+        "separator": separator
+    }
+    config_file.write(json.dumps(config_json))
+    config_file.close()
+    print("Installation Complete")

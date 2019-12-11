@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/game/sounds.py                 #
-# Project: /williamye/program/pyxel_projects/muser/game                        #
-# Created Date: Tuesday, December 10th 2019, 06:28:33 pm                       #
+# File: /williamye/program/pyxel_projects/muser/game_config.py                 #
+# Project: /williamye/program/pyxel_projects/muser                             #
+# Created Date: Wednesday, December 11th 2019, 07:24:19 am                     #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -27,22 +27,18 @@
 '''
 
 
-import pygame.mixer_music
-import game_config
-pygame.mixer.init()
-class Sound:
-    def __init__(self, path):
-        self.path = path
-    def play(self):
-        try:
-            pygame.mixer.music.load(self.path)
-            pygame.mixer.music.play()
-        except:
-            print("Error loading sound")
+import io, os, json
+import assets
 
-class Sounds:
-    class Grade:
-        A = Sound(
-            game_config.GLOB_CONFIG.assets.get("sounds/A.flac"))
-        C = Sound(
-            game_config.GLOB_CONFIG.assets.get("assets/sounds/C.flac"))
+class GameConfig:
+    def __init__(self):
+        print(os.system("cwd"))
+        if os.path.exists("muser_config.json"):
+            self.config: dict = json.loads(io.open("muser_config.json", "r").read())
+    def proc(self):
+        self.asset_path = self.config["asset_path"] if "asset_path" in self.config.keys() else "/williamye/program/pyxel_projects/muser"
+        self.separator = self.config["separator"] if "separator" in self.config.keys() else "/"
+        self.assets = assets.Assets(self.asset_path, self.separator)
+            
+GLOB_CONFIG = GameConfig()
+GLOB_CONFIG.proc()

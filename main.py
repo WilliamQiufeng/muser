@@ -1,4 +1,5 @@
 import pyxel
+import game_config
 pyxel.init(256, 256,
            caption="Muser", scale=48)
 print("Window loaded")
