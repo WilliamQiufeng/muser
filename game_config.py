@@ -32,7 +32,7 @@ import assets
 
 class GameConfig:
     def __init__(self):
-        print(os.system("cwd"))
+        print(os.system("pwd"))
         if os.path.exists("muser_config.json"):
             self.config: dict = json.loads(io.open("muser_config.json", "r").read())
     def proc(self):
