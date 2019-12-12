@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/__init__.py                    #
-# Project: /williamye/program/pyxel_projects/muser                             #
-# Created Date: Thursday, December 12th 2019, 02:43:12 pm                      #
+# File: /williamye/program/pyxel_projects/muser/sheet/gen/sheet_output.py      #
+# Project: /williamye/program/pyxel_projects/muser/sheet/gen                   #
+# Created Date: Tuesday, December 10th 2019, 01:23:02 pm                       #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -26,6 +26,12 @@
 *------------------------------------------------------------------------------*
 '''
 
-
-from . import muser
-__all__ = ["muser"]
+import io
+from muser.sheet.gen.abs_output import *
+class SheetOutput:
+    def __init__(self, sheets: list):
+        self.sheets = sheets
+    def write(self, filename):
+        file = io.open(filename, "w")
+        file.write("|".join([str(sheet) for sheet in self.sheets]))
+        
