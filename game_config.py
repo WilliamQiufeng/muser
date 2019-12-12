@@ -39,6 +39,6 @@ class GameConfig:
         self.asset_path = self.config["asset_path"] if "asset_path" in self.config.keys() else "/williamye/program/pyxel_projects/muser"
         self.separator = self.config["separator"] if "separator" in self.config.keys() else "/"
         self.assets = assets.Assets(self.asset_path, self.separator)
-            
+
 GLOB_CONFIG = GameConfig()
 GLOB_CONFIG.proc()
