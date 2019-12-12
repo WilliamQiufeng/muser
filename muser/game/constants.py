@@ -1,6 +1,6 @@
-from muser.game.frames import *
+from game.frames import *
 import math
-from muser.game.config import *
+from game.config import *
 class Constants:
     class Cast:
         WIDTH = 256

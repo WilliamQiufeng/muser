@@ -28,7 +28,7 @@
 
 
 import io, os, json
-import muser.assets as assets
+import assets as assets
 
 
 def find(name, path):
