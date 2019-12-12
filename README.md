@@ -12,6 +12,16 @@ This is a musical game which is made using [pyxel](https://pypi.org/project/pyxe
 + [pygame](https://pypi.org/project/pygame/)
 + [mido](https://pypi.org/project/mido/) (For sheet generation)
 
+## Run Directly (Recommended)
+
+This method is more recommendable than **Installation** because the **Installation** method has not been tested yet and is currently expected to be raising errors.
+
+```bash
+git clone https://github.com/Qiufeng54321/muser
+cd muser
+python main.py
+```
+
 ## Installation
 
 ```bash
@@ -21,19 +31,19 @@ pyxelpackager main.py
 ```
 
 And then you can find the executable in the dist/ folder.  
-Or, you can just run *main.py* without packaging it.
 
 ## How to play
 
 ### Intro
 
-Click Enter to skip the intro
+Click `<Enter>` to skip the intro
 
 ### Sheet Selection
+
 The sheets are detected in [muser/assets/sheets/](muser/assets/sheets/).  
-You can select sheets using left and right arrow keys.  
-For every sheet, there are selections of hardness level. You can use up and down arrow keys to change the level.  
-Press Space to start the playthrough.
+You can select sheets using `<Left>` or `<Right>`.  
+For every sheet, there are selections of hardness level. You can use `<Up>` or `<Down>` to change the level.  
+Press `<Space>` to start the playthrough.
 
 ### PlayThrough
 
@@ -57,7 +67,9 @@ Press Space to start the playthrough.
 + For each note pressed by the player, the score will be increased by:  
 
 > + scoreToAdd = 100000 / (weight * noteCount)
->
+
+The player can quit the playthrough to go back to sheet selection cast using `<Q>` key.
+
 ### Result
 
 The player gets various grades in different ranges of score percentage:  
@@ -69,4 +81,4 @@ D: 60 <= score < 70
 F: 0 <= score < 60  
 The grade is shown in the center of the screen.  
 There are counters of **perfects**, **greats**, **bads**, and **misses** under the grade.  
-Press **Enter** to return to the sheet selection cast.
+Press `<Enter>` to return to the sheet selection cast.

@@ -1,4 +1,4 @@
-from muser.sheet.sheet_constants import *
+from sheet.sheet_constants import *
 import random
 class AbsSheetOutput:
     def __init__(self, rel_in):

@@ -1,11 +1,11 @@
-from muser.game.frames import *
-from muser.game.constants import *
-from muser.game.widgets import *
-from muser.game.config import *
-from muser.game.playthrough.note_manager import *
-from muser.sheet.reader.sheet_reader import *
-from muser.game.sounds import *
-import muser.util as util
+from game.frames import *
+from game.constants import *
+from game.widgets import *
+from game.config import *
+from game.playthrough.note_manager import *
+from sheet.reader.sheet_reader import *
+from game.sounds import *
+import util as util
 import pyxel
 import pygame
 import io, sys, os

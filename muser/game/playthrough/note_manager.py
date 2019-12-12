@@ -1,10 +1,10 @@
 import copy
 import time
 import pygame
-from muser.sheet.reader.sheet_reader import *
-from muser.game.playthrough.note import PositionedNote
-from muser.game.constants import *
-import muser.util as util
+from sheet.reader.sheet_reader import *
+from game.playthrough.note import PositionedNote
+from game.constants import *
+import util as util
 
 pygame.mixer.init()
 

@@ -33,12 +33,12 @@ import json
 import mido
 from mido import MidiFile
 import io
-from muser.sheet.gen.abs_output import *
+from sheet.gen.abs_output import *
 import time
 from .rel_input import *
 
-out = io.open("/williamye/program/pyxel_projects/muser/test/out.txt", "w")
-debug = io.open("/williamye/program/pyxel_projects/muser/test/debug.txt", "w")
+# out = io.open("/williamye/program/pyxel_projects/muser/test/out.txt", "w")
+# debug = io.open("/williamye/program/pyxel_projects/muser/test/debug.txt", "w")
 
 INDEX_OFFSET = 0
 INDEX_LENGTH = 1
@@ -64,8 +64,8 @@ def midifile_to_dict(mid, tempo_index: int, indexes: list):
         track_res_array = []
         note_on_buffer = {}
         for x in tracks[index]:
-            debug.write("------------------------------------------------\n")
-            debug.write(f"{x}\n")
+            # debug.write("------------------------------------------------\n")
+            # debug.write(f"{x}\n")
             # Change tempo
             tempo_change_interval_tick = 0
             before_tempo = cur_tempo
@@ -74,8 +74,8 @@ def midifile_to_dict(mid, tempo_index: int, indexes: list):
                     tempo_change_index += 1
                     cur_tempo = tempo_changes[tempo_change_index][1]
                     tempo_change_interval_tick = tick - tempo_changes[tempo_change_index][0]
-                    debug.write(f"Changed tempo from {before_tempo} to {cur_tempo}\n")
-                    debug.write(f"  Tempo Change Tick: {tempo_change_interval_tick}\n")
+                    # debug.write(f"Changed tempo from {before_tempo} to {cur_tempo}\n")
+                    # debug.write(f"  Tempo Change Tick: {tempo_change_interval_tick}\n")
                 else:
                     break
             if "time" in x.keys():
@@ -85,13 +85,13 @@ def midifile_to_dict(mid, tempo_index: int, indexes: list):
                 total_interval_sec = tempo_change_interval_sec + note_change_interval_sec
                 tick_sec += total_interval_sec
                 tick += x["time"]
-                debug.write(f"Time Change:               {x['time']}\n")
-                debug.write(f"Note Change Interval Tick: {note_change_interval_tick}\n")
-                debug.write(f"Tempo Change Interval Tick:{tempo_change_interval_tick}\n")
-                debug.write(f"Note Change Interval Sec:  {note_change_interval_sec}\n")
-                debug.write(f"Tempo Change Interval Sec: {tempo_change_interval_sec}\n")
-                debug.write(f"Total:                     {total_interval_sec}\n")
-                debug.write(f"Tick Sec:                  {tick_sec}\n")
+                # debug.write(f"Time Change:               {x['time']}\n")
+                # debug.write(f"Note Change Interval Tick: {note_change_interval_tick}\n")
+                # debug.write(f"Tempo Change Interval Tick:{tempo_change_interval_tick}\n")
+                # debug.write(f"Note Change Interval Sec:  {note_change_interval_sec}\n")
+                # debug.write(f"Tempo Change Interval Sec: {tempo_change_interval_sec}\n")
+                # debug.write(f"Total:                     {total_interval_sec}\n")
+                # debug.write(f"Tick Sec:                  {tick_sec}\n")
             if x["type"] not in ["note_on", "note_off"]:
                 continue
             if x["type"] == "note_on":
@@ -103,7 +103,7 @@ def midifile_to_dict(mid, tempo_index: int, indexes: list):
                 offset: float = note_array[len(note_array) - 1]
                 length_sec = tick_sec - offset
                 track_res_array.append((offset, length_sec, x["note"]))
-            debug.write("------------------------------------------------\n")
+            # debug.write("------------------------------------------------\n")
         res[index] = track_res_array
     return res
 
@@ -111,7 +111,7 @@ def midifile_to_dict(mid, tempo_index: int, indexes: list):
 def to_json(file, tempo_index = 0, indexes = [1], simulate = False):
     mid = mido.MidiFile(file)
     res: dict = midifile_to_dict(mid, tempo_index, indexes)
-    out.write(json.dumps(res, indent=4))
+    # out.write(json.dumps(res, indent=4))
     face_dict = {}
     face_gen_ind = 0
     abs_notes = []

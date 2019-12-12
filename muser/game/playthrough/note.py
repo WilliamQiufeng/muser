@@ -1,7 +1,7 @@
-from muser.sheet.gen.abs_output import AbsNote
-from muser.game.constants import Constants
-from muser.game.config import *
-from muser.game.frames import *
+from sheet.gen.abs_output import AbsNote
+from game.constants import Constants
+from game.config import *
+from game.frames import *
 import math
 import pyxel
 import copy

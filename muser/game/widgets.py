@@ -1,4 +1,4 @@
-from muser.game.ui import *
+from game.ui import *
 import pyxel
 
 def empty_function():

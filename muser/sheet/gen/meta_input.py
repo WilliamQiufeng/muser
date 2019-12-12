@@ -27,9 +27,9 @@
 '''
 
 
-from muser.sheet.reader.sheet_reader import *
-from muser.sheet.gen.midi_converter import *
-from muser.game_config import *
+from sheet.reader.sheet_reader import *
+from sheet.gen.midi_converter import *
+from game_config import *
 import io
 
 class MetaInput:

@@ -28,7 +28,7 @@
 
 
 import pygame.mixer_music
-import muser.game_config as game_config
+import game_config as game_config
 pygame.mixer.init()
 class Sound:
     def __init__(self, path):

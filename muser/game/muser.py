@@ -1,8 +1,8 @@
 import pyxel
-from muser.sheet.reader import sheet_reader
-from muser.game.constants import *
-from muser.game.config import *
-from muser.game.casts import *
+from sheet.reader import sheet_reader
+from game.constants import *
+from game.config import *
+from game.casts import *
 
 class Muser:
     def __init__(self):
