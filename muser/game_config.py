@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/__init__.py                    #
+# File: /williamye/program/pyxel_projects/muser/game_config.py                 #
 # Project: /williamye/program/pyxel_projects/muser                             #
-# Created Date: Thursday, December 12th 2019, 02:43:12 pm                      #
+# Created Date: Wednesday, December 11th 2019, 07:24:19 am                     #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -27,5 +27,29 @@
 '''
 
 
-from . import muser
-__all__ = ["muser"]
+import io, os, json
+import muser.assets as assets
+
+
+def find(name, path):
+    for root, dirs, files in os.walk(path):
+        if name in files:
+            return os.path.join(root, name)
+    return None
+
+class GameConfig:
+    def __init__(self):
+        print(os.system("pwd"))
+        config_path = find("muser_config.json", ".")
+        self.config_path = config_path
+        if config_path != None:
+            self.config: dict = json.loads(io.open(config_path, "r").read())
+        else:
+            raise RuntimeError("Must have a config file!")
+    def proc(self):
+        self.asset_path = self.config["asset_path"] if "asset_path" in self.config.keys() else "/williamye/program/pyxel_projects/muser"
+        self.separator = self.config["separator"] if "separator" in self.config.keys() else "/"
+        self.assets = assets.Assets(self.asset_path, self.separator)
+
+GLOB_CONFIG = GameConfig()
+GLOB_CONFIG.proc()

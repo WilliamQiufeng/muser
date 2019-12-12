@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/__init__.py                    #
-# Project: /williamye/program/pyxel_projects/muser                             #
-# Created Date: Thursday, December 12th 2019, 02:43:12 pm                      #
+# File: /williamye/program/pyxel_projects/muser/game/sounds.py                 #
+# Project: /williamye/program/pyxel_projects/muser/game                        #
+# Created Date: Tuesday, December 10th 2019, 06:28:33 pm                       #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -27,5 +27,22 @@
 '''
 
 
-from . import muser
-__all__ = ["muser"]
+import pygame.mixer_music
+import muser.game_config as game_config
+pygame.mixer.init()
+class Sound:
+    def __init__(self, path):
+        self.path = path
+    def play(self):
+        try:
+            pygame.mixer.music.load(self.path)
+            pygame.mixer.music.play()
+        except:
+            print("Error loading sound")
+
+class Sounds:
+    class Grade:
+        A = Sound(
+            game_config.GLOB_CONFIG.assets.get("sounds/A.flac"))
+        C = Sound(
+            game_config.GLOB_CONFIG.assets.get("assets/sounds/C.flac"))

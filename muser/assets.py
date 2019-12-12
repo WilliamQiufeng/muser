@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/__init__.py                    #
+# File: /williamye/program/pyxel_projects/muser/assets.py                      #
 # Project: /williamye/program/pyxel_projects/muser                             #
-# Created Date: Thursday, December 12th 2019, 02:43:12 pm                      #
+# Created Date: Wednesday, December 11th 2019, 07:30:37 am                     #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -27,5 +27,13 @@
 '''
 
 
-from . import muser
-__all__ = ["muser"]
+class Assets:
+    def __init__(self, path: str, separator: str = "/"):
+        self.root = path
+        self.separator = separator
+    def get(self, path: str) -> str:
+        return self.root + (self.separator if not self.root.endswith(self.separator) else "") + path
+    def getSheets(self) -> str:
+        return f"{self.root}{self.separator}sheets{self.separator}"
+    def getSheet(self, path: str) -> str:
+        return f"{self.root}{self.separator}sheets{self.separator}{path}"

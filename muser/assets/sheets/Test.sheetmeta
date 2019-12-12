@@ -1,0 +1,17 @@
+{
+    "root": "$asset_path",
+    "output": "Test.sheet",
+    "name": "Test",
+    "sheets": [
+        {
+            "author": "Qiufeng",
+            "music_author": "Qiufeng",
+            "version": "0.0.0.1",
+            "midi": "Test.mid",
+            "music": "Test.flac",
+            "tempo_index": 1,
+            "indexes": [2],
+            "level": "test"
+        }
+    ]
+}

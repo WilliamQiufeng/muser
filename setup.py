@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/__init__.py                    #
+# File: /williamye/program/pyxel_projects/muser/setup.py                       #
 # Project: /williamye/program/pyxel_projects/muser                             #
-# Created Date: Thursday, December 12th 2019, 02:43:12 pm                      #
+# Created Date: Thursday, December 12th 2019, 12:53:39 pm                      #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -26,6 +26,20 @@
 *------------------------------------------------------------------------------*
 '''
 
+import io
+from setuptools import setup
 
-from . import muser
-__all__ = ["muser"]
+
+setup(
+    name="muser",
+    version="1.0",
+    author="Qiufeng54321",
+    author_email="williamcraft@163.com",
+    description=("A musical game made using pyxel"),
+    license="GPLv3",
+    keywords="pyxel",
+    url="github.com/Qiufeng54321/muser",
+    install_requires=io.open("requirements.txt", "r").read().split("\n"),
+    packages=['.'],
+    zip_safe=False
+)
