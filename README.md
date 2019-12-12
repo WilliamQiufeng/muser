@@ -30,7 +30,7 @@ Or, you can just run *main.py* without packaging it.
 Click Enter to skip the intro
 
 ### Sheet Selection
-The sheets are detected in [assets/sheets/](assets/sheets/).  
+The sheets are detected in [muser/assets/sheets/](muser/assets/sheets/).  
 You can select sheets using left and right arrow keys.  
 For every sheet, there are selections of hardness level. You can use up and down arrow keys to change the level.  
 Press Space to start the playthrough.
