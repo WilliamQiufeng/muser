@@ -149,9 +149,9 @@ def print_json(file):
     midi_file = MidiFile(file)
 
     for i, track in enumerate(midi_file.tracks):
-        out.write('=== Track {}\n'.format(i))
+        print('=== Track {}'.format(i))
         for message in track:
-            out.write('  {!r}\n'.format(message))
+            print('  {!r}'.format(message))
 
 class MidiToAbsSheet:
     def __init__(self, filename, tempo_index = 0, indexes = [1], simulate = False):
