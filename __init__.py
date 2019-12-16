@@ -4,7 +4,7 @@
 *------------------------------------------------------------------------------*
 # File: /williamye/program/pyxel_projects/muser/__init__.py                    #
 # Project: /williamye/program/pyxel_projects/muser                             #
-# Created Date: Thursday, December 12th 2019, 02:43:12 pm                      #
+# Created Date: Thursday, December 12th 2019, 06:52:01 pm                      #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -27,5 +27,4 @@
 '''
 
 
-from . import muser
-__all__ = ["muser"]
+# from muser import *

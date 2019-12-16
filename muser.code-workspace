@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "muser"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"code-runner.cwd": "/williamye/program/pyxel_projects/muser/muser",
+		"code-runner.fileDirectoryAsCwd": true
+	}
+}

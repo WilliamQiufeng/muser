@@ -45,4 +45,4 @@ class Sounds:
         A = Sound(
             game_config.GLOB_CONFIG.assets.get("sounds/A.flac"))
         C = Sound(
-            game_config.GLOB_CONFIG.assets.get("assets/sounds/C.flac"))
+            game_config.GLOB_CONFIG.assets.get("sounds/C.flac"))

@@ -7,11 +7,24 @@
             "author": "Qiufeng",
             "music_author": "Toby Fox",
             "version": "0.0.0.1",
+            "midi": "MegalovaniaEasy.mid",
+            "music": "Toby Fox - MEGALOVANIA.flac",
+            "tempo_index": 1,
+            "indexes": [3],
+            "level": "easy",
+            "effects": [
+                
+            ]
+        },
+        {
+            "author": "Qiufeng",
+            "music_author": "Toby Fox",
+            "version": "0.0.0.1",
             "midi": "Undertale_-_Megalovania.mid",
             "music": "Toby Fox - MEGALOVANIA.flac",
             "tempo_index": 1,
             "indexes": [3],
-            "level": "normal"
+            "level": "hard"
         }
     ]
 }

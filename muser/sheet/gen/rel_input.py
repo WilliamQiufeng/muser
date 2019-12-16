@@ -2,6 +2,7 @@ import io
 from sheet.sheet_constants import *
 from sheet.note import *
 from sheet.gen.abs_output import *
+from sheet.gen.effector import *
 
 class SourceSheetInput:
     def __init__(self, file="null"):
@@ -20,6 +21,8 @@ class SourceSheetInput:
         self.music = self.preprocess["music"] if "music" in self.preprocess.keys(
         ) else "/Unknown"
         self.tempo = self.preprocess["tempo"] if "tempo" in self.preprocess.keys() else 60
+        self.effects = self.preprocess["effects"] if "effects" in self.preprocess.keys() else []
+        
         # Calculate the length of a beat
         #                        1 (min)                1000 (ms)
         #  60 (sec) * ------------------------------- * ---------

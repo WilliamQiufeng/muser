@@ -1,5 +1,6 @@
 import io, json
 from sheet.gen.abs_output import AbsNote
+from sheet.actions import *
 
 """
 Sheet Reader
@@ -45,8 +46,9 @@ class SheetReader:
         }
     
     def read_notes(self):
-        self.note_datas = [[float(i) for i in x.split(",")] for x in self.data[-1].split("\n")]
-        self.notes = [AbsNote(*note_data[1:-1], absolutified=True, side=int(note_data[4])) for note_data in self.note_datas]
+        self.note_datas = [x.split(",") for x in self.data[-1].split("\n")]
+        self.notes = [Actions.fromArgs(*note_data) for note_data in self.note_datas]
+        # self.print_sheet()
     def print_sheet(self):
         print(json.dumps(self.metadata))
         print("\n".join([str(x) for x in self.notes]))

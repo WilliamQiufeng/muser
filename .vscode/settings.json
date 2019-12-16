@@ -1,5 +1,10 @@
 {
     "code-runner.cwd": "/williamye/program/pyxel_projects/muser/muser",
-    "code-runner.customCommand": "cd /williamye/program/pyxel_projects/muser",
-    "code-runner.fileDirectoryAsCwd": true
+    "code-runner.customCommand": "",
+    "code-runner.fileDirectoryAsCwd": true,
+    "python.linting.flake8Enabled": false,
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.prospectorEnabled": false,
+    "python.linting.pylamaEnabled": false
 }

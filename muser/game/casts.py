@@ -100,9 +100,9 @@ class Casts:
                 util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 3, 7, 1, x + 1) for x in range(5)]
             level = self.sheet[self.level_selection]
             pyxel.text(*positions[0], f'{level.metadata["name"]}', 12)
-            pyxel.text(*positions[1], f'author:       {level.metadata["author"]}', 11)
-            pyxel.text(*positions[2], f'music author: {level.metadata["music_author"]}', 10)
-            pyxel.text(*positions[3], f'version:      {level.metadata["version"]}', 9)
+            pyxel.text(*positions[1], f'Sheet Author: {level.metadata["author"]}', 11)
+            pyxel.text(*positions[2], f'Music Author: {level.metadata["music_author"]}', 10)
+            pyxel.text(*positions[3], f'Version:      {level.metadata["version"]}', 9)
             pyxel.text(*positions[4], f'Level:        {level.metadata["level"]}', 8)
         def is_finished(self):
             return self.finished
@@ -126,6 +126,7 @@ class Casts:
             self.sheet: SheetReader = sheet
             self.music_source = music_source
             self.finished: bool = False
+            self.quit: bool = False
             self.note_manager: NoteManager = NoteManager(self.sheet, Constants.PlayThrough.DISTANCES(), self.music_source)
             self.note_manager.prepare()
             self.note_manager.start()
@@ -140,7 +141,6 @@ class Casts:
             self.finished = self.note_manager.finished
             self.quit = pyxel.btn(pyxel.KEY_Q)
         def draw(self):
-            Frames.PlayThrough.INDICATOR_CIRCLE.draw(*Constants.Cast.center(Frames.PlayThrough.INDICATOR_CIRCLE.width, Frames.PlayThrough.INDICATOR_CIRCLE.height))
             self.note_manager.draw()
         def is_finished(self):
             return self.finished or self.quit
@@ -152,13 +152,22 @@ class Casts:
         ]
         @staticmethod
         def finish(obj):
-            obj.finished = True
+            if not obj.animating:
+                obj.prefinished = True
+                obj.prefinish_frame = pyxel.frame_count
+                obj.animating = True
+                pygame.mixer.music.stop()
         def __init__(self, play_through):
             self.play_through = play_through
             self.finished = False
+            self.prefinished = False
+            self.animating = False
+            self.prefinish_frame = pyxel.frame_count
             self.score_percentage = self.play_through.note_manager.score / Constants.PlayThrough.Score.TOTAL_SCORE * 100
             self.grade_frame = Constants.Result.Grade.getGradeFrame(self.score_percentage)
             self.count = NoteManager.count(self.play_through.note_manager)
+            self.tp = self.count.get_tp()
+            self.score = int(self.play_through.note_manager.score)
             if self.score_percentage >= Constants.Result.Grade.A:
                 Sounds.Grade.A.play()
             else:
@@ -171,11 +180,21 @@ class Casts:
             pyxel.cls(2 if self.score_percentage >= Constants.Result.Grade.A else 3)
             counter_positions = [util.grid(
                 Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 1 + (x % 2) * 2, 12 + (0 if x < 2 else 1)) for x in range(4)]
+            tp_pos = util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 2, 12.5)
+            score_pos = util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 2, 11)
             count_prop = self.count.get_prop()
+            pyxel.text(*tp_pos, "TP: {0:.2f}%".format(self.tp), 13)
+            pyxel.text(*score_pos, f"Score: {self.score}", 14)
             for x in range(4):
                 key = list(count_prop.keys())[x]
                 pyxel.text(*counter_positions[x], f"{key}: {count_prop[key]}", 12 - x)
             self.grade_frame.draw(*Constants.Cast.center(self.grade_frame.width, self.grade_frame.height))
+            if self.animating and not self.finished:
+                height = (pyxel.frame_count - self.prefinish_frame) * 32 / 256 * Constants.Cast.HEIGHT
+                pyxel.rect(0, Constants.Cast.HEIGHT - height, Constants.Cast.WIDTH, height, 14)
+                if height >= Constants.Cast.HEIGHT:
+                    self.animating = False
+                    self.finished = True
         def is_finished(self):
             return self.finished
         def next_cast(self):

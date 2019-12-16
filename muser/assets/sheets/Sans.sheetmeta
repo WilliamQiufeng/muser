@@ -7,12 +7,33 @@
             "author": "Qiufeng",
             "music_author": "Toby Fox",
             "version": "0.0.0.1",
-            "midi": "SansMerged.mid",
+            "midi": "SansEasy.mid",
             "music": "Toby Fox - sans.flac",
-            "output": "Sans.sheet",
+            "tempo_index": 1,
+            "indexes": [
+                2
+            ],
+            "level": "easy"
+        },
+        {
+            "author": "Qiufeng",
+            "music_author": "Toby Fox",
+            "version": "0.0.0.1",
+            "midi": "SansNormal.mid",
+            "music": "Toby Fox - sans.flac",
             "tempo_index": 1,
             "indexes": [2],
             "level": "normal"
+        },
+        {
+            "author": "Qiufeng",
+            "music_author": "Toby Fox",
+            "version": "0.0.0.1",
+            "midi": "SansMerged.mid",
+            "music": "Toby Fox - sans.flac",
+            "tempo_index": 1,
+            "indexes": [2],
+            "level": "hard"
         }
     ]
 }
