@@ -47,6 +47,21 @@ def add_effects(abs_notes: list, effect_pool: list, effects: list):
                 "size": size
             }
             effect_vars[identity] = effect
+        elif effect_var["type"] == "frame":
+            identity: int = int(effect_var["id"])
+            size: list = effect_var["size"]
+            frame_list: list = effect_var["frame"]
+            subst: dict = effect_var["substitution"]
+            offset_pos: list = effect_var["offset_pos"] if "offset_pos" in effect_var.keys() else [
+                0, 0]
+            effect = {
+                "type": effect_var["type"],
+                "size": size,
+                "frame": frame_list,
+                "substitution": subst,
+                "offset_pos": offset_pos
+            }
+            effect_vars[identity] = effect
             # print(effect)
     # print(effect_vars)
     effect_list = []
@@ -57,9 +72,15 @@ def add_effects(abs_notes: list, effect_pool: list, effects: list):
             effect_var = effect_vars[identity]
             start_fancy = StartFancy(
                 effect["offset"], effect_var["colors"], effect_var["interval"], identity, offset_pos=effect_var["offset_pos"], size=effect_var["size"])
-            end_fancy = EndFancy(effect["offset"] + effect["length"], identity)
+            end_fancy = EndEffect(effect["offset"] + effect["length"], identity)
             effect_list.append(start_fancy)
             effect_list.append(end_fancy)
+        elif effect_type == "frame":
+            effect_var = effect_vars[identity]
+            start_frame = StartFrame(effect["offset"], effect_var["size"], effect_var["frame"], effect_var["substitution"], effect_var["offset_pos"], identity)
+            end_frame = EndEffect(effect["offset"] + effect["length"], identity)
+            effect_list.append(start_frame)
+            effect_list.append(end_frame)
     res_list: list = abs_notes + effect_list
     res_list.sort(key=lambda n: n.offset)
     return res_list
