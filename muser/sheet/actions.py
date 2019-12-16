@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/game/sounds.py                 #
-# Project: /williamye/program/pyxel_projects/muser/game                        #
-# Created Date: Tuesday, December 10th 2019, 06:28:33 pm                       #
+# File: /williamye/program/pyxel_projects/muser/muser/sheet/actions.py         #
+# Project: /williamye/program/pyxel_projects/muser/muser/sheet                 #
+# Created Date: Friday, December 13th 2019, 01:21:46 pm                        #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -26,23 +26,19 @@
 *------------------------------------------------------------------------------*
 '''
 
+from sheet.gen.abs_output import *
+from sheet.sheet_constants import *
 
-import pygame.mixer_music
-import game_config as game_config
-pygame.mixer.init()
-class Sound:
-    def __init__(self, path):
-        self.path = path
-    def play(self):
-        try:
-            pygame.mixer.music.load(self.path)
-            pygame.mixer.music.play()
-        except:
-            print("Error loading sound")
-
-class Sounds:
-    class Grade:
-        A = Sound(
-            game_config.GLOB_CONFIG.assets.get("sounds/A.flac"))
-        C = Sound(
-            game_config.GLOB_CONFIG.assets.get("sounds/C.flac"))
+class Actions:
+    @staticmethod
+    def fromArgs(*args):
+        note_type = int(args[0])
+        if note_type == NoteType.NOTE:
+            return AbsNote(*[float(x) for x in args[1:]], absolutified=True)
+        elif note_type == NoteType.FANCY:
+            return StartFancy(int(args[1]), [int(x) for x in args[2].split(";")], float(args[3]), int(args[4]),
+                              [int(x) for x in args[5].split(";")], [int(x) for x in args[6].split(";")])
+        elif note_type == NoteType.STOP_FANCY:
+            return EndFancy(float(args[1]), int(args[2]))
+        else:
+            raise RuntimeError(f"Not supported: {args}")

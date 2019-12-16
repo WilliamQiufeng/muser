@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/game/sounds.py                 #
-# Project: /williamye/program/pyxel_projects/muser/game                        #
-# Created Date: Tuesday, December 10th 2019, 06:28:33 pm                       #
+# File: /williamye/program/pyxel_projects/muser/muser/game/playthrough/manager_actions.py #
+# Project: /williamye/program/pyxel_projects/muser/muser/game/playthrough      #
+# Created Date: Friday, December 13th 2019, 03:24:05 pm                        #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -27,22 +27,17 @@
 '''
 
 
-import pygame.mixer_music
-import game_config as game_config
-pygame.mixer.init()
-class Sound:
-    def __init__(self, path):
-        self.path = path
-    def play(self):
-        try:
-            pygame.mixer.music.load(self.path)
-            pygame.mixer.music.play()
-        except:
-            print("Error loading sound")
-
-class Sounds:
-    class Grade:
-        A = Sound(
-            game_config.GLOB_CONFIG.assets.get("sounds/A.flac"))
-        C = Sound(
-            game_config.GLOB_CONFIG.assets.get("sounds/C.flac"))
+from sheet.gen.abs_output import *
+from game.playthrough.note import PositionedNote
+from game.playthrough.fancy_note import *
+class ManagerActions:
+    @staticmethod
+    def from_note(note):
+        if isinstance(note, AbsNote):
+            return PositionedNote(note)
+        elif isinstance(note, StartFancy):
+            return StartFancyNote(note)
+        elif isinstance(note, EndFancy):
+            return EndFancyNote(note)
+        else:
+            return note

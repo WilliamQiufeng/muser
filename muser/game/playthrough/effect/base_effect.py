@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/game/sounds.py                 #
-# Project: /williamye/program/pyxel_projects/muser/game                        #
-# Created Date: Tuesday, December 10th 2019, 06:28:33 pm                       #
+# File: /williamye/program/pyxel_projects/muser/muser/game/playthrough/effect/effects.py #
+# Project: /williamye/program/pyxel_projects/muser/muser/game/playthrough/effect #
+# Created Date: Saturday, December 14th 2019, 09:36:47 pm                      #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -27,22 +27,12 @@
 '''
 
 
-import pygame.mixer_music
-import game_config as game_config
-pygame.mixer.init()
-class Sound:
-    def __init__(self, path):
-        self.path = path
-    def play(self):
-        try:
-            pygame.mixer.music.load(self.path)
-            pygame.mixer.music.play()
-        except:
-            print("Error loading sound")
-
-class Sounds:
-    class Grade:
-        A = Sound(
-            game_config.GLOB_CONFIG.assets.get("sounds/A.flac"))
-        C = Sound(
-            game_config.GLOB_CONFIG.assets.get("sounds/C.flac"))
+class Effect:
+    
+    def __init__(self, identity: int = 0):
+        self.identity = identity
+    
+    def update(self, **kwargs):
+        raise NotImplementedError
+    def draw(self, **kwargs):
+        raise NotImplementedError

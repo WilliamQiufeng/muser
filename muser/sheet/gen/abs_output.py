@@ -14,16 +14,16 @@ class AbsSheetOutput:
                 self.rel_in.music,
                 self.rel_in.music_offset,
                 self.rel_in.level,
-                NEWLINE.join([str(x) for x in self.rel_in.abs_notes])
+                NEWLINE.join([x.__repr__() for x in self.rel_in.abs_notes])
             ]]
         )
 
 class AbsNote:
-    def __init__(self, offset, beat = 0, pass_time = 2000, absolutified = False, side = random.randint(0, 3)):
+    def __init__(self, offset, beat=0, pass_time=2000, side=random.randint(0, 3), absolutified=False):
         self.offset = offset
         self.beat = beat
         self.pass_time = pass_time
-        self.side = side
+        self.side = int(side)
         self.absolutified = absolutified
     def absolutify(self, beat_interval):
         if not self.absolutified:
@@ -33,6 +33,22 @@ class AbsNote:
             self.absolutified = True
     def __repr__(self):
         return f"{NoteType.NOTE},{self.offset},{self.beat},{self.pass_time},{self.side}"
+class StartFancy:
+    def __init__(self, offset: int, colors = [9, 10], interval: float = 250, identity: int = 0, offset_pos: list = [0, 0], size: list = [256, 256]):
+        self.offset = offset
+        self.colors = colors
+        self.interval = interval
+        self.identity = identity
+        self.offset_pos = offset_pos
+        self.size = size
+    def __repr__(self):
+        return f"{NoteType.FANCY},{self.offset},{';'.join([str(c) for c in self.colors])},{self.interval},{self.identity},{';'.join([str(x) for x in self.offset_pos])},{';'.join([str(x) for x in self.size])}"
+class EndFancy:
+    def __init__(self, offset: float, identity: int = 0):
+        self.offset = offset
+        self.identity = identity
+    def __repr__(self):
+        return f"{NoteType.STOP_FANCY},{self.offset},{self.identity}"
 class ChangeTempo:
     """
     tempo: tempo to be set

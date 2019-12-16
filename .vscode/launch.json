@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "/williamye/program/pyxel_projects/muser/main.py",
             "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}/muser"
         }
     ]
 }

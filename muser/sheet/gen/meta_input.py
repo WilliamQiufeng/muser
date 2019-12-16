@@ -50,6 +50,7 @@ class MetaInput:
             abs_music = root + sheet["music"]
             tempo_index = sheet["tempo_index"]
             indexes = sheet["indexes"]
+            effects = sheet["effects"] if "effects" in sheet.keys() else []
             mtas = MidiToAbsSheet(
                 abs_midi, tempo_index, indexes, False)
             abs_sheet = mtas.to_abs_sheet({
@@ -58,7 +59,8 @@ class MetaInput:
                 "version": sheet["version"],
                 "name": name,
                 "music": abs_music,
-                "level": sheet["level"]
+                "level": sheet["level"],
+                "effects": effects
             })
             #print(abs_sheet)
             sheets.append(abs_sheet)

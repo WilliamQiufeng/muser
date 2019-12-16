@@ -34,6 +34,7 @@ import mido
 from mido import MidiFile
 import io
 from sheet.gen.abs_output import *
+from sheet.gen.effector import *
 import time
 from .rel_input import *
 
@@ -129,7 +130,7 @@ def to_json(file, tempo_index = 0, indexes = [1], simulate = False):
             abs_notes.append(
                 AbsNote(tmp[INDEX_OFFSET] * 1000,
                 0,# tmp["length"],
-                NoteSpeed.SLOW, True, face))
+                2000, face, True))
     abs_notes.sort(key=lambda t: t.offset)
     if simulate:
         #NEWLINE = "\n"
@@ -140,6 +141,9 @@ def to_json(file, tempo_index = 0, indexes = [1], simulate = False):
             if x < len(abs_notes) - 1:
                 time.sleep((abs_notes[x + 1].offset - abs_notes[x].offset) / 1000)
     return abs_notes
+
+
+
 def print_json(file):
 
     midi_file = MidiFile(file)
@@ -153,6 +157,8 @@ class MidiToAbsSheet:
     def __init__(self, filename, tempo_index = 0, indexes = [1], simulate = False):
         self.abs_notes = to_json(filename, tempo_index, indexes, simulate)
     def to_abs_sheet(self, meta = {}):
+        effects = meta["effects"] if "effects" in meta.keys() else []
+        self.abs_notes = add_effects(self.abs_notes, effects)
         self.sheet = SourceSheetInput()
         self.sheet.preprocess = meta
         self.sheet.process()

@@ -7,4 +7,4 @@ if __name__ == '__main__':
     pyxel.load(f"{game_config.GLOB_CONFIG.assets.root}/resources.pyxres")
     print("Res loaded")
     from game import *
-    import game.muser
+    from game import muser

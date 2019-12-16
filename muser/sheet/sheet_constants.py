@@ -31,6 +31,8 @@ class NoteType:
     NOTE = 0
     WAIT = 1
     TEMPO = 2
+    FANCY = 3
+    STOP_FANCY = 4
 
 class NoteAction:
     IN = 0

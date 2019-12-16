@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/game/sounds.py                 #
-# Project: /williamye/program/pyxel_projects/muser/game                        #
-# Created Date: Tuesday, December 10th 2019, 06:28:33 pm                       #
+# File: /williamye/program/pyxel_projects/muser/muser/sheet/gen/effector.py    #
+# Project: /williamye/program/pyxel_projects/muser/muser/sheet/gen             #
+# Created Date: Friday, December 13th 2019, 02:46:44 pm                        #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -27,22 +27,20 @@
 '''
 
 
-import pygame.mixer_music
-import game_config as game_config
-pygame.mixer.init()
-class Sound:
-    def __init__(self, path):
-        self.path = path
-    def play(self):
-        try:
-            pygame.mixer.music.load(self.path)
-            pygame.mixer.music.play()
-        except:
-            print("Error loading sound")
+from sheet.gen.abs_output import *
 
-class Sounds:
-    class Grade:
-        A = Sound(
-            game_config.GLOB_CONFIG.assets.get("sounds/A.flac"))
-        C = Sound(
-            game_config.GLOB_CONFIG.assets.get("sounds/C.flac"))
+def add_effects(abs_notes: list, effects: list):
+    effect_list = []
+    for effect in effects:
+        if effect["type"] == "fancy":
+            identity: int = int(effect["id"])
+            offset_pos: list = effect["offset_pos"] if "offset_pos" in effect.keys() else [0, 0]
+            size: list = effect["size"] if "size" in effect.keys() else [256, 256]
+            start_fancy = StartFancy(
+                effect["offset"], effect["colors"], effect["interval"], identity, offset_pos=offset_pos, size=size)
+            end_fancy = EndFancy(effect["offset"] + effect["length"], identity)
+            effect_list.append(start_fancy)
+            effect_list.append(end_fancy)
+    res_list: list = abs_notes + effect_list
+    res_list.sort(key=lambda n: n.offset)
+    return res_list

@@ -2,10 +2,11 @@ from sheet.gen.abs_output import AbsNote
 from game.constants import Constants
 from game.config import *
 from game.frames import *
+from game.playthrough.base_note import *
 import math
 import pyxel
 import copy
-class PositionedNote:
+class PositionedNote(BaseNote):
 
     def __init__(self, note: AbsNote):
         self.note: AbsNote = note
@@ -14,6 +15,7 @@ class PositionedNote:
         self.direction = Constants.PlayThrough.DIRECTIONS[note.side]
         self.in_scene: bool = False
         self.finished: bool = False
+        self.animation_finished: bool = False
         self.result = Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
     @property
     def len_to_center(self, center: tuple):
@@ -28,6 +30,8 @@ class PositionedNote:
         self.pos[0] = self.initial_pos[0] + self.direction[0] * pixels
         self.pos[1] = self.initial_pos[1] + self.direction[1] * pixels
         #print(f"Move {self.note} {pixels} pixels to {self.pos} from {self.initial_pos}")
+    def __repr__(self):
+        return f"Note {self.note}"
     def update(self, total_time: float) -> int:
         if self.is_time(total_time) and not self.finished:
             print(f"Note in scene at {total_time}: {self.note}")
@@ -53,4 +57,6 @@ class PositionedNote:
     def draw(self):
         if (not self.finished) and self.in_scene:
             Frames.PlayThrough.DIRECTIONS[self.note.side].draw(self.pos[0] - 3, self.pos[1] - 3)
-            #print(f"Draw {self.note} at {self.pos}")
+        # elif self.finished and not self.animation_finished:
+        #     Frames.PlayThrough.ARROW_FADE[self.note.side].draw(self.pos[0] - 4, self.pos[1] - 4)
+        #     self.animation_finished = True

@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/game/sounds.py                 #
-# Project: /williamye/program/pyxel_projects/muser/game                        #
-# Created Date: Tuesday, December 10th 2019, 06:28:33 pm                       #
+# File: /williamye/program/pyxel_projects/muser/muser/game/playthrough/effect/fancy_effect.py #
+# Project: /williamye/program/pyxel_projects/muser/muser/game/playthrough/effect #
+# Created Date: Saturday, December 14th 2019, 10:01:01 pm                      #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -26,23 +26,27 @@
 *------------------------------------------------------------------------------*
 '''
 
-
-import pygame.mixer_music
-import game_config as game_config
-pygame.mixer.init()
-class Sound:
-    def __init__(self, path):
-        self.path = path
-    def play(self):
-        try:
-            pygame.mixer.music.load(self.path)
-            pygame.mixer.music.play()
-        except:
-            print("Error loading sound")
-
-class Sounds:
-    class Grade:
-        A = Sound(
-            game_config.GLOB_CONFIG.assets.get("sounds/A.flac"))
-        C = Sound(
-            game_config.GLOB_CONFIG.assets.get("sounds/C.flac"))
+import pyxel
+from game.playthrough.effect.base_effect import *
+from game.constants import Constants
+from sheet.gen.abs_output import *
+class FancyEffect(Effect):
+    
+    def __init__(self, identity: int, fancy_note: StartFancy):
+        super().__init__(identity=identity)
+        self.fancy_note = fancy_note
+        self.cur_color_index = 0
+    
+    def update(self, **kwargs):
+        total_time: float = kwargs["total_time"]
+        int_total_time = int(total_time)
+        col_range = (int_total_time - self.fancy_note.offset) % (len(self.fancy_note.colors) * self.fancy_note.interval)
+        for i in range(len(self.fancy_note.colors)):
+            if i * self.fancy_note.interval <= col_range and col_range < (i + 1) * self.fancy_note.interval:
+                self.cur_color_index = i
+                # print(f"Color {self.colors[self.cur_color_index]}: {i * self.interval} <= {col_range} < {(i + 1) * self.interval}, {total_time}")
+                break
+    def draw(self, **kwargs):
+        if self.fancy_note.colors[self.cur_color_index] != -1:
+            pyxel.rect(*self.fancy_note.offset_pos, *self.fancy_note.size,
+                        self.fancy_note.colors[self.cur_color_index])
