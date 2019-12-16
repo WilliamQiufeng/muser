@@ -158,7 +158,8 @@ class MidiToAbsSheet:
         self.abs_notes = to_json(filename, tempo_index, indexes, simulate)
     def to_abs_sheet(self, meta = {}):
         effects = meta["effects"] if "effects" in meta.keys() else []
-        self.abs_notes = add_effects(self.abs_notes, effects)
+        effect_pool = meta["effect_pool"] if "effect_pool" in meta.keys() else []
+        self.abs_notes = add_effects(self.abs_notes, effect_pool, effects)
         self.sheet = SourceSheetInput()
         self.sheet.preprocess = meta
         self.sheet.process()

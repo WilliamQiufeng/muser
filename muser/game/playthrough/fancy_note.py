@@ -28,7 +28,7 @@
 
 
 from game.playthrough.base_note import *
-from sheet.gen.abs_output import StartFancy, EndFancy
+from sheet.gen.abs_output import StartFancy, EndEffect
 from game.playthrough.effect.effect_controller import *
 from game.playthrough.effect.fancy_effect import *
 
@@ -46,9 +46,9 @@ class StartFancyNote(BaseNote):
         return f"StartFancy {self.fancy_note.identity} at {self.fancy_note.offset}"
     def draw(self):
         pass
-class EndFancyNote(BaseNote):
-    def __init__(self, end_fancy: EndFancy):
-        self.end_fancy: EndFancy = end_fancy
+class EndEffectNote(BaseNote):
+    def __init__(self, end_fancy: EndEffect):
+        self.end_fancy: EndEffect = end_fancy
         self.finished = False
     def update(self, total_time: int):
         if (not self.finished) and total_time >= self.end_fancy.offset:
