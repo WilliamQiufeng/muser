@@ -61,7 +61,6 @@ Qiufeng#Toby Fox#0.0.0.1#Determination#/williamye/program/pyxel_projects/muser/m
 0,26340.85634375,0,2000,3
 0,26596.2910625,0,2000,2
 0,26857.160562499997,0,2000,2
-3,27140,0;1,3130,0,0;0,256;256
 0,27389.769125000003,0,2000,0
 0,27906.073343750002,0,2000,0
 0,28161.5080625,0,2000,2
@@ -120,8 +119,7 @@ Qiufeng#Toby Fox#0.0.0.1#Determination#/williamye/program/pyxel_projects/muser/m
 0,47218.58720833326,0,2000,0
 0,47751.19577083326,0,2000,3
 0,48267.49998958326,0,2000,1
-0,48783.804208333255,0,2000,2
-4,49080,0|Qiufeng#Toby Fox#0.0.0.1#Determination#/williamye/program/pyxel_projects/muser/muser/assets//sheets/Toby Fox - Determination.flac#2000#hard#0,43.478249999999996,0,2000,0
+0,48783.804208333255,0,2000,2|Qiufeng#Toby Fox#0.0.0.1#Determination#/williamye/program/pyxel_projects/muser/muser/assets//sheets/Toby Fox - Determination.flac#2000#hard#0,43.478249999999996,0,2000,0
 0,320.65209375,0,2000,1
 0,576.0868125,0,2000,2
 0,836.9563125,0,2000,3

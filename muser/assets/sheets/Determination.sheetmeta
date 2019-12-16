@@ -11,20 +11,7 @@
             "music": "Toby Fox - Determination.flac",
             "tempo_index": 1,
             "indexes": [2],
-            "level": "easy",
-            "effects": [
-                {
-                    "id": 0,
-                    "offset": 27140,
-                    "type": "fancy",
-                    "colors": [
-                        0,
-                        1
-                    ],
-                    "interval": 3130,
-                    "length": 21940
-                }
-            ]
+            "level": "easy"
         },
         {  
             "author": "Qiufeng",

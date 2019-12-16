@@ -29,15 +29,34 @@
 
 from sheet.gen.abs_output import *
 
-def add_effects(abs_notes: list, effects: list):
+def add_effects(abs_notes: list, effect_pool: list, effects: list):
+    # print(effect_pool)
+    effect_vars = {}
+    for effect_var in effect_pool:
+        if effect_var["type"] == "fancy":
+            identity: int = int(effect_var["id"])
+            offset_pos: list = effect_var["offset_pos"] if "offset_pos" in effect_var.keys() else [
+                0, 0]
+            size: list = effect_var["size"] if "size" in effect_var.keys() else [
+                256, 256]
+            effect = {
+                "type": effect_var["type"],
+                "colors": effect_var["colors"],
+                "interval": effect_var["interval"],
+                "offset_pos": offset_pos,
+                "size": size
+            }
+            effect_vars[identity] = effect
+            # print(effect)
+    # print(effect_vars)
     effect_list = []
     for effect in effects:
-        if effect["type"] == "fancy":
-            identity: int = int(effect["id"])
-            offset_pos: list = effect["offset_pos"] if "offset_pos" in effect.keys() else [0, 0]
-            size: list = effect["size"] if "size" in effect.keys() else [256, 256]
+        identity: int = int(effect["id"])
+        effect_type = effect_vars[identity]["type"]
+        if effect_type == "fancy":
+            effect_var = effect_vars[identity]
             start_fancy = StartFancy(
-                effect["offset"], effect["colors"], effect["interval"], identity, offset_pos=offset_pos, size=size)
+                effect["offset"], effect_var["colors"], effect_var["interval"], identity, offset_pos=effect_var["offset_pos"], size=effect_var["size"])
             end_fancy = EndFancy(effect["offset"] + effect["length"], identity)
             effect_list.append(start_fancy)
             effect_list.append(end_fancy)
