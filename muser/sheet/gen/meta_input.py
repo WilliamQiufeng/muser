@@ -50,6 +50,7 @@ class MetaInput:
             abs_music = root + sheet["music"]
             tempo_index = sheet["tempo_index"]
             indexes = sheet["indexes"]
+            effect_pool = sheet["effect_pool"] if "effect_pool" in sheet.keys() else []
             effects = sheet["effects"] if "effects" in sheet.keys() else []
             mtas = MidiToAbsSheet(
                 abs_midi, tempo_index, indexes, False)
@@ -60,6 +61,7 @@ class MetaInput:
                 "name": name,
                 "music": abs_music,
                 "level": sheet["level"],
+                "effect_pool": effect_pool,
                 "effects": effects
             })
             #print(abs_sheet)

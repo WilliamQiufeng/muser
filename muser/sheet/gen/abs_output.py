@@ -43,12 +43,27 @@ class StartFancy:
         self.size = size
     def __repr__(self):
         return f"{NoteType.FANCY},{self.offset},{';'.join([str(c) for c in self.colors])},{self.interval},{self.identity},{';'.join([str(x) for x in self.offset_pos])},{';'.join([str(x) for x in self.size])}"
-class EndFancy:
+class EndEffect:
     def __init__(self, offset: float, identity: int = 0):
         self.offset = offset
         self.identity = identity
     def __repr__(self):
-        return f"{NoteType.STOP_FANCY},{self.offset},{self.identity}"
+        return f"{NoteType.STOP_EFFECT},{self.offset},{self.identity}"
+
+class StartFrame:
+    def __init__(self, offset: float, size: list, frame_list: list, substitution: dict, offset_pos: list = [0, 0], identity: int = 0, substitute: bool = True):
+        self.offset = offset
+        if substitute:
+            self.frame = [[substitution[frame_list[line][char_i]] for char_i in range(size[0])] for line in range(size[1])]
+        else:
+            self.frame = frame_list
+        self.identity = identity
+        self.size = size
+        self.offset_pos = offset_pos
+    def __repr__(self):
+        return f"{NoteType.START_FRAME},{self.offset},{';'.join([str(x) for x in self.size])},"\
+                f"{';'.join([';'.join([str(col) for col in line]) for line in self.frame])},{';'.join([str(x) for x in self.offset_pos])},{self.identity}"
+        
 class ChangeTempo:
     """
     tempo: tempo to be set

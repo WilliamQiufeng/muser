@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/muser/game/playthrough/manager_actions.py #
+# File: /williamye/program/pyxel_projects/muser/muser/game/playthrough/frame_note.py #
 # Project: /williamye/program/pyxel_projects/muser/muser/game/playthrough      #
-# Created Date: Friday, December 13th 2019, 03:24:05 pm                        #
+# Created Date: Monday, December 16th 2019, 06:06:22 pm                        #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -27,20 +27,27 @@
 '''
 
 
-from sheet.gen.abs_output import *
-from game.playthrough.note import PositionedNote
-from game.playthrough.fancy_note import *
-from game.playthrough.frame_note import *
-class ManagerActions:
-    @staticmethod
-    def from_note(note):
-        if isinstance(note, AbsNote):
-            return PositionedNote(note)
-        elif isinstance(note, StartFancy):
-            return StartFancyNote(note)
-        elif isinstance(note, EndEffect):
-            return EndEffectNote(note)
-        elif isinstance(note, StartFrame):
-            return StartFrameNote(note)
-        else:
-            return note
+from game.playthrough.base_note import *
+from sheet.gen.abs_output import StartFancy, EndEffect
+from game.playthrough.effect.effect_controller import *
+from game.playthrough.effect.frame_effect import *
+
+
+class StartFrameNote(BaseNote):
+    def __init__(self, frame_note: StartFrame):
+        self.frame_note: StartFrame = frame_note
+        self.finished = False
+        self.effect = FrameEffect(
+            identity=self.frame_note.identity, frame_note=frame_note)
+
+    def update(self, total_time: int):
+        if (not self.finished) and total_time >= self.frame_note.offset:
+            print("Frame Note In")
+            EffectController.add_effect(self.effect)
+            self.finished = True
+
+    def __repr__(self):
+        return f"StartFrame {self.frame_note.identity} at {self.frame_note.offset}"
+
+    def draw(self):
+        pass

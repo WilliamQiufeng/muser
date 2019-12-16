@@ -32,7 +32,8 @@ class NoteType:
     WAIT = 1
     TEMPO = 2
     FANCY = 3
-    STOP_FANCY = 4
+    STOP_EFFECT = 4
+    START_FRAME = 5
 
 class NoteAction:
     IN = 0
