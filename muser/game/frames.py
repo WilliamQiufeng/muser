@@ -36,7 +36,7 @@ class ArrowFrame(Frame):
             y10 = y00
             x11 = x + math.ceil((self.width - 1) / 2)
             y11 = y00
-            x12 = x + math.ceil((self.width - 1) / 2)
+            x12 = x11
             y12 = y02
             
             pyxel.rect(x + self.width / 3 * 1, y, self.width / 3 * 1, self.height, self.col)
