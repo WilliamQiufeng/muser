@@ -34,7 +34,7 @@ with open("../README.md", "r") as fh:
 
 setup(
     name="muser",
-    version="1.2.1.1",
+    version="1.2.1.2",
     author="Qiufeng54321",
     author_email="williamcraft@163.com",
     description="A musical game made using pyxel",
@@ -48,7 +48,7 @@ setup(
     zip_safe=False,
     entry_points={
         'console_scripts': [
-            'muser=main',
+            'muser=muser:main',
         ],
     },
     classifiers=[
