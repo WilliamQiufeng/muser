@@ -29,12 +29,12 @@
 import io
 from setuptools import setup, find_packages
 
-with open("README.md", "r") as fh:
+with open("../README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
     name="muser",
-    version="1.1",
+    version="1.2.1",
     author="Qiufeng54321",
     author_email="williamcraft@163.com",
     description="A musical game made using pyxel",
