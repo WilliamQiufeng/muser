@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "."
+		},
+		{
+			"path": "/williamye/program/pyxel_projects/muser_sheeets"
 		}
 	],
 	"settings": {
