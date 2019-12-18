@@ -1,5 +1,14 @@
 # Muser
 
+![LatestRelease](<https://img.shields.io/github/v/release/Qiufeng54321/muser?label=latest%20release&style=flat-square>)
+![ReleaseDate](<https://img.shields.io/github/release-date/Qiufeng54321/muser?style=flat-square>)
+![LastCommit](<https://img.shields.io/github/last-commit/Qiufeng54321/muser?style=flat-square>)
+![License](https://img.shields.io/pypi/l/muser?style=flat-square)
+![UploadPackage](<https://img.shields.io/github/workflow/status/Qiufeng54321/muser/Upload Python Package?label=package%20upload&style=flat-square>)
+![Packaging](<https://img.shields.io/github/workflow/status/Qiufeng54321/muser/Python package?label=package&style=flat-square>)
+![CodeSize](<https://img.shields.io/github/languages/code-size/Qiufeng54321/muser?style=flat-square>)
+![RepoSize](<https://img.shields.io/github/repo-size/Qiufeng54321/muser?style=flat-square>)
+
 ------
 
 ## Introduction
