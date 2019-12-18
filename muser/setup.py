@@ -43,12 +43,12 @@ setup(
     license="GPLv3",
     keywords="pyxel",
     url="https://github.com/Qiufeng54321/muser",
-    install_requires=io.open("requirements.txt", "r").read().split("\n"),
+    install_requires=io.open("../requirements.txt", "r").read().split("\n"),
     packages=find_packages(),
     zip_safe=False,
     entry_points={
         'console_scripts': [
-            'muser=muser:main',
+            'muser=main',
         ],
     },
     classifiers=[
