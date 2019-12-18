@@ -92,11 +92,6 @@
             ],
             "effects": [
                 {
-                    "id": 7,
-                    "offset": 2000,
-                    "length": 100000
-                },
-                {
                     "id": 0,
                     "offset": 2000,
                     "length": 17680
