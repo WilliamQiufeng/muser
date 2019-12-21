@@ -16,6 +16,7 @@ class Muser:
         except BaseException as e:
             print(e)
             traceback.print_exc()
+            exit()
     def draw(self):
         pyxel.cls(0)
         Config.CAST.draw()
