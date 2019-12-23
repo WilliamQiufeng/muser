@@ -110,13 +110,22 @@ class Casts:
             return Casts.PlayThrough(self.sheet[self.level_selection], self.music_source)
     class PlayThrough(Cast):
         UPDATES = [
-            KeyListener(pyxel.KEY_S, on_touch=lambda: Casts.PlayThrough.touch(0)),
+            KeyListener(
+                pyxel.KEY_S, on_touch=lambda: Casts.PlayThrough.touch(0)),
             KeyListener(
                 pyxel.KEY_W, on_touch=lambda: Casts.PlayThrough.touch(1)),
             KeyListener(
                 pyxel.KEY_D, on_touch=lambda: Casts.PlayThrough.touch(2)),
             KeyListener(
-                pyxel.KEY_A, on_touch=lambda: Casts.PlayThrough.touch(3))
+                pyxel.KEY_A, on_touch=lambda: Casts.PlayThrough.touch(3)),
+            KeyListener(
+                pyxel.KEY_K, on_touch=lambda: Casts.PlayThrough.touch(0)),
+            KeyListener(
+                pyxel.KEY_I, on_touch=lambda: Casts.PlayThrough.touch(1)),
+            KeyListener(
+                pyxel.KEY_L, on_touch=lambda: Casts.PlayThrough.touch(2)),
+            KeyListener(
+                pyxel.KEY_J, on_touch=lambda: Casts.PlayThrough.touch(3))
         ]
         @staticmethod
         def touch(side: int):

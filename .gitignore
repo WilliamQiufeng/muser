@@ -3,7 +3,7 @@ dist/
 out/
 __pycache__/
 muser.egg-info/
-sheets/
+sheets
 # General
 .DS_Store
 .AppleDouble
