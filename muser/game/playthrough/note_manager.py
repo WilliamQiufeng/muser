@@ -115,11 +115,6 @@ class NoteManager:
     
     def draw(self):
         EffectController.draw(total_time=self.total_time)
-        Constants.PlayThrough.NoteIndicator.getFrame(self.last_indicator).draw(*util.grid(
-            Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
-            16, 16,
-            1, 1
-        ))
         pyxel.text(*util.grid(
             Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
             16, 16,
@@ -127,5 +122,14 @@ class NoteManager:
         ), f"Score: {int(self.score)}", 12)
         Frames.PlayThrough.INDICATOR_CIRCLE.draw(*Constants.Cast.center(
             Frames.PlayThrough.INDICATOR_CIRCLE.width, Frames.PlayThrough.INDICATOR_CIRCLE.height))
+        # indicator_res = Constants.PlayThrough.NoteIndicator.getFrame(
+        #     self.last_indicator)
+        # indicator_res.draw(
+        #     *Constants.Cast.center(indicator_res.width, indicator_res.height))
+        Constants.PlayThrough.NoteIndicator.getFrame(self.last_indicator).draw(*util.grid(
+            Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
+            16, 16,
+            1, 1
+        ))
         for note in self.notes:
             note.draw()

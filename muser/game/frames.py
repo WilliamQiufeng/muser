@@ -6,7 +6,7 @@ class Frame:
         self.y = y
         self.width = width
         self.height = height
-        self.image = 0
+        self.image = image
     def draw(self, x, y):
         pyxel.blt(x, y, self.image, self.x, self.y, self.width, self.height)
 class ArrowFrame(Frame):
@@ -71,6 +71,35 @@ class ArrowFrame(Frame):
                       x11, y11,
                       x12, y12,
                       self.col)
+
+class BitmapFrame(Frame):
+    def __init__(self, width, height, image=[], substitution={}):
+        super().__init__(0, 0, width, height, image=[list(x) if isinstance(x, str) else x for x in image])
+        self.substitution = substitution
+    def scaleUp(self, scale_x: int = 1, scale_y: int = 1):
+        new_size = (self.width * scale_x, self.height * scale_y)
+        new_image = [[' '] * new_size[0] for _ in range(new_size[1])]
+        # y_o and x_o: y and x offsets
+        for y_o in range(self.height):
+            for x_o in range(self.width):
+                placeholder = self.image[y_o][x_o]
+                # y_s and x_s: y scale and x scale
+                for y_s in range(scale_y):
+                    for x_s in range(scale_x):
+                        new_image[y_o * scale_y + y_s][x_o * scale_x + x_s] = placeholder
+        self.width, self.height = new_size
+        self.image = new_image
+        return self
+    def draw(self, x, y):
+        # y_o and x_o: y and x offsets
+        for y_o in range(self.height):
+            for x_o in range(self.width):
+                col = self.substitution[self.image[y_o][x_o]]
+                if col != -1:
+                    pyxel.pix(x + x_o, y + y_o, col)
+    def __repr__(self):
+        return '\n'.join([','.join(x) for x in self.image])
+
 class Frames:
     class Intro:
         EMPTY = [Frame(80, 136, 79, 16)]
@@ -97,7 +126,65 @@ class Frames:
         DIRECTIONS = [ArrowFrame(x) for x in range(4)]
         ARROW_FADE = [Frame(56 + 8 * x, 4, 8, 8) for x in range(4)]
         INDICATOR_CIRCLE = Frame(32, 48, 32, 32)
-        INDICATOR_RES = [Frame(x * 8, 16, 8, 8) for x in range(5)]
+        # INDICATOR_RES = [Frame(x * 8, 16, 8, 8) for x in range(5)]
+        INDICATOR_SCALE = (2, 2)
+        INDICATOR_RES = [
+            BitmapFrame(5, 6, [
+                ' OOO ',
+                'O   O',
+                'O   O',
+                'OOOO ',
+                'O    ',
+                'O    '
+            ], {
+                ' ': -1,
+                'O': 8
+            }).scaleUp(*INDICATOR_SCALE),
+            BitmapFrame(5, 6, [
+                ' OOO ',
+                'O   O',
+                'O    ',
+                'O OOO',
+                'O   O',
+                ' OOOO'
+            ], {
+                ' ': -1,
+                'O': 12
+            }).scaleUp(*INDICATOR_SCALE),
+            BitmapFrame(5, 6, [
+                ' OOO ',
+                'O   O',
+                'OOOO ',
+                'O   O',
+                'O   O',
+                'OOOO '
+            ], {
+                ' ': -1,
+                'O': 13
+            }).scaleUp(*INDICATOR_SCALE),
+            BitmapFrame(5, 6, [
+                'O   O',
+                'OO OO',
+                'O O O',
+                'O O O',
+                'O   O',
+                'O   O'
+            ], {
+                ' ': -1,
+                'O': 5
+            }).scaleUp(*INDICATOR_SCALE),
+            BitmapFrame(5, 6, [
+                '     ',
+                '     ',
+                '     ',
+                '     ',
+                '     ',
+                '     '
+            ], {
+                ' ': -1,
+                'O': 8
+            }).scaleUp(*INDICATOR_SCALE)
+        ]
     class Result:
         S, A, B, C, D, F = (Frame(x * 16, 112, 16, 16) for x in range(6))
         
@@ -111,3 +198,4 @@ class Frames:
                 Frames.Result.D,
                 Frames.Result.F
             ]
+
