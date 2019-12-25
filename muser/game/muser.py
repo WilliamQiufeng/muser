@@ -18,6 +18,6 @@ class Muser:
             traceback.print_exc()
             exit()
     def draw(self):
-        pyxel.cls(0)
+        Config.CAST.clear_screen()
         Config.CAST.draw()
 Muser()

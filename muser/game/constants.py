@@ -94,6 +94,7 @@ class Constants:
                 return Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
             
     class Result:
+        ANIMATION_SPEED = 3072
         class Grade:
             FAIL = 0
             D = 60

@@ -53,6 +53,9 @@ class NoteManager:
         print("\n".join([str(x) for x in self.notes]))
         self.side_distances: list = side_distances
         self.music_source: str = music_source
+        buf_mus = pygame.mixer.Sound(self.music_source)
+        self.music_len: float = buf_mus.get_length()
+        del buf_mus
         self.music_started: bool = False
         self.started: bool = False
         self.initiate: bool = True
@@ -100,6 +103,7 @@ class NoteManager:
         EffectController.update(total_time=self.total_time * 1000)
         if self.music_started and not pygame.mixer.music.get_busy():
             self.finished = True
+            EffectController.clear_effects()
             return None
         res = Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
         for note in self.notes:
@@ -114,22 +118,36 @@ class NoteManager:
             self.last_indicator = res
     
     def draw(self):
+        # Draw effects first
         EffectController.draw(total_time=self.total_time)
+        
+        # Draw score
         pyxel.text(*util.grid(
             Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
             16, 16,
             12, 1
         ), f"Score: {int(self.score)}", 12)
+        
+        # Draw indicator
         Frames.PlayThrough.INDICATOR_CIRCLE.draw(*Constants.Cast.center(
             Frames.PlayThrough.INDICATOR_CIRCLE.width, Frames.PlayThrough.INDICATOR_CIRCLE.height))
         # indicator_res = Constants.PlayThrough.NoteIndicator.getFrame(
         #     self.last_indicator)
         # indicator_res.draw(
         #     *Constants.Cast.center(indicator_res.width, indicator_res.height))
+        
+        # Draw last indicator result
         Constants.PlayThrough.NoteIndicator.getFrame(self.last_indicator).draw(*util.grid(
             Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
             16, 16,
             1, 1
         ))
+        
+        # Draw notes
         for note in self.notes:
             note.draw()
+            
+        # Draw progress
+        if self.music_started:
+            progess: int = int(pygame.mixer.music.get_pos() / (self.music_len * 1000) * Constants.Cast.WIDTH)
+            pyxel.rect(0, 0, progess, 2, 7)

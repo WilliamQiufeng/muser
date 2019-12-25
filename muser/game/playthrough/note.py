@@ -56,7 +56,8 @@ class PositionedNote(BaseNote):
         return Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
     def draw(self):
         if (not self.finished) and self.in_scene:
-            Frames.PlayThrough.DIRECTIONS[self.note.side].draw(self.pos[0] - 3, self.pos[1] - 3)
+            frame = Frames.PlayThrough.DIRECTIONS[self.note.side]
+            frame.draw(self.pos[0] - frame.width / 2, self.pos[1] - frame.height / 2)
         # elif self.finished and not self.animation_finished:
         #     Frames.PlayThrough.ARROW_FADE[self.note.side].draw(self.pos[0] - 4, self.pos[1] - 4)
         #     self.animation_finished = True
