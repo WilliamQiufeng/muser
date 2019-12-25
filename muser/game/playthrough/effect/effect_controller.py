@@ -34,7 +34,11 @@ class EffectController:
         EffectController.pool[effect.identity] = effect
     @staticmethod
     def remove_effect(identity: int):
-        del EffectController.pool[identity]
+        if identity in EffectController.pool.keys():
+            del EffectController.pool[identity]
+    @staticmethod
+    def clear_effects():
+        EffectController.pool.clear()
     @staticmethod
     def update(**kwargs):
         for effect in EffectController.pool.values():

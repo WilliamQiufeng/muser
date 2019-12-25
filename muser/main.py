@@ -8,3 +8,4 @@ if __name__ == '__main__':
     print("Res loaded")
     from game import *
     from game import muser
+

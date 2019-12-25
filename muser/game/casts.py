@@ -22,6 +22,8 @@ class Cast:
         raise NotImplementedError
     def next_cast(self):
         raise NotImplementedError
+    def clear_screen(self):
+        pyxel.cls(0)
 class Casts:
     class Intro(Cast):
         def __init__(self):
@@ -43,6 +45,7 @@ class Casts:
             return self.finished
         def next_cast(self):
             return Casts.LevelSelection()
+
     class LevelSelection(Cast):
         BUTTONS = [
             Button(16, Constants.Cast.center(16, 16)[1], pyxel.KEY_LEFT,Frames.LevelSelection.LEFT_PRESSED, Frames.LevelSelection.LEFT_UNPRESSED, lambda: Casts.LevelSelection.increase(Config.CAST, -1)),
@@ -171,7 +174,9 @@ class Casts:
             self.finished = False
             self.prefinished = False
             self.animating = False
-            self.prefinish_frame = pyxel.frame_count
+            # self.animation_bitmap = [(x, y) for x in range(Constants.Cast.WIDTH) for y in range(Constants.Cast.HEIGHT)]
+            total_pixels = Constants.Cast.WIDTH * Constants.Cast.HEIGHT
+            self.animation_bitmap = random.sample(range(0, total_pixels), total_pixels)
             self.score_percentage = self.play_through.note_manager.score / Constants.PlayThrough.Score.TOTAL_SCORE * 100
             self.grade_frame = Constants.Result.Grade.getGradeFrame(self.score_percentage)
             self.count = NoteManager.count(self.play_through.note_manager)
@@ -186,27 +191,35 @@ class Casts:
             for upd in Casts.Result.UPDATES:
                 upd.update()
         def draw(self):
-            pyxel.cls(2 if self.score_percentage >= Constants.Result.Grade.A else 3)
-            counter_positions = [util.grid(
-                Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 1 + (x % 2) * 2, 12 + (0 if x < 2 else 1)) for x in range(4)]
-            tp_pos = util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 2, 12.5)
-            score_pos = util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 2, 11)
-            count_prop = self.count.get_prop()
-            pyxel.text(*tp_pos, "TP: {0:.2f}%".format(self.tp), 13)
-            pyxel.text(*score_pos, f"Score: {self.score}", 14)
-            for x in range(4):
-                key = list(count_prop.keys())[x]
-                pyxel.text(*counter_positions[x], f"{key}: {count_prop[key]}", 12 - x)
-            self.grade_frame.draw(*Constants.Cast.center(self.grade_frame.width, self.grade_frame.height))
+            if not self.animating:
+                pyxel.cls(2 if self.score_percentage >= Constants.Result.Grade.A else 3)
+                counter_positions = [util.grid(
+                    Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 1 + (x % 2) * 2, 12 + (0 if x < 2 else 1)) for x in range(4)]
+                tp_pos = util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 2, 12.5)
+                score_pos = util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 2, 11)
+                count_prop = self.count.get_prop()
+                pyxel.text(*tp_pos, "TP: {0:.2f}%".format(self.tp), 13)
+                pyxel.text(*score_pos, f"Score: {self.score}", 14)
+                for x in range(4):
+                    key = list(count_prop.keys())[x]
+                    pyxel.text(*counter_positions[x], f"{key}: {count_prop[key]}", 12 - x)
+                self.grade_frame.draw(*Constants.Cast.center(self.grade_frame.width, self.grade_frame.height))
             if self.animating and not self.finished:
-                height = (pyxel.frame_count - self.prefinish_frame) * 32 / 256 * Constants.Cast.HEIGHT
-                pyxel.rect(0, Constants.Cast.HEIGHT - height, Constants.Cast.WIDTH, height, 14)
-                if height >= Constants.Cast.HEIGHT:
-                    self.animating = False
-                    self.finished = True
+                for i in range(Constants.Result.ANIMATION_SPEED):
+                    if len(self.animation_bitmap) == 0:
+                        self.animating = False
+                        self.finished = True
+                        break
+                    rand = self.animation_bitmap.pop()
+                    x = rand % Constants.Cast.WIDTH
+                    pos = [(rand - x) / Constants.Cast.WIDTH, x]
+                    pyxel.pix(*pos, 8)
         def is_finished(self):
             return self.finished
         def next_cast(self):
             return Casts.LevelSelection()
+        def clear_screen(self):
+            if not self.animating:
+                super().clear_screen()
 
 Config.CAST = Casts.Intro()

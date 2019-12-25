@@ -76,6 +76,22 @@ class BitmapFrame(Frame):
     def __init__(self, width, height, image=[], substitution={}):
         super().__init__(0, 0, width, height, image=[list(x) if isinstance(x, str) else x for x in image])
         self.substitution = substitution
+    @staticmethod
+    def frameScaleUp(image: list, width: int = 16, height: int = 16, scale_x: int = 1, scale_y: int = 1):
+        new_size = (width * scale_x, height * scale_y)
+        new_image = [[' '] * new_size[0] for _ in range(new_size[1])]
+        # y_o and x_o: y and x offsets
+        for y_o in range(height):
+            for x_o in range(width):
+                placeholder = image[y_o][x_o]
+                # y_s and x_s: y scale and x scale
+                for y_s in range(scale_y):
+                    for x_s in range(scale_x):
+                        new_image[y_o * scale_y + y_s][x_o * scale_x + x_s] = placeholder
+        return {
+            "new_size": new_size,
+            "new_image": new_image
+        }
     def scaleUp(self, scale_x: int = 1, scale_y: int = 1):
         new_size = (self.width * scale_x, self.height * scale_y)
         new_image = [[' '] * new_size[0] for _ in range(new_size[1])]
@@ -123,7 +139,7 @@ class Frames:
         PLAY_PRESSED = Frame(16, 64, 16, 16)
     class PlayThrough:
         # DIRECTIONS = [Frame(1 + x * 8, 5, 6, 6) for x in range(4)]
-        DIRECTIONS = [ArrowFrame(x) for x in range(4)]
+        DIRECTIONS = [ArrowFrame(x, 6, 6) for x in range(4)]
         ARROW_FADE = [Frame(56 + 8 * x, 4, 8, 8) for x in range(4)]
         INDICATOR_CIRCLE = Frame(32, 48, 32, 32)
         # INDICATOR_RES = [Frame(x * 8, 16, 8, 8) for x in range(5)]

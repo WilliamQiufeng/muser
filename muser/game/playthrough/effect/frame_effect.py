@@ -39,8 +39,6 @@ class FrameEffect(Effect):
         self.frame_note = frame_note
         print(self.frame_note.frame)
     def update(self, **kwargs):
-        # total_time = kwargs["total_time"]
-        # int_total_time = int(total_time)
         pass
     def draw(self, **kwargs):
         for y in range(self.frame_note.size[1]):

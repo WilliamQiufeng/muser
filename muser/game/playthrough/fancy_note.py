@@ -52,7 +52,7 @@ class EndEffectNote(BaseNote):
         self.finished = False
     def update(self, total_time: int):
         if (not self.finished) and total_time >= self.end_fancy.offset:
-            print("Fancy note out")
+            print(f"Effect note {self.end_fancy.identity} out")
             EffectController.remove_effect(self.end_fancy.identity)
             self.finished = True
     def __repr__(self):
