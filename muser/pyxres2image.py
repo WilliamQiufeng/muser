@@ -55,7 +55,8 @@ image_index = int(input("Image Index: "))
 offset_pos = (int(input("Offset X: ")), int(input("Offset Y: ")))
 size = (int(input("Size X: ")), int(input("Size Y: ")))
 
-col_arr = [list(
+col_arr =   (
+                list(
                     chain.from_iterable(
                         (
                             int2rgb(
@@ -64,21 +65,7 @@ col_arr = [list(
                         )
                     )
                 ) for y in range(size[1])
-            ]
-# col_arr = []
-# for row in col_code_arr:
-#     nrow = []
-#     for element in row:
-#         nrow.extend(int2rgb(element))
-#     col_arr.append(nrow)
-
-# for y in range(size[1]):
-#     row = []
-#     for x in range(size[0]):
-#         col_hex = pyxel.DEFAULT_PALETTE[pyxel.image(0).get(offset_pos[0] + x, offset_pos[1] + y)]
-#         col_rgb = int2rgb(col_hex)
-#         row += col_rgb
-#     col_arr.append(row)
+            )
 
 out_path = input("Output Image Path: ")
 out = io.open(out_path, "wb")
