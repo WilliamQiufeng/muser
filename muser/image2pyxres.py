@@ -36,24 +36,6 @@ print("Pyxel initialised")
 filename = input("Image name: ")
 
 reader = png.Reader(filename=filename)
-# read = list(reader.read())
-# read[2] = list(read[2])
-# color_code_res = []
-# for row in read[2]:
-#     arr = []
-#     for i in range(int(read[0] / 3)):
-#         color = row[i] * 65536 + row[i + 1] * 256 + row[i + 2]
-#         diff = 2 ** 32
-#         ind = -1
-#         for palette_index in range(len(pyxel.DEFAULT_PALETTE)):
-#             diff_cur = abs(color - pyxel.DEFAULT_PALETTE[palette_index])
-#             if diff_cur < diff:
-#                 diff = diff_cur
-#                 ind = palette_index
-#         arr.append(ind)
-#     color_code_res.append(arr)
-
-# print("Image read")
 
 out_res = input("Output pyxres file: ")
 offset_pos = (int(input("Offset X: ")), int(input("Offset Y: ")))
@@ -61,9 +43,3 @@ pyxel.load(out_res)
 pyxel.image(0, system=True).load(*offset_pos, filename)
 pyxel.save(out_res)
 print("Done")
-# size = (int(input("Size X: ")), int(input("Size Y: ")))
-
-# image = pyxel.image(0, True)
-# for y in range(size[1]):
-#     for x in range(size[0]):
-#         image.
