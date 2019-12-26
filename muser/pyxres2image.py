@@ -57,12 +57,10 @@ size = (int(input("Size X: ")), int(input("Size Y: ")))
 
 col_arr =   (
                 list(
-                    chain.from_iterable(
-                        (
-                            int2rgb(
-                                pyxel.DEFAULT_PALETTE[pyxel.image(image_index).data[y + offset_pos[1]][x + offset_pos[0]]]
-                            ) for x in range(size[0])
-                        )
+                    (
+                        int2rgb(
+                            pyxel.DEFAULT_PALETTE[pyxel.image(image_index).data[y + offset_pos[1]][x + offset_pos[0]]]
+                        )[i] for x in range(size[0]) for i in range(3)
                     )
                 ) for y in range(size[1])
             )

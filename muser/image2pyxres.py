@@ -31,9 +31,10 @@ import png, json
 import pyxel
 
 pyxel.init(1, 1)
+
 print("Pyxel initialised")
 
-filename = input("Image name: ")
+filename = input("Image path: ")
 
 reader = png.Reader(filename=filename)
 
