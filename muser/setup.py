@@ -34,7 +34,7 @@ with open("../README.md", "r") as fh:
 
 setup(
     name="muser",
-    version="1.2.1.3",
+    version="1.2.2",
     author="Qiufeng54321",
     author_email="williamcraft@163.com",
     description="A musical game made using pyxel",
