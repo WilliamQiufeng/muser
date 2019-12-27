@@ -6,15 +6,15 @@ sphinx:
   configuration: docs/source/conf.py
 python:
    version: 3.7
-   install:
-      - requirements: requirements.txt
-      - method: pip
-        path: .
-        extra_requirements:
-            - docs
-      - method: setuptools
-        path: muser
-   system_packages: true
+   # install:
+   #    - requirements: requirements.txt
+   #    - method: pip
+   #      path: .
+   #      extra_requirements:
+   #          - docs
+   #    - method: setuptools
+   #      path: muser
+   # system_packages: true
 build:
   image: latest
 
