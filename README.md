@@ -49,7 +49,7 @@ Click `<Enter>` to skip the intro
 
 ### Sheet Selection
 
-The sheets are detected in [muser/assets/sheets/](muser/assets/sheets/).  
+The sheets are detected in [muser/assets/sheets/](https://github.com/Qiufeng54321/muser/muser/assets/sheets/).  
 You can select sheets using `<Left>` or `<Right>`.  
 For every sheet, there are selections of hardness level. You can use `<Up>` or `<Down>` to change the level.  
 Press `<Space>` to start the playthrough.
