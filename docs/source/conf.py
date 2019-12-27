@@ -24,7 +24,7 @@ author = 'Qiufeng54321'
 # The full version, including alpha/beta/rc tags
 release = '1.2.2'
 
-
+master_doc = 'index'
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
