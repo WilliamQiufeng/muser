@@ -10,7 +10,7 @@ python:
      - requirements: requirements.txt
      - method: pip
         path: .
-      - method: setuptools
+     - method: setuptools
         path: muser
    system_packages: true
 build:
