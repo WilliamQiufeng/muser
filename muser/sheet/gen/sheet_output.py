@@ -33,5 +33,7 @@ class SheetOutput:
         self.sheets = sheets
     def write(self, filename):
         file = io.open(filename, "w")
+        # TODO!!!!
+        # Write json formatted sheets instead of the original formattes sheets!
         file.write("|".join([str(sheet) for sheet in self.sheets]))
         
