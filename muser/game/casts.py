@@ -151,7 +151,14 @@ class Casts:
             self.note_manager.update()
             # print(f"cur: {Config.TOUCHED}")
             self.finished = self.note_manager.finished
+            if pyxel.btnp(pyxel.KEY_P):
+                self.note_manager.pause()
             self.quit = pyxel.btn(pyxel.KEY_Q)
+            if self.quit:
+                print("Quit playthrough.")
+                EffectController.clear_effects()
+                print("Effects cleared")
+            
         def draw(self):
             self.note_manager.draw()
         def is_finished(self):

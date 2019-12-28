@@ -47,9 +47,12 @@ class GameConfig:
         else:
             raise RuntimeError("Must have a config file!")
     def proc(self):
-        self.asset_path = self.config["asset_path"] if "asset_path" in self.config.keys() else "/williamye/program/pyxel_projects/muser"
-        self.separator = self.config["separator"] if "separator" in self.config.keys() else "/"
+        self.asset_path: str = self.get("asset_path", default="/williamye/program/pyxel_projects/muser")
+        self.separator: str = self.get("separator", default="/")
+        self.fps: int = self.get("fps", 60)
         self.assets = assets.Assets(self.asset_path, self.separator)
+    def get(self, key, default = None):
+        return self.config[key] if key in self.config.keys() else default
 
 GLOB_CONFIG = GameConfig()
 GLOB_CONFIG.proc()

@@ -29,18 +29,18 @@
 
 from sheet.gen.abs_output import *
 from game.playthrough.note import PositionedNote
+from game.playthrough.effect.frame_effect import *
 from game.playthrough.fancy_note import *
-from game.playthrough.frame_note import *
 class ManagerActions:
     @staticmethod
     def from_note(note):
         if isinstance(note, AbsNote):
             return PositionedNote(note)
         elif isinstance(note, StartFancy):
-            return StartFancyNote(note)
+            return StartEffectNote(FancyEffect, note)
         elif isinstance(note, EndEffect):
             return EndEffectNote(note)
         elif isinstance(note, StartFrame):
-            return StartFrameNote(note)
+            return StartEffectNote(FrameEffect, note)
         else:
             return note
