@@ -1,5 +1,6 @@
 import pyxel
 import math
+from game.config import *
 class Frame:
     def __init__(self, x, y, width, height, image = 0):
         self.x = x
@@ -17,11 +18,11 @@ class ArrowFrame(Frame):
     DIRECTIONS = [UP, DOWN, LEFT, RIGHT]
     INITIALS = [(0.5, 1), (0.5, 0), (1, 0.5), (0, 0.5)]
     OFFSETS = [(0, -16), (0, 0), (-16, 0), (0, 0)]
-    def __init__(self, side: int = 0, width: int = 6, height: int = 6, col = 5):
+    def __init__(self, side: int = 0, width: int = 6, height: int = 6):
         self.side = side
         self.width = width
         self.height = height
-        self.col = col
+        self.col = Config.ARROW_COLORS[side]
     def draw(self, x, y):
         if self.side <= 1: # The side is up or down
             x00 = x
@@ -120,12 +121,15 @@ class Frames:
     class Intro:
         EMPTY = [Frame(80, 136, 79, 16)]
         TITLE_PRE = EMPTY * 20
-        TITLE_FADEIN = [Frame(0, 136 + 16 * x, 79, 16) for x in range(0, 5)]
-        TITLE_STAY = [Frame(0, 200, 79, 16)] * 100
+        TITLE_FADEIN = [Frame(0, 136 + 16 * x, 79, 16) for x in range(0, 5) for _ in range(int(game_config.GLOB_CONFIG.fps / 15))]
+        TITLE_STAY = [Frame(0, 200, 79, 16)] * \
+            int(game_config.GLOB_CONFIG.fps * 2)
         TITLE_FADEOUT = TITLE_FADEIN[::-1]
         TITLE = TITLE_PRE + TITLE_FADEIN + TITLE_STAY + TITLE_FADEOUT
-        AUTHOR_FADEIN = [Frame(80, 152 + 16 * x, 79, 16) for x in range(0, 4)]
-        AUTHOR_STAY = [Frame(80, 200, 79, 16)] * 100
+        AUTHOR_FADEIN = [Frame(80, 152 + 16 * x, 79, 16) for x in range(0, 4)
+                         for _ in range(int(game_config.GLOB_CONFIG.fps / 15))]
+        AUTHOR_STAY = [Frame(80, 200, 79, 16)] * \
+            int(game_config.GLOB_CONFIG.fps * 2)
         AUTHOR_FADEOUT = AUTHOR_FADEIN[::-1] + EMPTY
         AUTHOR = AUTHOR_FADEIN + AUTHOR_STAY + AUTHOR_FADEOUT
         WHOLE = TITLE + AUTHOR

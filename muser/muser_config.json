@@ -1,4 +1,5 @@
 {
     "asset_path": "/Users/Shared/williamye/program/pyxel_projects/muser/muser/assets/",
-    "separator": "/"
+    "separator": "/",
+    "fps": 120
 }

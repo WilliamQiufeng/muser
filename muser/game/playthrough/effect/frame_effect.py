@@ -33,11 +33,10 @@ from game.constants import Constants
 from sheet.gen.abs_output import *
 
 class FrameEffect(Effect):
-    # TODO
-    def __init__(self, identity: int, frame_note: StartFrame):
-        super().__init__(identity=identity)
+    def __init__(self, frame_note: StartFrame):
+        super().__init__(identity=frame_note.identity)
         self.frame_note = frame_note
-        print(self.frame_note.frame)
+        # print(self.frame_note.frame)
     def update(self, **kwargs):
         pass
     def draw(self, **kwargs):

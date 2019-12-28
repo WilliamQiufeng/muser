@@ -66,6 +66,6 @@ class SourceSheetInput:
             for note in self.abs_notes:
                 if isinstance(note, AbsNote):
                     note.offset -= min_offset
-        self.abs_notes.sort(key = lambda t: t.offset)#TODO
+        self.abs_notes.sort(key = lambda t: t.offset)
     def to_abs(self):
         return AbsSheetOutput(self).__repr__()

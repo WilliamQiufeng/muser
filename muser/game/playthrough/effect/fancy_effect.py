@@ -32,8 +32,8 @@ from game.constants import Constants
 from sheet.gen.abs_output import *
 class FancyEffect(Effect):
     
-    def __init__(self, identity: int, fancy_note: StartFancy):
-        super().__init__(identity=identity)
+    def __init__(self, fancy_note: StartFancy):
+        super().__init__(identity=fancy_note.identity)
         self.fancy_note = fancy_note
         self.cur_color_index = 0
     

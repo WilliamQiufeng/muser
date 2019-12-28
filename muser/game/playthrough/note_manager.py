@@ -32,6 +32,7 @@ class Counter:
         tp = avg_weight / 0.03
         return tp
 class NoteManager:
+    # TODO: make the tp be shown while playing
     @staticmethod
     def count(manager):
         counter = Counter()
@@ -50,7 +51,7 @@ class NoteManager:
     def __init__(self, sheet: SheetReader, side_distances : list, music_source : str):
         self.meta: dict = sheet.metadata
         self.notes: list = [ManagerActions.from_note(x) for x in sheet.notes]
-        print("\n".join([str(x) for x in self.notes]))
+        # print("\n".join([str(x) for x in self.notes]))
         self.side_distances: list = side_distances
         self.music_source: str = music_source
         buf_mus = pygame.mixer.Sound(self.music_source)
@@ -60,6 +61,7 @@ class NoteManager:
         self.started: bool = False
         self.initiate: bool = True
         self.finished: bool = False
+        self.paused: bool = False
         self.score: int = 0
         self.perfect_note_score = Constants.PlayThrough.Score.TOTAL_SCORE / (len(self.notes) * Constants.PlayThrough.NoteIndicator.INDICATORS().index(Constants.PlayThrough.NoteIndicator.PERFECT))
     def prepare(self):
@@ -67,7 +69,18 @@ class NoteManager:
         pygame.mixer.music.load(self.music_source)
     def start(self):
         self.initiate = True
-        
+    def pause(self):
+        if not self.paused:
+            pygame.mixer.music.pause()
+            self.last_pause_time = time.time()
+            print(
+                f"Game paused. Total Time: {self.total_time},  Start Time: {self.start_time}")
+        else:
+            pygame.mixer.music.unpause()
+            self.start_time += time.time() - self.last_pause_time
+            print(
+                f"Game continued. Total Time: {self.total_time}, Start Time: {self.start_time}")
+        self.paused = not self.paused
     def update_time(self) -> float:
         cur_time = time.time()
         if self.music_started:
@@ -92,6 +105,8 @@ class NoteManager:
                 f"Total Time: {self.total_time}, Cur Time: {cur_time}, Start Time: {self.start_time}")
         return cur_time
     def update(self):
+        if self.paused:
+            return None
         if self.initiate:
             self.start_time = time.time()
             self.total_time: float = 0

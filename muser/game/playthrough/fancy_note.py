@@ -32,18 +32,19 @@ from sheet.gen.abs_output import StartFancy, EndEffect
 from game.playthrough.effect.effect_controller import *
 from game.playthrough.effect.fancy_effect import *
 
-class StartFancyNote(BaseNote):
-    def __init__(self, fancy_note: StartFancy):
-        self.fancy_note: StartFancy = fancy_note
+class StartEffectNote(BaseNote):
+    def __init__(self, effect_type: type, note):
+        self.note = note
+        self.effect_type: type = effect_type
         self.finished = False
-        self.effect = FancyEffect(identity=self.fancy_note.identity, fancy_note=fancy_note)
+        self.effect = effect_type(note)
     def update(self, total_time: int):
-        if (not self.finished) and total_time >= self.fancy_note.offset:
-            print("Fancy Note In")
+        if (not self.finished) and total_time >= self.note.offset:
+            print(f"Effect Note {self.note.identity} In")
             EffectController.add_effect(self.effect)
             self.finished = True
     def __repr__(self):
-        return f"StartFancy {self.fancy_note.identity} at {self.fancy_note.offset}"
+        return f"StartEffect {self.effect_type} {self.note.identity} at {self.note.offset}"
     def draw(self):
         pass
 class EndEffectNote(BaseNote):
