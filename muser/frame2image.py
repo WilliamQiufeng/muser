@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /Users/Shared/williamye/program/pyxel_projects/muser/muser/pyxres2image.py #
+# File: /Users/Shared/williamye/program/pyxel_projects/muser/muser/frame2image.py #
 # Project: /Users/Shared/williamye/program/pyxel_projects/muser/muser          #
-# Created Date: Thursday, December 26th 2019, 04:00:08 pm                      #
+# Created Date: Sunday, December 29th 2019, 03:47:24 pm                        #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -27,17 +27,12 @@
 '''
 
 
-import png
-import pyxel
 import io
-from itertools import chain
+import pyxel
+from game.frames import BitmapFrame
+import json
+import png
 
-
-res_path = input(
-    "Path to resource[/Users/Shared/williamye/program/pyxel_projects/muser/muser/assets/buf.pyxres]: ")
-if res_path.isspace() or len(res_path) == 0:
-    res_path = "/Users/Shared/williamye/program/pyxel_projects/muser/muser/assets/buf.pyxres"
-print(res_path)
 
 def int2rgb(n):
     b = n % 256
@@ -46,28 +41,26 @@ def int2rgb(n):
     return (r, g, b)
 
 pyxel.init(1, 1)
-print("Pyxel initialised")
-pyxel.load(res_path)
 
-print("Res loaded")
+frame_file = io.open(input("Input frame file: "))
+frame_data = json.loads(frame_file.read())
+frame_image= frame_data["frame"]
+size = frame_data["size"]
+print("Data loaded.")
 
-image_index = int(input("Image Index: "))
-offset_pos = (int(input("Offset X: ")), int(input("Offset Y: ")))
-size = (int(input("Size X: ")), int(input("Size Y: ")))
+substitution = frame_data["substitution"]
 
-
-out_path = input("Output Image Path: ")
-out = io.open(out_path, "wb")
+output_image_path = input("Output image path: ")
+output_image = io.open(output_image_path, "wb")
 
 writer = png.Writer(*size, greyscale=False)
-writer.write(out, (
+writer.write(output_image, (
     [
         int2rgb(
-            pyxel.DEFAULT_PALETTE[pyxel.image(
-                image_index).data[y + offset_pos[1]][x + offset_pos[0]]]
+            pyxel.DEFAULT_PALETTE[substitution[frame_image[y][x]]]
         )[i] for x in range(size[0]) for i in range(3)
     ] for y in range(size[1])
 ))
-out.close()
+output_image.close()
 
 print("Done")
