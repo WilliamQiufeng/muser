@@ -6,6 +6,7 @@ from game.playthrough.base_note import *
 import math
 import pyxel
 import copy
+import json
 class PositionedNote(BaseNote):
 
     def __init__(self, note: AbsNote):
@@ -34,7 +35,7 @@ class PositionedNote(BaseNote):
         return f"Note {self.note}"
     def update(self, total_time: float) -> int:
         if self.is_time(total_time) and not self.finished:
-            print(f"Note in scene at {total_time}: {self.note}")
+            # print(f"Note in scene at {total_time}: {json.dumps(self.note.__repr__())}")
             self.in_scene = True
             self.finished = False
         if (not self.finished) and self.in_scene:
@@ -51,7 +52,7 @@ class PositionedNote(BaseNote):
                     self.in_scene = False
                     self.result = result
                     Config.TOUCHED[self.note.side] = False
-                    print(f"Note {self.note} finished at {self.pos}, {total_time}, {Constants.PlayThrough.NoteIndicator.INDICATOR_NAME[self.result]}")
+                    # print(f"Note {json.dumps(self.note.__repr__())} finished at {self.pos}, {total_time}, {Constants.PlayThrough.NoteIndicator.INDICATOR_NAME[self.result]}")
                     return self.result
         return Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
     def draw(self):

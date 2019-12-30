@@ -19,10 +19,17 @@ class SheetReader:
         reader.readinput = info
         reader.read_all()
         return reader
+
+    @staticmethod
+    def from_obj(info: dict):
+        reader = SheetReader()
+        reader.data = info
+        reader.read_notes()
+        return reader
     @staticmethod
     def from_sheets(filename: str) -> list:
         file = io.open(filename, "r")
-        sheets: list = [SheetReader.from_str(info) for info in file.read().split("|")]
+        sheets: list = [SheetReader.from_obj(info) for info in json.loads(file.read())]
         return sheets
     def __init__(self):
         pass
@@ -31,25 +38,11 @@ class SheetReader:
         self.read_notes()
 
     def read_metadata(self):
-        self.data = self.readinput.split("#")
-        #print(self.data)
-        if len(self.data) != 8:
-            raise NotImplementedError
-        self.metadata = {
-            "author": self.data[0],
-            "music_author": self.data[1],
-            "version": self.data[2],
-            "name": self.data[3],
-            "music": self.data[4],
-            "offset": float(self.data[5]),
-            "level": self.data[6]
-        }
+        self.data = json.loads(self.readinput)
     
     def read_notes(self):
-        self.note_datas = [x.split(",") for x in self.data[-1].split("\n")]
-        self.notes = [Actions.fromArgs(*note_data) for note_data in self.note_datas]
+        self.notes = [Actions.fromArgs(note_data) for note_data in self.data["notes"]]
         # self.print_sheet()
     def print_sheet(self):
-        print(json.dumps(self.metadata))
-        print("\n".join([str(x) for x in self.notes]))
+        print(json.dumps(self.data, indent=4))
         

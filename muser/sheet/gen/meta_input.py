@@ -30,7 +30,7 @@
 from sheet.reader.sheet_reader import *
 from sheet.gen.midi_converter import *
 from game_config import *
-import io
+import io, json
 
 class MetaInput:
     @staticmethod
@@ -66,5 +66,5 @@ class MetaInput:
             })
             #print(abs_sheet)
             sheets.append(abs_sheet)
-        io.open(abs_output, "w").write("|".join(sheets))
+        io.open(abs_output, "w").write(json.dumps(sheets, indent=4))
         
