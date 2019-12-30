@@ -27,7 +27,7 @@
 '''
 
 
-import png, json
+import png, json, os
 import pyxel
 
 pyxel.init(1, 1)
@@ -39,8 +39,10 @@ filename = input("Image path: ")
 reader = png.Reader(filename=filename)
 
 out_res = input("Output pyxres file: ")
+image = int(input("Image: "))
 offset_pos = (int(input("Offset X: ")), int(input("Offset Y: ")))
-pyxel.load(out_res)
-pyxel.image(0, system=True).load(*offset_pos, filename)
+if os.path.exists(out_res):
+    pyxel.load(out_res)
+pyxel.image(image, system=True).load(*offset_pos, filename)
 pyxel.save(out_res)
 print("Done")
