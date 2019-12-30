@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /Users/Shared/williamye/program/pyxel_projects/muser/muser/image2pyxres.py #
+# File: /Users/Shared/williamye/program/pyxel_projects/muser/muser/frame2image.py #
 # Project: /Users/Shared/williamye/program/pyxel_projects/muser/muser          #
-# Created Date: Thursday, December 26th 2019, 03:37:40 pm                      #
+# Created Date: Sunday, December 29th 2019, 03:47:24 pm                        #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
@@ -27,22 +27,40 @@
 '''
 
 
-import png, json, os
+import io
 import pyxel
+from game.frames import BitmapFrame
+import json
+import png
+
+
+def int2rgb(n):
+    b = n % 256
+    g = int(((n-b)/256) % 256)      # always an integer
+    r = int(((n-b)/256**2) - g/256)  # ditto
+    return (r, g, b)
 
 pyxel.init(1, 1)
 
-print("Pyxel initialised")
+frame_file = io.open(input("Input frame file: "))
+frame_data = json.loads(frame_file.read())
+frame_image= frame_data["frame"]
+size = frame_data["size"]
+print("Data loaded.")
 
-filename = input("Image path: ")
+substitution = frame_data["substitution"]
 
-reader = png.Reader(filename=filename)
+output_image_path = input("Output image path: ")
+output_image = io.open(output_image_path, "wb")
 
-out_res = input("Output pyxres file: ")
-image = int(input("Image: "))
-offset_pos = (int(input("Offset X: ")), int(input("Offset Y: ")))
-if os.path.exists(out_res):
-    pyxel.load(out_res)
-pyxel.image(image, system=True).load(*offset_pos, filename)
-pyxel.save(out_res)
+writer = png.Writer(*size, greyscale=False)
+writer.write(output_image, (
+    [
+        int2rgb(
+            pyxel.DEFAULT_PALETTE[substitution[frame_image[y][x]]]
+        )[i] for x in range(size[0]) for i in range(3)
+    ] for y in range(size[1])
+))
+output_image.close()
+
 print("Done")

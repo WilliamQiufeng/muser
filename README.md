@@ -77,7 +77,7 @@ Press `<Space>` to start the playthrough.
 >
 + For each note pressed by the player, the score will be increased by:  
 
-> + scoreToAdd = 100000 / (weight * noteCount)
+> + scoreToAdd = *weight* * 100000 / (*weight* \* *noteCount*)
 
 The player can quit the playthrough to go back to sheet selection cast using `<Q>` key.
 
