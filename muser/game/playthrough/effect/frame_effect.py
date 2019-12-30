@@ -41,10 +41,15 @@ class FrameEffect(Effect):
         pass
     def draw(self, **kwargs):
         cur = time.time()
+        avg = 0
         for y in range(self.frame_note.size[1]):
             for x in range(self.frame_note.size[0]):
+                c = time.time()
                 if self.frame_note.frame[y][x] != -1:
                     # print(
                     #     f"Draw {self.frame_note.frame[y][x]} at ({self.frame_note.offset_pos[0] + x}, {self.frame_note.offset_pos[1] + y})")
-                    pyxel.pix(self.frame_note.offset_pos[0] + x, self.frame_note.offset_pos[1] + y, self.frame_note.frame[y][x])
-        print(f"{time.time() - cur}s")
+                    pyxel.pix(
+                        self.frame_note.offset_pos[0] + x, self.frame_note.offset_pos[1] + y, self.frame_note.frame[y][x])
+                avg += (time.time() - c) / (self.frame_note.size[1] * self.frame_note.size[0])
+        print(
+            f"{time.time() - cur}s, avg {avg}s, execution: {self.frame_note.size[0] * self.frame_note.size[1]} times")
