@@ -36,17 +36,18 @@ class FancyEffect(Effect):
         super().__init__(identity=fancy_note.identity)
         self.fancy_note = fancy_note
         self.cur_color_index = 0
+        self.note_prop = fancy_note.prop
     
     def update(self, **kwargs):
         total_time: float = kwargs["total_time"]
         int_total_time = int(total_time)
-        col_range = (int_total_time - self.fancy_note.offset) % (len(self.fancy_note.colors) * self.fancy_note.interval)
-        for i in range(len(self.fancy_note.colors)):
-            if i * self.fancy_note.interval <= col_range and col_range < (i + 1) * self.fancy_note.interval:
+        col_range = (int_total_time - self.note_prop["offset"]) % (len(self.note_prop["colors"]) * self.note_prop["interval"])
+        for i in range(len(self.note_prop["colors"])):
+            if i * self.note_prop["interval"] <= col_range and col_range < (i + 1) * self.note_prop["interval"]:
                 self.cur_color_index = i
                 # print(f"Color {self.colors[self.cur_color_index]}: {i * self.interval} <= {col_range} < {(i + 1) * self.interval}, {total_time}")
                 break
     def draw(self, **kwargs):
-        if self.fancy_note.colors[self.cur_color_index] != -1:
-            pyxel.rect(*self.fancy_note.offset_pos, *self.fancy_note.size,
-                        self.fancy_note.colors[self.cur_color_index])
+        if self.note_prop["colors"][self.cur_color_index] != -1:
+            pyxel.rect(*self.note_prop["offset_pos"], *self.note_prop["size"],
+                        self.note_prop["colors"][self.cur_color_index])

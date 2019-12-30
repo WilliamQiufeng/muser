@@ -36,20 +36,21 @@ class FrameEffect(Effect):
     def __init__(self, frame_note: StartFrame):
         super().__init__(identity=frame_note.identity)
         self.frame_note = frame_note
+        self.note_prop = self.frame_note.prop
         # print(self.frame_note.frame)
     def update(self, **kwargs):
         pass
     def draw(self, **kwargs):
-        cur = time.time()
-        avg = 0
-        for y in range(self.frame_note.size[1]):
-            for x in range(self.frame_note.size[0]):
-                c = time.time()
-                if self.frame_note.frame[y][x] != -1:
+        # cur = time.time()
+        # avg = 0
+        for y in range(self.note_prop["size"][1]):
+            for x in range(self.note_prop["size"][0]):
+                # c = time.time()
+                if self.note_prop["frame"][y][x] != -1:
                     # print(
                     #     f"Draw {self.frame_note.frame[y][x]} at ({self.frame_note.offset_pos[0] + x}, {self.frame_note.offset_pos[1] + y})")
                     pyxel.pix(
-                        self.frame_note.offset_pos[0] + x, self.frame_note.offset_pos[1] + y, self.frame_note.frame[y][x])
-                avg += (time.time() - c) / (self.frame_note.size[1] * self.frame_note.size[0])
-        print(
-            f"{time.time() - cur}s, avg {avg}s, execution: {self.frame_note.size[0] * self.frame_note.size[1]} times")
+                        self.note_prop["offset_pos"][0] + x, self.note_prop["offset_pos"][1] + y, self.note_prop["frame"][y][x])
+                # avg += (time.time() - c) / (self.note_prop["size"][1] * self.note_prop["size"][0])
+        # print(
+        #     f"{time.time() - cur}s, avg {avg}s, execution: {self.note_prop["size"][0] * self.note_prop["size"][1]} times")
