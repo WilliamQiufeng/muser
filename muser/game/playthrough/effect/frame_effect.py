@@ -31,6 +31,7 @@ import pyxel
 from game.playthrough.effect.base_effect import *
 from game.constants import Constants
 from sheet.gen.abs_output import *
+import time
 
 class FrameEffect(Effect):
     def __init__(self, frame_note: StartFrame):
@@ -40,9 +41,11 @@ class FrameEffect(Effect):
     def update(self, **kwargs):
         pass
     def draw(self, **kwargs):
+        cur = time.time()
         for y in range(self.frame_note.size[1]):
             for x in range(self.frame_note.size[0]):
                 if self.frame_note.frame[y][x] != -1:
                     # print(
                     #     f"Draw {self.frame_note.frame[y][x]} at ({self.frame_note.offset_pos[0] + x}, {self.frame_note.offset_pos[1] + y})")
                     pyxel.pix(self.frame_note.offset_pos[0] + x, self.frame_note.offset_pos[1] + y, self.frame_note.frame[y][x])
+        print(f"{time.time() - cur}s")
