@@ -31,24 +31,25 @@ from sheet.sheet_constants import *
 
 class Actions:
     @staticmethod
-    def fromArgs(*args):
-        note_type = int(args[0])
-        if note_type == NoteType.NOTE:
-            return AbsNote(*[float(x) for x in args[1:]], absolutified=True)
-        elif note_type == NoteType.FANCY:
-            return StartFancy(int(args[1]), [int(x) for x in args[2].split(";")], float(args[3]), int(args[4]),
-                              [int(x) for x in args[5].split(";")], [int(x) for x in args[6].split(";")])
-        elif note_type == NoteType.STOP_EFFECT:
-            return EndEffect(float(args[1]), int(args[2]))
-        elif note_type == NoteType.START_FRAME:
-            size = [int(x) for x in args[2].split(";")]
-            frame = []
-            split_frame = args[3].split(";")
-            for y in range(size[1]):
-                line = []
-                for x in range(size[0]):
-                    line.append(int(split_frame[y * size[0] + x]))
-                frame.append(line)
-            return StartFrame(float(args[1]), size, frame, {}, [int(x) for x in args[4].split(';')], args[5], False)
-        else:
-            raise RuntimeError(f"Not supported: {args}")
+    def fromArgs(args):
+        return eval(args["type"])(args)
+        # note_type = int(args[0])
+        # if note_type == NoteType.NOTE:
+        #     return AbsNote(*[float(x) for x in args[1:]], absolutified=True)
+        # elif note_type == NoteType.FANCY:
+        #     return StartFancy(int(args[1]), [int(x) for x in args[2].split(";")], float(args[3]), int(args[4]),
+        #                       [int(x) for x in args[5].split(";")], [int(x) for x in args[6].split(";")])
+        # elif note_type == NoteType.STOP_EFFECT:
+        #     return EndEffect(float(args[1]), int(args[2]))
+        # elif note_type == NoteType.START_FRAME:
+        #     size = [int(x) for x in args[2].split(";")]
+        #     frame = []
+        #     split_frame = args[3].split(";")
+        #     for y in range(size[1]):
+        #         line = []
+        #         for x in range(size[0]):
+        #             line.append(int(split_frame[y * size[0] + x]))
+        #         frame.append(line)
+        #     return StartFrame(float(args[1]), size, frame, {}, [int(x) for x in args[4].split(';')], args[5], False)
+        # else:
+        #     raise RuntimeError(f"Not supported: {args}")

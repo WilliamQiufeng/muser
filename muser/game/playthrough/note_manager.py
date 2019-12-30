@@ -49,7 +49,8 @@ class NoteManager:
                 counter.misses += 1
         return counter
     def __init__(self, sheet: SheetReader, side_distances : list, music_source : str):
-        self.meta: dict = sheet.metadata
+        self.meta: dict = sheet.data
+        # print(self.meta)
         self.notes: list = [ManagerActions.from_note(x) for x in sheet.notes]
         # print("\n".join([str(x) for x in self.notes]))
         self.side_distances: list = side_distances
@@ -85,7 +86,7 @@ class NoteManager:
         cur_time = time.time()
         if self.music_started:
             self.total_time = (
-                self.meta["offset"] + pygame.mixer.music.get_pos()) / 1000
+                self.meta["music_offset"] + pygame.mixer.music.get_pos()) / 1000
             cur_time = self.total_time
             #print(
             #    f"Total Time: {self.total_time}, Cur Time: {cur_time}, Interval: {interval}, Last Time: {self.last_time}")
@@ -93,12 +94,12 @@ class NoteManager:
             self.total_time = cur_time - self.start_time
             #print(
             #    f"Total Time: {self.total_time}, Cur Time: {cur_time}, Interval: {interval}, Last Time: {self.last_time}")
-        if (not self.music_started) and self.total_time * 1000 >= self.meta["offset"]:
+        if (not self.music_started) and self.total_time * 1000 >= self.meta["music_offset"]:
             # pygame.mixer.music.set_pos(self.total_time * 1000 - self.meta["offset"])
             print(self.total_time)
             pygame.mixer.music.play()
             self.music_started = True
-            cur_time = (self.meta["offset"] +
+            cur_time = (self.meta["music_offset"] +
                         pygame.mixer.music.get_pos()) / 1000
             self.total_time = self.total_time
             print(
