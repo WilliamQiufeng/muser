@@ -28,6 +28,7 @@
 
 
 import pyxel, json.decoder
+import io
 import game_config as game_config
 import argparse
 from game.frames import BitmapFrame
@@ -77,4 +78,14 @@ res["frame"] = frame_image
 
 res["substitution"] = substitution
 
-print(json.dumps(res, indent=4))
+res_str = json.dumps(res, indent=4)
+
+output = input("Output[file/stdout]: ")
+
+if output == "stdout":
+    print(res_str)
+else:
+    file = io.open(output, "w")
+    file.write(res_str)
+    file.close()
+print("Done")

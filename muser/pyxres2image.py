@@ -55,21 +55,19 @@ image_index = int(input("Image Index: "))
 offset_pos = (int(input("Offset X: ")), int(input("Offset Y: ")))
 size = (int(input("Size X: ")), int(input("Size Y: ")))
 
-col_arr =   (
-                list(
-                    (
-                        int2rgb(
-                            pyxel.DEFAULT_PALETTE[pyxel.image(image_index).data[y + offset_pos[1]][x + offset_pos[0]]]
-                        )[i] for x in range(size[0]) for i in range(3)
-                    )
-                ) for y in range(size[1])
-            )
 
 out_path = input("Output Image Path: ")
 out = io.open(out_path, "wb")
 
 writer = png.Writer(*size, greyscale=False)
-writer.write(out, col_arr)
+writer.write(out, (
+    [
+        int2rgb(
+            pyxel.DEFAULT_PALETTE[pyxel.image(
+                image_index).data[y + offset_pos[1]][x + offset_pos[0]]]
+        )[i] for x in range(size[0]) for i in range(3)
+    ] for y in range(size[1])
+))
 out.close()
 
 print("Done")
