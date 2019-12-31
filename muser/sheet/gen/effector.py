@@ -28,6 +28,7 @@
 
 
 from sheet.gen.abs_output import *
+import copy
 
 def add_effects(abs_notes: list, effect_pool: list, effects: list):
     # print(effect_pool)
@@ -40,6 +41,7 @@ def add_effects(abs_notes: list, effect_pool: list, effects: list):
             size: list = effect_var["size"] if "size" in effect_var.keys() else [
                 256, 256]
             effect = {
+                "identity": identity,
                 "type": effect_var["type"],
                 "colors": effect_var["colors"],
                 "interval": effect_var["interval"],
@@ -55,6 +57,7 @@ def add_effects(abs_notes: list, effect_pool: list, effects: list):
             offset_pos: list = effect_var["offset_pos"] if "offset_pos" in effect_var.keys() else [
                 0, 0]
             effect = {
+                "identity": identity,
                 "type": effect_var["type"],
                 "size": size,
                 "frame": frame_list,
@@ -67,18 +70,27 @@ def add_effects(abs_notes: list, effect_pool: list, effects: list):
     effect_list = []
     for effect in effects:
         identity: int = int(effect["id"])
+        effect_var = effect_vars[identity]
         effect_type = effect_vars[identity]["type"]
+        res = copy.copy(effect)
+        res.update(effect_var)
+        end = {
+            "offset": effect["offset"] + effect["length"],
+            "identity": identity
+        }
         if effect_type == "fancy":
-            effect_var = effect_vars[identity]
-            start_fancy = StartFancy(
-                effect["offset"], effect_var["colors"], effect_var["interval"], identity, offset_pos=effect_var["offset_pos"], size=effect_var["size"])
-            end_fancy = EndEffect(effect["offset"] + effect["length"], identity)
+            # start_fancy = StartFancy(
+            #     effect["offset"], effect_var["colors"], effect_var["interval"], identity, offset_pos=effect_var["offset_pos"], size=effect_var["size"])
+            # end_fancy = EndEffect(effect["offset"] + effect["length"], identity)
+            start_fancy = StartFancy(res)
+            end_fancy = EndEffect(end)
             effect_list.append(start_fancy)
             effect_list.append(end_fancy)
         elif effect_type == "frame":
-            effect_var = effect_vars[identity]
-            start_frame = StartFrame(effect["offset"], effect_var["size"], effect_var["frame"], effect_var["substitution"], effect_var["offset_pos"], identity)
-            end_frame = EndEffect(effect["offset"] + effect["length"], identity)
+            # start_frame = StartFrame(effect["offset"], effect_var["size"], effect_var["frame"], effect_var["substitution"], effect_var["offset_pos"], identity)
+            start_frame = StartFrame(res)
+            start_frame.flatten_frame()
+            end_frame = EndEffect(end)
             effect_list.append(start_frame)
             effect_list.append(end_frame)
     res_list: list = abs_notes + effect_list

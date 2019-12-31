@@ -28,6 +28,7 @@
 
 import io
 from sheet.gen.abs_output import *
+import json
 class SheetOutput:
     def __init__(self, sheets: list):
         self.sheets = sheets
@@ -35,5 +36,5 @@ class SheetOutput:
         file = io.open(filename, "w")
         # TODO!!!!
         # Write json formatted sheets instead of the original formattes sheets!
-        file.write("|".join([str(sheet) for sheet in self.sheets]))
+        file.write(json.dumps(self.sheets))
         

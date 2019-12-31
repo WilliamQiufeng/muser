@@ -27,25 +27,26 @@
 '''
 
 
-import pyxel
+import pyxel, time, util
 from game.playthrough.effect.base_effect import *
 from game.constants import Constants
 from sheet.gen.abs_output import *
-import time
+import numba
 
 class FrameEffect(Effect):
     def __init__(self, frame_note: StartFrame):
         super().__init__(identity=frame_note.identity)
         self.frame_note = frame_note
+        self.note_prop = self.frame_note.prop
         # print(self.frame_note.frame)
-    def update(self, **kwargs):
+    def update(self, args, kwargs):
         pass
-    def draw(self, **kwargs):
-        cur = time.time()
-        for y in range(self.frame_note.size[1]):
-            for x in range(self.frame_note.size[0]):
-                if self.frame_note.frame[y][x] != -1:
-                    # print(
-                    #     f"Draw {self.frame_note.frame[y][x]} at ({self.frame_note.offset_pos[0] + x}, {self.frame_note.offset_pos[1] + y})")
-                    pyxel.pix(self.frame_note.offset_pos[0] + x, self.frame_note.offset_pos[1] + y, self.frame_note.frame[y][x])
-        print(f"{time.time() - cur}s")
+    # @util.timeit()
+    # @numba.jit()
+    def draw(self, args, kwargs):
+        for y in range(self.note_prop["size"][1]):
+            for x in range(self.note_prop["size"][0]):
+                # c = time.time()
+                if self.note_prop["frame"][y][x] != -1:
+                    pyxel.pix(
+                        self.note_prop["offset_pos"][0] + x, self.note_prop["offset_pos"][1] + y, self.note_prop["frame"][y][x])
