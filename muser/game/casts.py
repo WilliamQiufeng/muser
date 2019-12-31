@@ -88,7 +88,7 @@ class Casts:
         def update_meta(self):
             self.level_selection = 0
             self.sheet = SheetReader.from_sheets(self.sheets[self.selection])
-            self.music_source = self.sheet[self.level_selection].metadata["music"]
+            self.music_source = self.sheet[self.level_selection].data["music"]
             pygame.mixer.music.stop()
             pygame.mixer.music.load(self.music_source)
             pygame.mixer.music.play()
@@ -102,11 +102,11 @@ class Casts:
             positions = [
                 util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 3, 7, 1, x + 1) for x in range(5)]
             level = self.sheet[self.level_selection]
-            pyxel.text(*positions[0], f'{level.metadata["name"]}', 12)
-            pyxel.text(*positions[1], f'Sheet Author: {level.metadata["author"]}', 11)
-            pyxel.text(*positions[2], f'Music Author: {level.metadata["music_author"]}', 10)
-            pyxel.text(*positions[3], f'Version:      {level.metadata["version"]}', 9)
-            pyxel.text(*positions[4], f'Level:        {level.metadata["level"]}', 8)
+            pyxel.text(*positions[0], f'{level.data["name"]}', 12)
+            pyxel.text(*positions[1], f'Sheet Author: {level.data["author"]}', 11)
+            pyxel.text(*positions[2], f'Music Author: {level.data["music_author"]}', 10)
+            pyxel.text(*positions[3], f'Version:      {level.data["version"]}', 9)
+            pyxel.text(*positions[4], f'Level:        {level.data["level"]}', 8)
         def is_finished(self):
             return self.finished
         def next_cast(self):
@@ -143,6 +143,7 @@ class Casts:
             self.note_manager.prepare()
             self.note_manager.start()
 
+        @util.timeit(without=(-1, 30))
         def update(self):
             Config.TOUCHED = [False for _ in range(4)]
             for upd in Casts.PlayThrough.UPDATES:
@@ -158,7 +159,8 @@ class Casts:
                 print("Quit playthrough.")
                 EffectController.clear_effects()
                 print("Effects cleared")
-            
+
+        @util.timeit(without=(-1, 30))
         def draw(self):
             self.note_manager.draw()
         def is_finished(self):

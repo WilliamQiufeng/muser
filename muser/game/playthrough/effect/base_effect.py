@@ -32,7 +32,7 @@ class Effect:
     def __init__(self, identity: int = 0):
         self.identity = identity
     
-    def update(self, **kwargs):
+    def update(self, args, kwargs):
         raise NotImplementedError
-    def draw(self, **kwargs):
+    def draw(self, args, kwargs):
         raise NotImplementedError
