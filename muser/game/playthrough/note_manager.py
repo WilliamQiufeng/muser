@@ -6,6 +6,7 @@ from game.playthrough.manager_actions import *
 from game.constants import *
 from game.playthrough.effect.effect_controller import *
 import util as util
+import numba
 
 pygame.mixer.init()
 
@@ -105,6 +106,8 @@ class NoteManager:
             print(
                 f"Total Time: {self.total_time}, Cur Time: {cur_time}, Start Time: {self.start_time}")
         return cur_time
+    @util.timeit(without=(-1, 30))
+    # @numba.jit()
     def update(self):
         if self.paused:
             return None
@@ -132,7 +135,8 @@ class NoteManager:
                     self.score += self.perfect_note_score * Constants.PlayThrough.NoteIndicator.INDICATORS().index(res_indicate)
         if res != Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND:
             self.last_indicator = res
-    
+    # @util.timeit(within=(40, -1))
+    @util.timeit(without=(-1, 30))
     def draw(self):
         # Draw effects first
         EffectController.draw(total_time=self.total_time)

@@ -143,6 +143,7 @@ class Casts:
             self.note_manager.prepare()
             self.note_manager.start()
 
+        @util.timeit(without=(-1, 30))
         def update(self):
             Config.TOUCHED = [False for _ in range(4)]
             for upd in Casts.PlayThrough.UPDATES:
@@ -158,7 +159,8 @@ class Casts:
                 print("Quit playthrough.")
                 EffectController.clear_effects()
                 print("Effects cleared")
-            
+
+        @util.timeit(without=(-1, 30))
         def draw(self):
             self.note_manager.draw()
         def is_finished(self):
