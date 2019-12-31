@@ -40,10 +40,11 @@ class EffectController:
     def clear_effects():
         EffectController.pool.clear()
     @staticmethod
-    def update(**kwargs):
+    def update(*args, **kwargs):
         for effect in EffectController.pool.values():
-            effect.update(**kwargs)
+            effect.update(args, kwargs)
     @staticmethod
-    def draw(**kwargs):
+    def draw(*args, **kwargs):
         for effect in EffectController.pool.values():
-            effect.draw(**kwargs)
+            # print(effect.draw.__code__)
+            effect.draw(args, kwargs)

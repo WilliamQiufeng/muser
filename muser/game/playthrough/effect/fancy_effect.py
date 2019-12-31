@@ -26,10 +26,11 @@
 *------------------------------------------------------------------------------*
 '''
 
-import pyxel
+import pyxel, util
 from game.playthrough.effect.base_effect import *
 from game.constants import Constants
 from sheet.gen.abs_output import *
+import numba
 class FancyEffect(Effect):
     
     def __init__(self, fancy_note: StartFancy):
@@ -37,8 +38,8 @@ class FancyEffect(Effect):
         self.fancy_note = fancy_note
         self.cur_color_index = 0
         self.note_prop = fancy_note.prop
-    
-    def update(self, **kwargs):
+    # @util.timeit(within=(1, -1))
+    def update(self, args, kwargs):
         total_time: float = kwargs["total_time"]
         int_total_time = int(total_time)
         col_range = (int_total_time - self.note_prop["offset"]) % (len(self.note_prop["colors"]) * self.note_prop["interval"])
@@ -47,7 +48,10 @@ class FancyEffect(Effect):
                 self.cur_color_index = i
                 # print(f"Color {self.colors[self.cur_color_index]}: {i * self.interval} <= {col_range} < {(i + 1) * self.interval}, {total_time}")
                 break
-    def draw(self, **kwargs):
+
+    # @util.timeit(within=(1, -1))
+    def draw(self, args, kwargs):
         if self.note_prop["colors"][self.cur_color_index] != -1:
             pyxel.rect(*self.note_prop["offset_pos"], *self.note_prop["size"],
                         self.note_prop["colors"][self.cur_color_index])
+            

@@ -27,10 +27,11 @@
 '''
 
 
-import pyxel, time
+import pyxel, time, util
 from game.playthrough.effect.base_effect import *
 from game.constants import Constants
 from sheet.gen.abs_output import *
+import numba
 
 class FrameEffect(Effect):
     def __init__(self, frame_note: StartFrame):
@@ -38,9 +39,11 @@ class FrameEffect(Effect):
         self.frame_note = frame_note
         self.note_prop = self.frame_note.prop
         # print(self.frame_note.frame)
-    def update(self, **kwargs):
+    def update(self, args, kwargs):
         pass
-    def draw(self, **kwargs):
+    # @util.timeit()
+    # @numba.jit()
+    def draw(self, args, kwargs):
         # cur = time.time()
         # avg = 0
         for y in range(self.note_prop["size"][1]):

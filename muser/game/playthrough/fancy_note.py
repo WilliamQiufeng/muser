@@ -38,25 +38,30 @@ class StartEffectNote(BaseNote):
         self.effect_type: type = effect_type
         self.finished = False
         self.effect = effect_type(note)
+        # Because access to notes will execute 'in' expr 2 times
+        # For higher speed, I extracted it.
+        self.identity = self.note.identity
+        self.offset = self.note.offset
     def update(self, total_time: int):
-        if (not self.finished) and total_time >= self.note.offset:
-            print(f"Effect Note {self.note.identity} In")
+        if (not self.finished) and total_time >= self.offset:
+            print(f"Effect Note {self.identity} In")
             EffectController.add_effect(self.effect)
             self.finished = True
     def __repr__(self):
-        return f"StartEffect {self.effect_type} {self.note.identity} at {self.note.offset}"
+        return f"StartEffect {self.effect_type} {self.identity} at {self.offset}"
     def draw(self):
         pass
 class EndEffectNote(BaseNote):
     def __init__(self, end_fancy: EndEffect):
         self.end_fancy: EndEffect = end_fancy
         self.finished = False
+        self.identity, self.offset = self.end_fancy.identity, self.end_fancy.offset
     def update(self, total_time: int):
-        if (not self.finished) and total_time >= self.end_fancy.offset:
-            print(f"Effect note {self.end_fancy.identity} out")
-            EffectController.remove_effect(self.end_fancy.identity)
+        if (not self.finished) and total_time >= self.offset:
+            print(f"Effect note {self.identity} out")
+            EffectController.remove_effect(self.identity)
             self.finished = True
     def __repr__(self):
-        return f"EndFancyNote {self.end_fancy.identity} at {self.end_fancy.offset}"
+        return f"EndFancyNote {self.identity} at {self.offset}"
     def draw(self):
         pass
