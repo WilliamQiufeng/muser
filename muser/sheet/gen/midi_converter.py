@@ -45,7 +45,7 @@ INDEX_OFFSET = 0
 INDEX_LENGTH = 1
 INDEX_NOTE = 2
 
-def midifile_to_dict(mid, tempo_index: int, indexes: list):
+def midifile_to_dict(mid, tempo_index: int, indexes: list, music_offset: int):
     tracks = []
     for track in mid.tracks:
         tracks.append([vars(msg).copy() for msg in track])
@@ -109,9 +109,9 @@ def midifile_to_dict(mid, tempo_index: int, indexes: list):
     return res
 
 
-def to_json(file, tempo_index = 0, indexes = [1], simulate = False):
+def to_json(file, tempo_index = 0, indexes = [1], music_offset: int = 0, simulate = False):
     mid = mido.MidiFile(file)
-    res: dict = midifile_to_dict(mid, tempo_index, indexes)
+    res: dict = midifile_to_dict(mid, tempo_index, indexes, music_offset)
     # out.write(json.dumps(res, indent=4))
     face_dict = {}
     face_gen_ind = 0
@@ -159,8 +159,8 @@ def print_json(file):
             print('  {!r}'.format(message))
 
 class MidiToAbsSheet:
-    def __init__(self, filename, tempo_index = 0, indexes = [1], simulate = False):
-        self.abs_notes = to_json(filename, tempo_index, indexes, simulate)
+    def __init__(self, filename, tempo_index = 0, indexes = [1], music_offset = 0, simulate = False):
+        self.abs_notes = to_json(filename, tempo_index, indexes, music_offset, simulate)
     def to_abs_sheet(self, meta = {}):
         effects = meta["effects"] if "effects" in meta.keys() else []
         effect_pool = meta["effect_pool"] if "effect_pool" in meta.keys() else []
@@ -169,5 +169,5 @@ class MidiToAbsSheet:
         self.sheet.preprocess = meta
         self.sheet.process()
         self.sheet.abs_notes = self.abs_notes
-        self.sheet.music_offset = 2000
+        self.sheet.music_offset = meta["music_offset"]
         return self.sheet.to_abs()

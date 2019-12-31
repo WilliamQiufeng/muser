@@ -22,6 +22,7 @@ class SourceSheetInput:
         ) else "/Unknown"
         self.tempo = self.preprocess["tempo"] if "tempo" in self.preprocess.keys() else 60
         self.effects = self.preprocess["effects"] if "effects" in self.preprocess.keys() else []
+        self.music_offset = self.preprocess["music_offset"] if "music_offset" in self.preprocess.keys() else 0
         
         # Calculate the length of a beat
         #                        1 (min)                1000 (ms)
