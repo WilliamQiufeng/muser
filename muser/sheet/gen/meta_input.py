@@ -52,7 +52,7 @@ class MetaInput:
             indexes = sheet["indexes"]
             effect_pool = sheet["effect_pool"] if "effect_pool" in sheet.keys() else []
             effects = sheet["effects"] if "effects" in sheet.keys() else []
-            music_offset = sheet["music_offset"] if "music_offset" in sheet.keys() else 0
+            music_offset = sheet["music_offset"] if "music_offset" in sheet.keys() else 2000
             mtas = MidiToAbsSheet(
                 abs_midi, tempo_index, indexes, music_offset, False)
             abs_sheet = mtas.to_abs_sheet({

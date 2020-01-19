@@ -75,6 +75,7 @@ class Casts:
         def select(obj):
             obj.finished = True
         def __init__(self):
+            self.volume = 0.0
             self.selection = 0
             self.level_selection = 0
             self.finished = False
@@ -86,6 +87,7 @@ class Casts:
             print(self.sheets)
             self.update_meta()
         def update_meta(self):
+            self.volume = 0.0
             self.level_selection = 0
             self.sheet = SheetReader.from_sheets(self.sheets[self.selection])
             self.music_source = self.sheet[self.level_selection].data["music"]
@@ -93,6 +95,13 @@ class Casts:
             pygame.mixer.music.load(self.music_source)
             pygame.mixer.music.play()
         def update(self):
+            if self.volume >= 1.0:
+                self.volume = 1.0
+            else:
+                self.volume += 0.01
+                if self.volume > 1.0:
+                    self.volume = 1.0
+                pygame.mixer.music.set_volume(self.volume)
             for btn in Casts.LevelSelection.BUTTONS:
                 btn.update()
         def draw(self):
