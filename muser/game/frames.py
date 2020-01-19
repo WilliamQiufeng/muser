@@ -143,7 +143,7 @@ class Frames:
         PLAY_PRESSED = Frame(16, 64, 16, 16)
     class PlayThrough:
         # DIRECTIONS = [Frame(1 + x * 8, 5, 6, 6) for x in range(4)]
-        DIRECTIONS = [ArrowFrame(x, 6, 6) for x in range(4)]
+        DIRECTIONS = [ArrowFrame(x) for x in range(4)]
         ARROW_FADE = [Frame(56 + 8 * x, 4, 8, 8) for x in range(4)]
         INDICATOR_CIRCLE = Frame(32, 48, 32, 32)
         # INDICATOR_RES = [Frame(x * 8, 16, 8, 8) for x in range(5)]
