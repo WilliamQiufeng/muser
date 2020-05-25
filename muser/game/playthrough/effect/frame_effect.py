@@ -48,5 +48,5 @@ class FrameEffect(Effect):
             for x in range(self.note_prop["size"][0]):
                 # c = time.time()
                 if self.note_prop["frame"][y][x] != -1:
-                    pyxel.pix(
+                    pyxel.pset(
                         self.note_prop["offset_pos"][0] + x, self.note_prop["offset_pos"][1] + y, self.note_prop["frame"][y][x])

@@ -113,11 +113,16 @@ class BitmapFrame(Frame):
             for x_o in range(self.width):
                 col = self.substitution[self.image[y_o][x_o]]
                 if col != -1:
-                    pyxel.pix(x + x_o, y + y_o, col)
+                    pyxel.pset(x + x_o, y + y_o, col)
     def __repr__(self):
         return '\n'.join([','.join(x) for x in self.image])
 
 class Frames:
+    class Init:
+        DIRECTORY = Frame(0, 216, 16, 16)
+        FILE = Frame(16, 216, 16, 16)
+        BACK = Frame(32, 216, 16, 16)
+        ENTER = Frame(48, 216, 16, 16)
     class Intro:
         EMPTY = [Frame(80, 136, 79, 16)]
         TITLE_PRE = EMPTY * 20

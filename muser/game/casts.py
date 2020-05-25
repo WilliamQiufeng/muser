@@ -25,6 +25,37 @@ class Cast:
     def clear_screen(self):
         pyxel.cls(0)
 class Casts:
+    # class Init(Cast):
+    #     def __init__(self):
+    #         self.finished = (game_config.GLOB_CONFIG.config_path is not None) and os.path.isfile(game_config.GLOB_CONFIG.config_path)
+    #         self.path = os.path.abspath(".")
+    #         self.file_chosen = None
+    #         self.current_dir_files = self.list_files()
+
+    #     def goto_previous_dir(self):
+    #         self.path = os.path.dirname(self.path)
+
+    #     def goto_dir(self, name):
+    #         self.path = os.path.join(self.path, name)
+
+    #     def choose_file(self, name):
+    #         self.file_chosen = os.path.join(self.path, name)
+
+    #     def list_files(self):
+    #         return os.listdir(self.path)
+            
+    #     def update(self):
+    #         if pyxel.btnp(pyxel.KEY_ENTER):
+    #             if os.path.isdir(self.file_chosen):
+    #                 self.goto_dir(self.file_chosen)
+    #             elif os.path.isfile(self.file_chosen):
+    #                 pass
+    #     def draw(self):
+    #         pass
+    #     def is_finished(self):
+    #         return self.finished
+    #     def next_cast(self):
+    #         return Casts.Intro()
     class Intro(Cast):
         def __init__(self):
             self.frame = 0

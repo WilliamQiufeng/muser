@@ -1,4 +1,5 @@
 {
     "code-runner.cwd": "/williamye/program/pyxel_projects/muser/muser",
-    "code-runner.customCommand": "cd /williamye/program/pyxel_projects/muser/muser"
+    "code-runner.customCommand": "cd /williamye/program/pyxel_projects/muser/muser",
+    "python.pythonPath": "/usr/local/bin/python"
 }

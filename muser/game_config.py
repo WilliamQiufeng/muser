@@ -40,19 +40,25 @@ def find(name, path):
 class GameConfig:
     def __init__(self):
         print(os.system("pwd"))
-        config_path = find("muser_config.json", ".")
-        self.config_path = config_path
-        if config_path != None:
-            self.config: dict = json.loads(io.open(config_path, "r").read())
+        self.config_path = find("muser_config.json", ".")
+        if self.config_path != None:
+            self.config: dict = json.loads(io.open(self.config_path, "r").read())
         else:
-            raise RuntimeError("Must have a config file!")
+            self.config_path = os.path.join(os.path.abspath("."), "muser_config.json")
+            self.config: dict = {}
     def proc(self):
-        self.asset_path: str = self.get("asset_path", default="/williamye/program/pyxel_projects/muser")
-        self.separator: str = self.get("separator", default="/")
-        self.fps: int = self.get("fps", 60)
+        self.asset_path: str = self.get("asset_path", default="./assets")
+        self.separator: str = self.get("separator", default=os.path.sep)
+        self.fps: int = self.get("fps", default=60)
         self.assets = assets.Assets(self.asset_path, self.separator)
+    def save(self):
+        self.config["asset_path"] = self.asset_path
+        self.config["separator"] = self.separator
+        self.config["fps"] = self.fps
+        io.open(self.config_path, "w").write(json.dumps(self.config, indent=4))
     def get(self, key, default = None):
         return self.config[key] if key in self.config.keys() else default
 
 GLOB_CONFIG = GameConfig()
 GLOB_CONFIG.proc()
+GLOB_CONFIG.save()

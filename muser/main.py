@@ -6,6 +6,6 @@ pyxel.init(256, 256,
             fps=game_config.GLOB_CONFIG.fps)
 
 print("Window loaded")
-pyxel.load(f"{game_config.GLOB_CONFIG.assets.root}/resources.pyxres")
+pyxel.load(f"{game_config.GLOB_CONFIG.assets.root}{game_config.GLOB_CONFIG.separator}resources.pyxres")
 print("Res loaded")
 from game import muser

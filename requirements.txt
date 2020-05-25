@@ -1,5 +1,5 @@
 pygame>=1.9.6
 pyglet>=1.4.7
 PyInstaller>=3.5
-pyxel>=1.2.10
+pyxel>=1.4.0
 mido>=1.2.9
