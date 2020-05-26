@@ -1,6 +1,7 @@
 import io, json
 from sheet.gen.abs_output import AbsNote
 from sheet.actions import *
+from game_config import *
 
 """
 Sheet Reader
@@ -25,6 +26,7 @@ class SheetReader:
         reader = SheetReader()
         reader.data = info
         reader.read_notes()
+        reader.apply_relative_music_offset()
         return reader
     @staticmethod
     def from_sheets(filename: str) -> list:
@@ -39,6 +41,9 @@ class SheetReader:
 
     def read_metadata(self):
         self.data = json.loads(self.readinput)
+        
+    def apply_relative_music_offset(self):
+        self.data["music_offset"] += GLOB_CONFIG.config["rel_music_offset"]
     
     def read_notes(self):
         self.notes = [Actions.fromArgs(note_data) for note_data in self.data["notes"]]

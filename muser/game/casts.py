@@ -262,7 +262,7 @@ class Casts:
                     rand = self.animation_bitmap.pop()
                     x = rand % Constants.Cast.WIDTH
                     pos = [(rand - x) / Constants.Cast.WIDTH, x]
-                    pyxel.pix(*pos, 8)
+                    pyxel.pset(*pos, 0)
         def is_finished(self):
             return self.finished
         def next_cast(self):

@@ -23,17 +23,24 @@ class PositionedNote(BaseNote):
     @property
     def len_to_center(self, center: tuple):
         return math.sqrt((self.initial_pos[0] - center[0])** 2 + (self.initial_pos[1] - center[1])** 2)
+    
     def is_time(self, total_time: int):
         if (not self.in_scene) and (not self.finished) and (total_time >= self.prop["offset"]):
             return True
         else:
             return False
     def move(self, total_time: float):
-        pixels = Constants.PlayThrough.DISTANCES()[self.prop["side"]] * (total_time - self.prop["offset"]) / self.prop["pass_time"]
-        # pixels = Constants.PlayThrough.DISTANCES()[self.prop["side"]] * (2000) / self.prop["pass_time"]
-        self.pos[0] = self.initial_pos[0] + self.direction[0] * pixels
-        self.pos[1] = self.initial_pos[1] + self.direction[1] * pixels
-        # print(f"Move {str(self.note.__repr__())} {pixels} pixels to {self.pos} from {self.initial_pos}")
+        # pixels = Constants.PlayThrough.DISTANCES()[self.prop["side"]] * (total_time - self.prop["offset"]) / self.prop["pass_time"]
+        # # pixels = Constants.PlayThrough.DISTANCES()[self.prop["side"]] * (2000) / self.prop["pass_time"]
+        # self.pos[0] = self.initial_pos[0] + self.direction[0] * pixels
+        # self.pos[1] = self.initial_pos[1] + self.direction[1] * pixels
+        # # print(f"Move {str(self.note.__repr__())} {pixels} pixels to {self.pos} from {self.initial_pos}")
+        center = Constants.Cast.center(0, 0)
+        
+        init_to_center_vec = (center[0] - self.initial_pos[0], center[0] - self.initial_pos[1])
+        percent_passed = (total_time - self.prop["offset"]) / self.prop["pass_time"]
+        self.pos[0] = self.initial_pos[0] + init_to_center_vec[0] * percent_passed
+        self.pos[1] = self.initial_pos[1] + init_to_center_vec[1] * percent_passed
     def __repr__(self):
         return f"Note {self.note}"
     def update(self, total_time: float) -> int:

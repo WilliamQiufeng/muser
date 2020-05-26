@@ -41,20 +41,23 @@ class GameConfig:
     def __init__(self):
         print(os.system("pwd"))
         self.config_path = find("muser_config.json", ".")
+        success: bool = True
         if self.config_path != None:
-            self.config: dict = json.loads(io.open(self.config_path, "r").read())
-        else:
+            try:
+                self.config: dict = json.loads(io.open(self.config_path, "r").read())
+            except:
+                success = False
+        if not success:
             self.config_path = os.path.join(os.path.abspath("."), "muser_config.json")
             self.config: dict = {}
     def proc(self):
-        self.asset_path: str = self.get("asset_path", default="./assets")
-        self.separator: str = self.get("separator", default=os.path.sep)
-        self.fps: int = self.get("fps", default=60)
-        self.assets = assets.Assets(self.asset_path, self.separator)
+        self.config["asset_path"]: str = self.get("asset_path", default="./assets")
+        self.config["separator"]: str = self.get("separator", default=os.path.sep)
+        self.config["fps"]: int = self.get("fps", default=60)
+        # The relative offset of note appearence
+        self.config["rel_music_offset"]: float = self.get("rel_music_offset", default=-256)
+        self.assets = assets.Assets(self.config["asset_path"], self.config["separator"])
     def save(self):
-        self.config["asset_path"] = self.asset_path
-        self.config["separator"] = self.separator
-        self.config["fps"] = self.fps
         io.open(self.config_path, "w").write(json.dumps(self.config, indent=4))
     def get(self, key, default = None):
         return self.config[key] if key in self.config.keys() else default

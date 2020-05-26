@@ -8,7 +8,7 @@
             "name": "Python: 当前文件",
             "type": "python",
             "request": "launch",
-            "program": "/williamye/program/pyxel_projects/muser/main.py",
+            "program": "/Users/Shared/williamye/program/pyxel_projects/muser/muser/main.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}/muser"
         }

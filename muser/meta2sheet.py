@@ -1,18 +1,15 @@
 from game_config import *
 from sheet.gen.meta_input import *
 import os
-import argparse
 
-argp = argparse.ArgumentParser()
-argp.add_argument("-r", "--root", default='/Users/Shared/williamye/program/pyxel_projects/muser_sheeets')
+sheet_path = os.path.abspath(GLOB_CONFIG.assets.getSheets())
 
-args = argp.parse_args()
+if os.path.islink(sheet_path):
+    sheet_path = os.readlink(sheet_path)
 
-root = f"{args.root}/sheets/"
+print(f"Generating sheets under {sheet_path}")
 
-print(f"Generating sheets under {root}, root is {GLOB_CONFIG.assets.getSheets()}")
-
-file_list = os.listdir(root)
+file_list = os.listdir(sheet_path)
 for file in file_list:
     if file.endswith(".sheetmeta"):
-        MetaInput.from_file(root + file).proc()
+        MetaInput.from_file(os.path.join(sheet_path, file)).proc()

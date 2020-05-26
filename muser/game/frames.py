@@ -126,15 +126,15 @@ class Frames:
     class Intro:
         EMPTY = [Frame(80, 136, 79, 16)]
         TITLE_PRE = EMPTY * 20
-        TITLE_FADEIN = [Frame(0, 136 + 16 * x, 79, 16) for x in range(0, 5) for _ in range(int(game_config.GLOB_CONFIG.fps / 15))]
+        TITLE_FADEIN = [Frame(0, 136 + 16 * x, 79, 16) for x in range(0, 5) for _ in range(int(game_config.GLOB_CONFIG.config["fps"] / 15))]
         TITLE_STAY = [Frame(0, 200, 79, 16)] * \
-            int(game_config.GLOB_CONFIG.fps * 2)
+            int(game_config.GLOB_CONFIG.config["fps"] * 2)
         TITLE_FADEOUT = TITLE_FADEIN[::-1]
         TITLE = TITLE_PRE + TITLE_FADEIN + TITLE_STAY + TITLE_FADEOUT
         AUTHOR_FADEIN = [Frame(80, 152 + 16 * x, 79, 16) for x in range(0, 4)
-                         for _ in range(int(game_config.GLOB_CONFIG.fps / 15))]
+                         for _ in range(int(game_config.GLOB_CONFIG.config["fps"] / 15))]
         AUTHOR_STAY = [Frame(80, 200, 79, 16)] * \
-            int(game_config.GLOB_CONFIG.fps * 2)
+            int(game_config.GLOB_CONFIG.config["fps"] * 2)
         AUTHOR_FADEOUT = AUTHOR_FADEIN[::-1] + EMPTY
         AUTHOR = AUTHOR_FADEIN + AUTHOR_STAY + AUTHOR_FADEOUT
         WHOLE = TITLE + AUTHOR
