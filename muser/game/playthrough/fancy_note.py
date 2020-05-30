@@ -44,7 +44,7 @@ class StartEffectNote(BaseNote):
         self.offset = self.note.offset
     def update(self, total_time: int):
         if (not self.finished) and total_time >= self.offset:
-            print(f"Effect Note {self.identity} In")
+            # print(f"Effect Note {self.identity} In")
             EffectController.add_effect(self.effect)
             self.finished = True
     def __repr__(self):
@@ -58,7 +58,7 @@ class EndEffectNote(BaseNote):
         self.identity, self.offset = self.end_fancy.identity, self.end_fancy.offset
     def update(self, total_time: int):
         if (not self.finished) and total_time >= self.offset:
-            print(f"Effect note {self.identity} out")
+            # print(f"Effect note {self.identity} out")
             EffectController.remove_effect(self.identity)
             self.finished = True
     def __repr__(self):

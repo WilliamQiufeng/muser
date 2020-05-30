@@ -65,6 +65,7 @@ class NoteManager:
         self.finished: bool = False
         self.paused: bool = False
         self.score: int = 0
+        self.combo: int = 0
         self.perfect_note_score = Constants.PlayThrough.Score.TOTAL_SCORE / (len(self.notes) * Constants.PlayThrough.NoteIndicator.INDICATORS().index(Constants.PlayThrough.NoteIndicator.PERFECT))
     def prepare(self):
         pygame.mixer.music.stop()
@@ -75,13 +76,13 @@ class NoteManager:
         if not self.paused:
             pygame.mixer.music.pause()
             self.last_pause_time = time.time()
-            print(
-                f"Game paused. Total Time: {self.total_time},  Start Time: {self.start_time}")
+            # print(
+            #     f"Game paused. Total Time: {self.total_time},  Start Time: {self.start_time}")
         else:
             pygame.mixer.music.unpause()
             self.start_time += time.time() - self.last_pause_time
-            print(
-                f"Game continued. Total Time: {self.total_time}, Start Time: {self.start_time}")
+            # print(
+            #     f"Game continued. Total Time: {self.total_time}, Start Time: {self.start_time}")
         self.paused = not self.paused
     def update_time(self) -> float:
         cur_time = time.time()
@@ -103,8 +104,8 @@ class NoteManager:
             cur_time = (self.meta["music_offset"] +
                         pygame.mixer.music.get_pos()) / 1000
             self.total_time = self.total_time
-            print(
-                f"Total Time: {self.total_time}, Cur Time: {cur_time}, Start Time: {self.start_time}")
+            # print(
+            #     f"Total Time: {self.total_time}, Cur Time: {cur_time}, Start Time: {self.start_time}")
         return cur_time
     @util.timeit(without=(-1, 30))
     # @numba.jit()
@@ -131,6 +132,10 @@ class NoteManager:
                 continue
             if res_indicate != Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND:
                 res = res_indicate
+                if res_indicate in [Constants.PlayThrough.NoteIndicator.BAD, Constants.PlayThrough.NoteIndicator.MISS]:
+                    self.combo = 0
+                else:
+                    self.combo += 1
                 if res_indicate != Constants.PlayThrough.NoteIndicator.MISS:
                     self.score += self.perfect_note_score * Constants.PlayThrough.NoteIndicator.INDICATORS().index(res_indicate)
         if res != Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND:
@@ -147,6 +152,8 @@ class NoteManager:
             16, 16,
             12, 1
         ), f"Score: {int(self.score)}", 12)
+        
+        pyxel.text(128, 8, f"{self.combo}", 12)
         
         # Draw indicator
         Frames.PlayThrough.INDICATOR_CIRCLE.draw(*Constants.Cast.center(

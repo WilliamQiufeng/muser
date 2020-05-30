@@ -45,7 +45,7 @@ class PositionedNote(BaseNote):
         return f"Note {self.note}"
     def update(self, total_time: float) -> int:
         if self.is_time(total_time) and not self.finished:
-            print(f"Note in scene at {total_time}: {str(self.note.__repr__())}")
+            # print(f"Note in scene at {total_time}: {str(self.note.__repr__())}")
             self.in_scene = True
             self.finished = False
         if (not self.finished) and self.in_scene:
@@ -66,7 +66,7 @@ class PositionedNote(BaseNote):
                     self.in_scene = False
                     self.result = result
                     Config.TOUCHED[self.prop["side"]] = False
-                    print(f"Note {str(self.note.__repr__())} finished at {self.pos}, {total_time}, {Constants.PlayThrough.NoteIndicator.INDICATOR_NAME[self.result]}")
+                    # print(f"Note {str(self.note.__repr__())} finished at {self.pos}, {total_time}, {Constants.PlayThrough.NoteIndicator.INDICATOR_NAME[self.result]}")
                     return self.result
         return Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
     def draw(self):

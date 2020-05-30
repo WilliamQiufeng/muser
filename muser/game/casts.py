@@ -115,7 +115,7 @@ class Casts:
                 for file in os.listdir(path):
                     if file.endswith(".sheet"):
                         self.sheets.append(path + file)
-            print(self.sheets)
+            # print(self.sheets)
             self.update_meta()
         def update_meta(self):
             self.volume = 0.0
@@ -179,6 +179,7 @@ class Casts:
             self.music_source = music_source
             self.finished: bool = False
             self.quit: bool = False
+            pygame.mixer.music.set_volume(1.0)
             self.note_manager: NoteManager = NoteManager(self.sheet, Constants.PlayThrough.DISTANCES(), self.music_source)
             self.note_manager.prepare()
             self.note_manager.start()
@@ -196,9 +197,9 @@ class Casts:
                 self.note_manager.pause()
             self.quit = pyxel.btn(pyxel.KEY_Q)
             if self.quit:
-                print("Quit playthrough.")
+                # print("Quit playthrough.")
                 EffectController.clear_effects()
-                print("Effects cleared")
+                # print("Effects cleared")
 
         @util.timeit(without=(-1, 30))
         def draw(self):
