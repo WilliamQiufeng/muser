@@ -50,8 +50,12 @@ class PositionedNote(BaseNote):
             self.finished = False
         if (not self.finished) and self.in_scene:
             self.move(total_time)
-            result = Constants.PlayThrough.IndicatorRange(
-                self.prop["side"], self.pos)
+            # result = Constants.PlayThrough.IndicatorRange(
+            #     self.prop["side"], self.pos)
+            result = Constants.PlayThrough.IndicateWithTime(
+                self.prop["side"], self.prop["offset"],
+                self.prop["pass_time"], total_time
+            )
             # if Config.TOUCHED[self.prop["side]:
                 # print(
                 #     f"This note is in bound and is touched at {self.pos}, distance to center: {Constants.PlayThrough.DistanceToCenter(self.pos)}: {self.note}, result: {Constants.PlayThrough.NoteIndicator.INDICATOR_NAME[result]}")

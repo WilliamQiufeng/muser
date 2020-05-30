@@ -150,7 +150,44 @@ class Frames:
         # DIRECTIONS = [Frame(1 + x * 8, 5, 6, 6) for x in range(4)]
         DIRECTIONS = [ArrowFrame(x) for x in range(4)]
         ARROW_FADE = [Frame(56 + 8 * x, 4, 8, 8) for x in range(4)]
-        INDICATOR_CIRCLE = Frame(32, 48, 32, 32)
+        # INDICATOR_CIRCLE = Frame(32, 48, 32, 32)
+        INDICATOR_CIRCLE = BitmapFrame(32, 32, [
+            "             H    H             ",
+            "             H    H             ",
+            "                                ",
+            "                                ",
+            "             H    H             ",
+            "             H    H             ",
+            "             H    H             ",
+            "       HHHHHHHHHHHHHHHHHH       ",
+            "       HHHHH        HHHHH       ",
+            "       HH              HH       ",
+            "       HH              HH       ",
+            "       HH              HH       ",
+            "HH  HHHH                H       ",
+            "       H                HHHH  HH",
+            "       H                H       ",
+            "       H                H       ",
+            "       H                H       ",
+            "       H                H       ",
+            "       H                HHHH  HH",
+            "HH  HHHH                H       ",
+            "       HH              HH       ",
+            "       HH              HH       ",
+            "       HH              HH       ",
+            "       HHHHH        HHHHH       ",
+            "       HHHHHHHHHHHHHHHHHH       ",
+            "             H    H             ",
+            "             H    H             ",
+            "             H    H             ",
+            "                                ",
+            "                                ",
+            "             H    H             ",
+            "             H    H             "
+        ], {
+            " ": -1,
+            "H": 8,
+        })
         # INDICATOR_RES = [Frame(x * 8, 16, 8, 8) for x in range(5)]
         INDICATOR_SCALE = (2, 2)
         INDICATOR_RES = [

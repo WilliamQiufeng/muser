@@ -75,6 +75,23 @@ class Constants:
         def IndicatorMiss(side: int) -> tuple:
             return Constants.PlayThrough.IndicatorGet(side, Constants.PlayThrough.NoteIndicator.MISS)
         @staticmethod
+        def IndicateWithTime(side: int, offset: float, pass_time: float, total_time: float):
+            expected_time: float = offset + pass_time
+            time_diff: float = abs(expected_time - total_time)
+            touched: bool = Config.TOUCHED[side]
+            tolerance: list = [
+                dist * 20 for dist in Constants.PlayThrough.NoteIndicator.INDICATORS()[::-1]]
+            if touched:
+                if time_diff <= tolerance[0]:
+                    return Constants.PlayThrough.NoteIndicator.PERFECT
+                elif time_diff <= tolerance[1]:
+                    return Constants.PlayThrough.NoteIndicator.GREAT
+                elif time_diff <= tolerance[2]:
+                    return Constants.PlayThrough.NoteIndicator.BAD
+            if total_time - expected_time > tolerance[2]:
+                return Constants.PlayThrough.NoteIndicator.MISS
+            return Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
+        @staticmethod
         def IndicatorRange(side: int, pos: list) -> int:
             touched = Config.TOUCHED[side]
             if touched:
