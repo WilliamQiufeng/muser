@@ -38,15 +38,31 @@ class FrameEffect(Effect):
         super().__init__(identity=frame_note.identity)
         self.frame_note = frame_note
         self.note_prop = self.frame_note.prop
+        self.offset_pos_x, self.offset_pos_y = self.note_prop["offset_pos"]
+        self._frame = self.note_prop["frame"]
+        self.size_x, self.size_y = self.note_prop["size"]
+        # Try to optimise
+        self.frame = [
+            (x, y, pix)
+            for y in range(self.size_y)
+            for x in range(self.size_x)
+            for pix in [self._frame[y][x]]
+            if pix != -1
+        ]
         # print(self.frame_note.frame)
     def update(self, args, kwargs):
         pass
-    # @util.timeit()
+
+    @util.timeit(without=(-1, 30))
     # @numba.jit()
     def draw(self, args, kwargs):
-        for y in range(self.note_prop["size"][1]):
-            for x in range(self.note_prop["size"][0]):
-                # c = time.time()
-                if self.note_prop["frame"][y][x] != -1:
-                    pyxel.pset(
-                        self.note_prop["offset_pos"][0] + x, self.note_prop["offset_pos"][1] + y, self.note_prop["frame"][y][x])
+        for x, y, pix in self.frame:
+            pyxel.pset(self.offset_pos_x + x, self.offset_pos_y + y, pix)
+
+        # for y in range(self.size_y):
+        #     for x in range(self.size_x):
+        #         # c = time.time()
+        #         pix = self._frame[y][x]
+        #         if pix != -1:
+        #             pyxel.pset(
+        #                 self.offset_pos_x + x, self.offset_pos_y + y, pix)

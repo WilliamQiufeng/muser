@@ -140,6 +140,8 @@ class NoteManager:
                     self.score += self.perfect_note_score * Constants.PlayThrough.NoteIndicator.INDICATORS().index(res_indicate)
         if res != Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND:
             self.last_indicator = res
+        self.last_indicated_frame = Constants.PlayThrough.NoteIndicator.getFrame(
+            self.last_indicator)
     # @util.timeit(within=(40, -1))
     @util.timeit(without=(-1, 30))
     def draw(self):
@@ -164,7 +166,7 @@ class NoteManager:
         #     *Constants.Cast.center(indicator_res.width, indicator_res.height))
         
         # Draw last indicator result
-        Constants.PlayThrough.NoteIndicator.getFrame(self.last_indicator).draw(*util.grid(
+        self.last_indicated_frame.draw(*util.grid(
             Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
             16, 16,
             1, 1
