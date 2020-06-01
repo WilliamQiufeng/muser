@@ -77,6 +77,7 @@ class BitmapFrame(Frame):
     def __init__(self, width, height, image=[], substitution={}):
         super().__init__(0, 0, width, height, image=[list(x) if isinstance(x, str) else x for x in image])
         self.substitution = substitution
+        self.optimize()
     @staticmethod
     def frameScaleUp(image: list, width: int = 16, height: int = 16, scale_x: int = 1, scale_y: int = 1):
         new_size = (width * scale_x, height * scale_y)
@@ -106,14 +107,25 @@ class BitmapFrame(Frame):
                         new_image[y_o * scale_y + y_s][x_o * scale_x + x_s] = placeholder
         self.width, self.height = new_size
         self.image = new_image
+        self.optimize()
         return self
+    def optimize(self):
+        self._optimized = [
+            (x, y, pix)
+            for y in range(self.height)
+            for x in range(self.width)
+            for pix in [self.substitution[self.image[y][x]]]
+            if pix != -1
+        ]
     def draw(self, x, y):
         # y_o and x_o: y and x offsets
-        for y_o in range(self.height):
-            for x_o in range(self.width):
-                col = self.substitution[self.image[y_o][x_o]]
-                if col != -1:
-                    pyxel.pset(x + x_o, y + y_o, col)
+        # for y_o in range(self.height):
+        #     for x_o in range(self.width):
+        #         col = self.substitution[self.image[y_o][x_o]]
+        #         if col != -1:
+        #             pyxel.pset(x + x_o, y + y_o, col)
+        for x_o, y_o, pix in self._optimized:
+            pyxel.pset(x + x_o, y + y_o, pix)
     def __repr__(self):
         return '\n'.join([','.join(x) for x in self.image])
 
@@ -152,38 +164,38 @@ class Frames:
         ARROW_FADE = [Frame(56 + 8 * x, 4, 8, 8) for x in range(4)]
         # INDICATOR_CIRCLE = Frame(32, 48, 32, 32)
         INDICATOR_CIRCLE = BitmapFrame(32, 32, [
-            "             H    H             ",
-            "             H    H             ",
+            "            H      H            ",
+            "            H      H            ",
             "                                ",
             "                                ",
-            "             H    H             ",
-            "             H    H             ",
-            "             H    H             ",
-            "       HHHHHHHHHHHHHHHHHH       ",
+            "            H      H            ",
+            "            H      H            ",
+            "            H      H            ",
+            "       HHHHHH      HHHHHH       ",
             "       HHHHH        HHHHH       ",
             "       HH              HH       ",
             "       HH              HH       ",
             "       HH              HH       ",
-            "HH  HHHH                H       ",
-            "       H                HHHH  HH",
-            "       H                H       ",
-            "       H                H       ",
-            "       H                H       ",
-            "       H                H       ",
-            "       H                HHHH  HH",
-            "HH  HHHH                H       ",
+            "HH  HHHH                HHHH  HH",
+            "                                ",
+            "                                ",
+            "                                ",
+            "                                ",
+            "                                ",
+            "                                ",
+            "HH  HHHH                HHHH  HH",
             "       HH              HH       ",
             "       HH              HH       ",
             "       HH              HH       ",
             "       HHHHH        HHHHH       ",
-            "       HHHHHHHHHHHHHHHHHH       ",
-            "             H    H             ",
-            "             H    H             ",
-            "             H    H             ",
+            "       HHHHHH      HHHHHH       ",
+            "            H      H            ",
+            "            H      H            ",
+            "            H      H            ",
             "                                ",
             "                                ",
-            "             H    H             ",
-            "             H    H             "
+            "            H      H            ",
+            "            H      H            "
         ], {
             " ": -1,
             "H": 8,

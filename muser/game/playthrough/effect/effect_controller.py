@@ -27,6 +27,7 @@
 '''
 
 from .base_effect import *
+import util
 class EffectController:
     pool: dict = {}
     @staticmethod
@@ -44,6 +45,7 @@ class EffectController:
         for effect in EffectController.pool.values():
             effect.update(args, kwargs)
     @staticmethod
+    @util.timeit(without=(-1, 30))
     def draw(*args, **kwargs):
         for effect in EffectController.pool.values():
             # print(effect.draw.__code__)

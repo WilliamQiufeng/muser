@@ -56,6 +56,7 @@ class GameConfig:
         self.config["fps"]: int = self.get("fps", default=60)
         # The relative offset of note appearence
         self.config["rel_music_offset"]: float = self.get("rel_music_offset", default=-256)
+        self.config["full_screen"]: bool = self.get("full_screen", default=False)
         self.assets = assets.Assets(self.config["asset_path"], self.config["separator"])
     def save(self):
         io.open(self.config_path, "w").write(json.dumps(self.config, indent=4))

@@ -34,21 +34,21 @@ class Counter:
         return tp
 class NoteManager:
     # TODO: make the tp be shown while playing
-    @staticmethod
-    def count(manager):
-        counter = Counter()
-        for note in manager.notes:
-            if not isinstance(note, PositionedNote):
-                continue
-            if note.result == Constants.PlayThrough.NoteIndicator.PERFECT:
-                counter.perfects += 1
-            elif note.result == Constants.PlayThrough.NoteIndicator.GREAT:
-                counter.greats += 1
-            elif note.result == Constants.PlayThrough.NoteIndicator.BAD:
-                counter.bads += 1
-            elif note.result == Constants.PlayThrough.NoteIndicator.MISS:
-                counter.misses += 1
-        return counter
+    # @staticmethod
+    # def count(manager):
+    #     counter = Counter()
+    #     for note in manager.notes:
+    #         if not isinstance(note, PositionedNote):
+    #             continue
+    #         if note.result == Constants.PlayThrough.NoteIndicator.PERFECT:
+    #             counter.perfects += 1
+    #         elif note.result == Constants.PlayThrough.NoteIndicator.GREAT:
+    #             counter.greats += 1
+    #         elif note.result == Constants.PlayThrough.NoteIndicator.BAD:
+    #             counter.bads += 1
+    #         elif note.result == Constants.PlayThrough.NoteIndicator.MISS:
+    #             counter.misses += 1
+    #     return counter
     def __init__(self, sheet: SheetReader, side_distances : list, music_source : str):
         self.meta: dict = sheet.data
         # print(self.meta)
@@ -66,6 +66,19 @@ class NoteManager:
         self.paused: bool = False
         self.score: int = 0
         self.combo: int = 0
+        self.counter: Counter = Counter()
+        self.last_indicated_frame_pos = util.grid(
+            Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
+            16, 16,
+            1, 1
+        )
+        self.score_pos = util.grid(
+            Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
+            16, 16,
+            12, 1
+        )
+        self.indicator_circle_pos = Constants.Cast.center(
+            Frames.PlayThrough.INDICATOR_CIRCLE.width, Frames.PlayThrough.INDICATOR_CIRCLE.height)
         self.perfect_note_score = Constants.PlayThrough.Score.TOTAL_SCORE / (len(self.notes) * Constants.PlayThrough.NoteIndicator.INDICATORS().index(Constants.PlayThrough.NoteIndicator.PERFECT))
     def prepare(self):
         pygame.mixer.music.stop()
@@ -138,6 +151,14 @@ class NoteManager:
                     self.combo += 1
                 if res_indicate != Constants.PlayThrough.NoteIndicator.MISS:
                     self.score += self.perfect_note_score * Constants.PlayThrough.NoteIndicator.INDICATORS().index(res_indicate)
+                if res_indicate == Constants.PlayThrough.NoteIndicator.PERFECT:
+                    self.counter.perfects += 1
+                elif res_indicate == Constants.PlayThrough.NoteIndicator.GREAT:
+                    self.counter.greats += 1
+                elif res_indicate == Constants.PlayThrough.NoteIndicator.BAD:
+                    self.counter.bads += 1
+                elif res_indicate == Constants.PlayThrough.NoteIndicator.MISS:
+                    self.counter.misses += 1
         if res != Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND:
             self.last_indicator = res
         self.last_indicated_frame = Constants.PlayThrough.NoteIndicator.getFrame(
@@ -149,28 +170,19 @@ class NoteManager:
         EffectController.draw(total_time=self.total_time)
         
         # Draw score
-        pyxel.text(*util.grid(
-            Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
-            16, 16,
-            12, 1
-        ), f"Score: {int(self.score)}", 12)
+        pyxel.text(*self.score_pos, f"Score: {int(self.score)}", 12)
         
         pyxel.text(128, 8, f"{self.combo}", 12)
         
         # Draw indicator
-        Frames.PlayThrough.INDICATOR_CIRCLE.draw(*Constants.Cast.center(
-            Frames.PlayThrough.INDICATOR_CIRCLE.width, Frames.PlayThrough.INDICATOR_CIRCLE.height))
+        Frames.PlayThrough.INDICATOR_CIRCLE.draw(*self.indicator_circle_pos)
         # indicator_res = Constants.PlayThrough.NoteIndicator.getFrame(
         #     self.last_indicator)
         # indicator_res.draw(
         #     *Constants.Cast.center(indicator_res.width, indicator_res.height))
         
         # Draw last indicator result
-        self.last_indicated_frame.draw(*util.grid(
-            Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
-            16, 16,
-            1, 1
-        ))
+        self.last_indicated_frame.draw(*self.last_indicated_frame_pos)
         
         # Draw notes
         for note in self.notes:

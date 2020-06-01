@@ -229,7 +229,7 @@ class Casts:
             self.animation_bitmap = random.sample(range(0, total_pixels), total_pixels)
             self.score_percentage = self.play_through.note_manager.score / Constants.PlayThrough.Score.TOTAL_SCORE * 100
             self.grade_frame = Constants.Result.Grade.getGradeFrame(self.score_percentage)
-            self.count = NoteManager.count(self.play_through.note_manager)
+            self.count = self.play_through.note_manager.counter
             self.tp = self.count.get_tp()
             self.score = int(self.play_through.note_manager.score)
             if self.score_percentage >= Constants.Result.Grade.A:
