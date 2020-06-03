@@ -25,7 +25,7 @@ Next, we create a  `{sheet_name}.sheetmeta` file, written in json format. Here i
             "tempo_index": 1,
             "indexes": [2],
             "level": "normal",
-            "operational_note": True
+            "operational_note": true
         }
     ]
 }
