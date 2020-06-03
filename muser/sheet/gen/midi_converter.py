@@ -31,6 +31,7 @@
 import sys
 import json
 import mido
+import math
 from mido import MidiFile
 import io
 from sheet.gen.abs_output import *
@@ -109,7 +110,7 @@ def midifile_to_dict(mid, tempo_index: int, indexes: list, music_offset: int):
     return res
 
 
-def to_json(file, tempo_index = 0, indexes = [1], music_offset: int = 0, simulate = False):
+def to_json(file, tempo_index = 0, indexes = [1], music_offset: int = 0, simulate = False, operational_note = False):
     mid = mido.MidiFile(file)
     res: dict = midifile_to_dict(mid, tempo_index, indexes, music_offset)
     # out.write(json.dumps(res, indent=4))
@@ -126,12 +127,20 @@ def to_json(file, tempo_index = 0, indexes = [1], music_offset: int = 0, simulat
                 face_gen_ind += 1
                 if face_gen_ind > 3:
                     face_gen_ind = 0
-            face = face_dict[tmp[INDEX_NOTE]]
+                    
+            # For operational note: 
+            # The notes range between Octave 4 to 6, speed slow to fast
+            # The Note number indicates the side
+            
+            note_number = tmp[INDEX_NOTE]
+            face = (note_number - 48) % 12 % 4 if operational_note else face_dict[tmp[INDEX_NOTE]]
+            pass_time = NoteSpeed.SPEEDS[math.floor((note_number - 48) / 12)] if operational_note else 2000
+            
             abs_notes.append(
                 AbsNote({
-                    "offset": tmp[INDEX_OFFSET] * 1000,
+                    "offset": tmp[INDEX_OFFSET] * 1000 + music_offset - pass_time,
                     "beat": 0,# tmp["length"],
-                    "pass_time": 2000,
+                    "pass_time": pass_time,
                     "side": face,
                     "absolutified": True}
                 )
@@ -159,8 +168,8 @@ def print_json(file):
             print('  {!r}'.format(message))
 
 class MidiToAbsSheet:
-    def __init__(self, filename, tempo_index = 0, indexes = [1], music_offset = 0, simulate = False):
-        self.abs_notes = to_json(filename, tempo_index, indexes, music_offset, simulate)
+    def __init__(self, filename, tempo_index = 0, indexes = [1], music_offset = 0, simulate = False, operational_note = False):
+        self.abs_notes = to_json(filename, tempo_index, indexes, music_offset, simulate, operational_note)
     def to_abs_sheet(self, meta = {}):
         effects = meta["effects"] if "effects" in meta.keys() else []
         effect_pool = meta["effect_pool"] if "effect_pool" in meta.keys() else []

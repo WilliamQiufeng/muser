@@ -139,6 +139,7 @@ class NoteManager:
             EffectController.clear_effects()
             return None
         res = Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
+        to_be_removed = []
         for note in self.notes:
             res_indicate = note.update(self.total_time * 1000)
             if not isinstance(note, PositionedNote):
@@ -159,6 +160,9 @@ class NoteManager:
                     self.counter.bads += 1
                 elif res_indicate == Constants.PlayThrough.NoteIndicator.MISS:
                     self.counter.misses += 1
+                to_be_removed.append(note)
+        for tbr_element in to_be_removed:
+            self.notes.remove(tbr_element)
         if res != Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND:
             self.last_indicator = res
         self.last_indicated_frame = Constants.PlayThrough.NoteIndicator.getFrame(

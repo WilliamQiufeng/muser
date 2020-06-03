@@ -36,7 +36,7 @@ class MetaInput:
     @staticmethod
     def from_file(file_name):
         file = io.open(file_name, "r")
-        return MetaInput(eval(file.read()))
+        return MetaInput(json.loads(file.read()))
     def __init__(self, meta):
         self.meta = meta
     def proc(self):
@@ -53,8 +53,10 @@ class MetaInput:
             effect_pool = sheet["effect_pool"] if "effect_pool" in sheet.keys() else []
             effects = sheet["effects"] if "effects" in sheet.keys() else []
             music_offset = sheet["music_offset"] if "music_offset" in sheet.keys() else 2000
+            operational_note = sheet["operational_note"] if "operational_note" in sheet.keys(
+            ) else False
             mtas = MidiToAbsSheet(
-                abs_midi, tempo_index, indexes, music_offset, False)
+                abs_midi, tempo_index, indexes, music_offset, False, operational_note)
             abs_sheet = mtas.to_abs_sheet({
                 "author": sheet["author"],
                 "music_author": sheet["music_author"],

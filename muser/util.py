@@ -1,5 +1,6 @@
 import time
 import functools
+
 def grid(sw, sh, gw, gh, x, y):
     gridw = sw / gw
     gridh = sh / gh
