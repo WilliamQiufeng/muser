@@ -5,6 +5,7 @@ from game.config import *
 from game.playthrough.note_manager import *
 from sheet.reader.sheet_reader import *
 from game.sounds import *
+import game_config
 import util as util
 import pyxel
 import pygame
@@ -84,7 +85,9 @@ class Casts:
             Button(Constants.Cast.center(16, 16)[0], Constants.Cast.HEIGHT - 32, pyxel.KEY_SPACE, Frames.LevelSelection.PLAY_PRESSED, Frames.LevelSelection.PLAY_UNPRESSED, lambda: Casts.LevelSelection.select(Config.CAST)),
             KeyListener(pyxel.KEY_UP, on_click=lambda: Casts.LevelSelection.increaseLevel(Config.CAST, 1)),
             KeyListener(pyxel.KEY_DOWN, on_click=lambda: Casts.LevelSelection.increaseLevel(
-                Config.CAST, -1))
+                Config.CAST, -1)),
+            KeyListener(pyxel.KEY_S, on_click=lambda: Casts.LevelSelection.settings(
+                Config.CAST))
         ]
         @staticmethod
         def increase(obj, inc):
@@ -105,11 +108,18 @@ class Casts:
         @staticmethod
         def select(obj):
             obj.finished = True
+
+        @staticmethod
+        def settings(obj):
+            pygame.mixer.music.stop()
+            obj.finished = True
+            obj.goto_settings = True
         def __init__(self):
             self.volume = 0.0
             self.selection = 0
             self.level_selection = 0
             self.finished = False
+            self.goto_settings = False
             self.sheets = []
             for path in Config.SHEET_PATHS:
                 for file in os.listdir(path):
@@ -150,7 +160,7 @@ class Casts:
         def is_finished(self):
             return self.finished
         def next_cast(self):
-            return Casts.PlayThrough(self.sheet[self.level_selection], self.music_source)
+            return Casts.Settings() if self.goto_settings else Casts.PlayThrough(self.sheet[self.level_selection], self.music_source)
     class PlayThrough(Cast):
         UPDATES = [
             KeyListener(
@@ -271,5 +281,72 @@ class Casts:
         def clear_screen(self):
             if not self.animating:
                 super().clear_screen()
+
+    class Settings(Cast):
+        
+        AVAILABLE_SETTINGS = [
+            ["fps", "FPS", "range", [1, 60]],
+            ["rel_music_offset", "Relative Music Offset", "range", [-1000, 1000]],
+            ["full_screen", "Fullscreen", "enum_options", [True, False]]
+        ]
+        
+        def __init__(self):
+            self.current_setting = 0
+            self.update_selection()
+            self.finished = False
+
+        def update(self):
+            if pyxel.btn(pyxel.KEY_Q):
+                game_config.GLOB_CONFIG.save()
+                self.finished = True  # Skip the starting screen
+                return None
+            if pyxel.btnp(pyxel.KEY_LEFT) or pyxel.btnp(pyxel.KEY_RIGHT) or \
+                pyxel.btnp(pyxel.KEY_RIGHT, 30, 2) or pyxel.btnp(pyxel.KEY_LEFT, 30, 2):
+                self.current_selection_index += -1 if pyxel.btnp(pyxel.KEY_LEFT) or pyxel.btnp(pyxel.KEY_LEFT, 30, 2) else 1
+                if self.current_setting_obj[2] == "enum_options":
+                    if self.current_selection_index < 0:
+                        self.current_selection_index = len(
+                            self.current_setting_obj[-1]) - 1
+                    if self.current_selection_index >= len(self.current_setting_obj[-1]):
+                        self.current_selection_index = 0
+                    self.current_selection = self.current_setting_obj[3][self.current_selection_index]
+                elif self.current_setting_obj[2] == "range":
+                    if self.current_selection_index < self.current_setting_obj[3][0]:
+                        self.current_selection_index = self.current_setting_obj[3][1]
+                    elif self.current_selection_index > self.current_setting_obj[3][1]:
+                        self.current_selection_index = self.current_setting_obj[3][0]
+                    self.current_selection = self.current_selection_index
+                game_config.GLOB_CONFIG.config[self.current_setting_obj[0]] = self.current_selection
+            if pyxel.btnp(pyxel.KEY_UP) or pyxel.btnp(pyxel.KEY_UP, 30, 2) or \
+                pyxel.btnp(pyxel.KEY_DOWN) or pyxel.btnp(pyxel.KEY_DOWN, 30, 2):
+                self.current_setting += 1 if pyxel.btnp(pyxel.KEY_DOWN) or pyxel.btnp(pyxel.KEY_DOWN, 30, 2) else -1
+                if self.current_setting < 0:
+                    self.current_setting = len(Casts.Settings.AVAILABLE_SETTINGS) - 1
+                elif self.current_setting >= len(Casts.Settings.AVAILABLE_SETTINGS):
+                    self.current_setting = 0
+                self.update_selection()
+                
+                
+
+        def draw(self):
+            pyxel.text(0, 6, "Settings", 12)
+            index = 3
+            for settings in Casts.Settings.AVAILABLE_SETTINGS:
+                pyxel.text(0, index*6, f"{'> ' if self.current_setting_obj[0] == settings[0] else ''}{settings[1]}: {game_config.GLOB_CONFIG.config[settings[0]]}", 12)
+                index += 1
+            
+        def update_selection(self):
+            self.current_setting_obj = Casts.Settings.AVAILABLE_SETTINGS[self.current_setting]
+            self.current_selection = game_config.GLOB_CONFIG.config[self.current_setting_obj[0]]
+            self.current_selection_index = self.current_setting_obj[-1].index(self.current_selection) \
+                if self.current_setting_obj[3] == "enum_options" else \
+                self.current_selection
+            
+
+        def is_finished(self):
+            return self.finished
+
+        def next_cast(self):
+            return Casts.LevelSelection()
 
 Config.CAST = Casts.Intro()
