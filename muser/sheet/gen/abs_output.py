@@ -89,3 +89,6 @@ class StartFrame(BaseAbsNote):
     def flatten_frame(self):
         self.frame = [[self.substitution[self.frame[line][char_i]]
                        for char_i in range(self.size[0])] for line in range(self.size[1])]
+        
+class StartMove(BaseAbsNote):
+    pass

@@ -65,6 +65,17 @@ def add_effects(abs_notes: list, effect_pool: list, effects: list):
                 "offset_pos": offset_pos
             }
             effect_vars[identity] = effect
+        elif effect_var["type"] == "move":
+            identity: int = int(effect_var["id"])
+            offset_pos: list = effect_var["offset_pos"] if "offset_pos" in effect_var.keys() else [
+                0, 0]
+            effect = copy.copy(effect_var)
+            effect.update({
+                "identity": identity,
+                "type": effect_var["type"],
+                "offset_pos": offset_pos
+            })
+            effect_vars[identity] = effect
             # print(effect)
     # print(effect_vars)
     effect_list = []
@@ -87,12 +98,16 @@ def add_effects(abs_notes: list, effect_pool: list, effects: list):
             effect_list.append(start_fancy)
             effect_list.append(end_fancy)
         elif effect_type == "frame":
-            # start_frame = StartFrame(effect["offset"], effect_var["size"], effect_var["frame"], effect_var["substitution"], effect_var["offset_pos"], identity)
             start_frame = StartFrame(res)
             start_frame.flatten_frame()
             end_frame = EndEffect(end)
             effect_list.append(start_frame)
             effect_list.append(end_frame)
+        elif effect_type == "move":
+            start_move = StartMove(res)
+            end_move = EndEffect(end)
+            effect_list.append(start_move)
+            effect_list.append(end_move)
     res_list: list = abs_notes + effect_list
     res_list.sort(key=lambda n: n.offset)
     return res_list

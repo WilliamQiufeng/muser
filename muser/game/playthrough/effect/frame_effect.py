@@ -38,7 +38,6 @@ class FrameEffect(Effect):
         super().__init__(identity=frame_note.identity)
         self.frame_note = frame_note
         self.note_prop = self.frame_note.prop
-        self.offset_pos_x, self.offset_pos_y = self.note_prop["offset_pos"]
         self._frame = self.note_prop["frame"]
         self.size_x, self.size_y = self.note_prop["size"]
         # Try to optimise
@@ -56,13 +55,11 @@ class FrameEffect(Effect):
     @util.timeit(without=(-1, 30))
     # @numba.jit()
     def draw(self, args, kwargs):
+        # pyxel.text(0, 250, f"{self.note_prop['offset_pos']}", 12)
+        offset_pos_x, offset_pos_y = self.note_prop["offset_pos"]
+        # If the frame is outside of the screen then don't draw
+        if offset_pos_x > 256 or offset_pos_y > 256 or \
+            offset_pos_x < (0 - self.size_x) or offset_pos_y < (0 - self.size_y):
+                return None
         for x, y, pix in self.frame:
-            pyxel.pset(self.offset_pos_x + x, self.offset_pos_y + y, pix)
-
-        # for y in range(self.size_y):
-        #     for x in range(self.size_x):
-        #         # c = time.time()
-        #         pix = self._frame[y][x]
-        #         if pix != -1:
-        #             pyxel.pset(
-        #                 self.offset_pos_x + x, self.offset_pos_y + y, pix)
+            pyxel.pset(offset_pos_x + x, offset_pos_y + y, pix)

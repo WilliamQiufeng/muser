@@ -30,6 +30,7 @@
 from sheet.gen.abs_output import *
 from game.playthrough.note import PositionedNote
 from game.playthrough.effect.frame_effect import *
+from game.playthrough.effect.move_effect import *
 from game.playthrough.fancy_note import *
 class ManagerActions:
     @staticmethod
@@ -42,5 +43,7 @@ class ManagerActions:
             return EndEffectNote(note)
         elif isinstance(note, StartFrame):
             return StartEffectNote(FrameEffect, note)
+        elif isinstance(note, StartMove):
+            return StartEffectNote(MoveEffect, note)
         else:
             return note
