@@ -47,19 +47,14 @@ class Move:
         self.object_identity = object_identity
         self.started = False
         self.finish = False
-        self.length = math.sqrt((pos2[0] - pos1[0]) ** 2 + (pos2[1] - pos1[1]) ** 2)
-        self.diff_height = abs(pos1[1] - pos2[1])
-        self.degree = math.acos(self.diff_height / self.length)
-        print(math.degrees(self.degree))
+        
     def get_current_pos(self, total_time: float):
         self.progress = self.get_progress(total_time)
         if self.progress >= 1:
             return self.pos2
-        self.progress_length = self.length * self.progress
-        self.direction_x = -1 if self.pos2[0] - self.pos1[0] < 0 else 1
-        self.direction_y = -1 if self.pos2[1] - self.pos1[1] < 0 else 1
-        return (self.pos1[0] + math.sin(self.degree) * self.progress_length * self.direction_x,
-                self.pos1[1] + math.cos(self.degree) * self.progress_length * self.direction_y)
+        # From math stackexchange: https://math.stackexchange.com/a/1269705
+        return ((1 - self.progress) * self.pos1[0] + self.progress * self.pos2[0],
+                (1 - self.progress) * self.pos1[1] + self.progress * self.pos2[1])
     
     def get_progress(self, total_time: float):
         return (total_time - self.offset) / self.time_length
