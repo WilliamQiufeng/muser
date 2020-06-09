@@ -92,3 +92,6 @@ class StartFrame(BaseAbsNote):
         
 class StartMove(BaseAbsNote):
     pass
+
+class StartCriteria(BaseAbsNote):
+    pass

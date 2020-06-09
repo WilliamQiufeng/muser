@@ -2,7 +2,7 @@ from game import *
 import pyxel, os
 import game_config as game_config
 pyxel.init(256, 256,
-           caption="Muser", scale=48,
+           caption="Muser",
            fps=game_config.GLOB_CONFIG.config["fps"],
            fullscreen=game_config.GLOB_CONFIG.config["full_screen"])
 

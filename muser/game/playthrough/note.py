@@ -3,11 +3,14 @@ from game.constants import Constants
 from game.config import *
 from game.frames import *
 from game.playthrough.base_note import *
+import game.playthrough.criteria_manager as cm
 import math
 import pyxel
 import copy
 import json
 import util
+
+
 class PositionedNote(BaseNote):
 
     def __init__(self, note: AbsNote):
@@ -30,17 +33,22 @@ class PositionedNote(BaseNote):
         else:
             return False
     def move(self, total_time: float):
+        progress = (total_time - self.prop["offset"]) / self.prop["pass_time"]
+        self.pos = cm.get_pos_in_progress(self, progress)
+        
         # pixels = Constants.PlayThrough.DISTANCES()[self.prop["side"]] * (total_time - self.prop["offset"]) / self.prop["pass_time"]
         # # pixels = Constants.PlayThrough.DISTANCES()[self.prop["side"]] * (2000) / self.prop["pass_time"]
         # self.pos[0] = self.initial_pos[0] + self.direction[0] * pixels
         # self.pos[1] = self.initial_pos[1] + self.direction[1] * pixels
         # # print(f"Move {str(self.note.__repr__())} {pixels} pixels to {self.pos} from {self.initial_pos}")
-        center = Constants.Cast.center(0, 0)
         
-        init_to_center_vec = (center[0] - self.initial_pos[0], center[0] - self.initial_pos[1])
-        percent_passed = (total_time - self.prop["offset"]) / self.prop["pass_time"]
-        self.pos[0] = self.initial_pos[0] + init_to_center_vec[0] * percent_passed
-        self.pos[1] = self.initial_pos[1] + init_to_center_vec[1] * percent_passed
+        
+        # center = Constants.Cast.center(0, 0)
+        
+        # init_to_center_vec = (center[0] - self.initial_pos[0], center[0] - self.initial_pos[1])
+        # percent_passed = (total_time - self.prop["offset"]) / self.prop["pass_time"]
+        # self.pos[0] = self.initial_pos[0] + init_to_center_vec[0] * percent_passed
+        # self.pos[1] = self.initial_pos[1] + init_to_center_vec[1] * percent_passed
     def __repr__(self):
         return f"Note {self.note}"
     def update(self, total_time: float) -> int:

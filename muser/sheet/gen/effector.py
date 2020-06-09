@@ -51,21 +51,27 @@ def add_effects(abs_notes: list, effect_pool: list, effects: list):
             effect_vars[identity] = effect
         elif effect_var["type"] == "frame":
             identity: int = int(effect_var["id"])
-            size: list = effect_var["size"]
-            frame_list: list = effect_var["frame"]
-            subst: dict = effect_var["substitution"]
             offset_pos: list = effect_var["offset_pos"] if "offset_pos" in effect_var.keys() else [
                 0, 0]
-            effect = {
+            effect = copy.copy(effect_var)
+            effect.update({
                 "identity": identity,
                 "type": effect_var["type"],
-                "size": size,
-                "frame": frame_list,
-                "substitution": subst,
                 "offset_pos": offset_pos
-            }
+            })
             effect_vars[identity] = effect
         elif effect_var["type"] == "move":
+            identity: int = int(effect_var["id"])
+            offset_pos: list = effect_var["offset_pos"] if "offset_pos" in effect_var.keys() else [
+                0, 0]
+            effect = copy.copy(effect_var)
+            effect.update({
+                "identity": identity,
+                "type": effect_var["type"],
+                "offset_pos": offset_pos
+            })
+            effect_vars[identity] = effect
+        elif effect_var["type"] == "criteria":
             identity: int = int(effect_var["id"])
             offset_pos: list = effect_var["offset_pos"] if "offset_pos" in effect_var.keys() else [
                 0, 0]
@@ -108,6 +114,11 @@ def add_effects(abs_notes: list, effect_pool: list, effects: list):
             end_move = EndEffect(end)
             effect_list.append(start_move)
             effect_list.append(end_move)
+        elif effect_type == "criteria":
+            start_criteria = StartCriteria(res)
+            end_criteria = EndEffect(end)
+            effect_list.append(start_criteria)
+            effect_list.append(end_criteria)
     res_list: list = abs_notes + effect_list
     res_list.sort(key=lambda n: n.offset)
     return res_list

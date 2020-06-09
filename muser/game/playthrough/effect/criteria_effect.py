@@ -2,13 +2,13 @@
 # -*- coding:utf-8 -*-
 '''
 *------------------------------------------------------------------------------*
-# File: /williamye/program/pyxel_projects/muser/muser/game/playthrough/manager_actions.py #
-# Project: /williamye/program/pyxel_projects/muser/muser/game/playthrough      #
-# Created Date: Friday, December 13th 2019, 03:24:05 pm                        #
+# File: /Users/Shared/williamye/program/pyxel_projects/muser/muser/game/playthrough/effect/criteria_effect.py #
+# Project: /Users/Shared/williamye/program/pyxel_projects/muser/muser/game/playthrough/effect #
+# Created Date: Tuesday, June 9th 2020, 10:21:09 am                            #
 # Author : Qiufeng54321                                                        #
 # Email : williamcraft@163.com                                                 #
 #                                                                              #
-# Copyright (C) 2019  Qiufeng54321                                             #
+# Copyright (C) 2020  Qiufeng54321                                             #
 # This program is free software: you can redistribute it and/or modify         #
 # it under the terms of the GNU General Public License as published by         #
 # the Free Software Foundation, either version 3 of the License, or            #
@@ -26,27 +26,32 @@
 *------------------------------------------------------------------------------*
 '''
 
-
+import pyxel
+import util
+from game.playthrough.effect.base_effect import *
+from game.constants import Constants
 from sheet.gen.abs_output import *
-from game.playthrough.note import PositionedNote
-from game.playthrough.effect.frame_effect import *
-from game.playthrough.effect.move_effect import *
-from game.playthrough.effect.criteria_effect import *
-from game.playthrough.fancy_note import *
-class ManagerActions:
-    @staticmethod
-    def from_note(note):
-        if isinstance(note, AbsNote):
-            return PositionedNote(note)
-        elif isinstance(note, StartFancy):
-            return StartEffectNote(FancyEffect, note)
-        elif isinstance(note, EndEffect):
-            return EndEffectNote(note)
-        elif isinstance(note, StartFrame):
-            return StartEffectNote(FrameEffect, note)
-        elif isinstance(note, StartMove):
-            return StartEffectNote(MoveEffect, note)
-        elif isinstance(note, StartCriteria):
-            return StartEffectNote(CriteriaEffect, note)
-        else:
-            return note
+import numba
+import game.playthrough.criteria_manager as cm
+
+
+class CriteriaEffect(Effect):
+
+    def __init__(self, criteria_note: StartCriteria):
+        super().__init__(identity=criteria_note.identity)
+        self.criteria_note = criteria_note
+        self.note_prop = criteria_note.prop
+        self.lock_effect_identity: int = self.note_prop["lock_effect_identity"]
+        self.sides: list = self.note_prop["sides"]
+        self.done: bool = False
+    # @util.timeit(within=(1, -1))
+
+    def update(self, args, kwargs):
+        if self.done:
+            return None
+        cm.set_criteria(self.lock_effect_identity, self.sides)
+        self.done = True
+
+    # @util.timeit(within=(1, -1))
+    def draw(self, args, kwargs):
+        pass

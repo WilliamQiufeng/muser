@@ -67,7 +67,7 @@ class MoveEffect(Effect):
         self.move_note = move_note
         self.note_prop = self.move_note.prop
         self.moves = [
-            Move(element["pos1"], element["pos2"], element["offset"], element["time_length"], element["object_identity"])
+            Move(element["pos1"], element["pos2"], self.note_prop["offset"] + element["offset"], element["time_length"], element["object_identity"])
             for element in self.note_prop["moves"]
         ]
     def update(self, args, kwargs):

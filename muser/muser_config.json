@@ -3,5 +3,5 @@
     "separator": "/",
     "fps": 60,
     "rel_music_offset": -256,
-    "full_screen": true
+    "full_screen": false
 }

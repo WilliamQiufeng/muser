@@ -85,7 +85,13 @@ class NoteManager:
         pygame.mixer.music.load(self.music_source)
     def start(self):
         self.initiate = True
+    
     def pause(self):
+        """
+        pauses the music and the sheet
+
+        Bug exists
+        """        
         if not self.paused:
             pygame.mixer.music.pause()
             self.last_pause_time = time.time()
@@ -178,8 +184,8 @@ class NoteManager:
         
         pyxel.text(128, 8, f"{self.combo}", 12)
         
-        # Draw indicator
-        Frames.PlayThrough.INDICATOR_CIRCLE.draw(*self.indicator_circle_pos)
+        # # Draw indicator
+        # Frames.PlayThrough.INDICATOR_CIRCLE.draw(*self.indicator_circle_pos)
         # indicator_res = Constants.PlayThrough.NoteIndicator.getFrame(
         #     self.last_indicator)
         # indicator_res.draw(
