@@ -25,7 +25,76 @@ Next, we create a  `{sheet_name}.sheetmeta` file, written in json format. Here i
             "tempo_index": 1,
             "indexes": [2],
             "level": "normal",
-            "operational_note": true
+            "operational_note": true,
+            "effect_pool": [
+                {
+                    "id": 0,
+                    "type": "frame",
+                    "offset_pos": [112, 112],
+                    "size": [32, 32],
+                    "frame": [
+                        "            H      H            ",
+                        "            H      H            ",
+                        "                                ",
+                        "                                ",
+                        "            H      H            ",
+                        "            H      H            ",
+                        "            H      H            ",
+                        "       HHHHHH      HHHHHH       ",
+                        "       HHHHH        HHHHH       ",
+                        "       HH              HH       ",
+                        "       HH              HH       ",
+                        "       HH              HH       ",
+                        "HH  HHHH                HHHH  HH",
+                        "                                ",
+                        "                                ",
+                        "                                ",
+                        "                                ",
+                        "                                ",
+                        "                                ",
+                        "HH  HHHH                HHHH  HH",
+                        "       HH              HH       ",
+                        "       HH              HH       ",
+                        "       HH              HH       ",
+                        "       HHHHH        HHHHH       ",
+                        "       HHHHHH      HHHHHH       ",
+                        "            H      H            ",
+                        "            H      H            ",
+                        "            H      H            ",
+                        "                                ",
+                        "                                ",
+                        "            H      H            ",
+                        "            H      H            "
+                    ],
+                    "substitution": {
+                        " ": -1,
+                        "H": 8
+                    }
+                },
+                {
+                    "id": 1,
+                    "type": "criteria",
+                    "lock_effect_identity": 0,
+                    "sides": [
+                        [0, [0, -128]],
+                        [1, [0, 128]],
+                        [2, [-128, 0]],
+                        [3, [128, 0]]
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "id": 0,
+                    "offset": 0,
+                    "length": ${Length}
+                },
+                {
+                    "id": 1,
+                    "offset": 0,
+                    "length": ${Length}
+                }
+            ]
         }
     ]
 }
@@ -44,6 +113,8 @@ the proper values.
 + The `tempo_index` is the track index that has tempo information.
 
 + `indexes` is the tracks of notes you want it to have.
+
++ `${Length}` to the length of the music.
   
 Now you are ready to go for a basic sheet
 generation! Put the .flac, sheetmeta and the midi file under the sheet directories

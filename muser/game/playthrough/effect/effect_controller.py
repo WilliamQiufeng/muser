@@ -47,6 +47,7 @@ class EffectController:
     @staticmethod
     @util.timeit(without=(-1, 30))
     def draw(*args, **kwargs):
-        for effect in EffectController.pool.values():
-            # print(effect.draw.__code__)
-            effect.draw(args, kwargs)
+        # print("Start drawing")
+        for effect_key in sorted(EffectController.pool.keys()):
+            # print(effect_key)
+            EffectController.pool[effect_key].draw(args, kwargs)
