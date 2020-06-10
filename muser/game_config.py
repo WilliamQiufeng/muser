@@ -52,14 +52,14 @@ class GameConfig:
             self.config_path = os.path.join(os.path.abspath("."), "muser_config.json")
             self.config: dict = {}
     def proc(self):
-        self.config["asset_path"]: str = self.get("asset_path", default="./assets")
-        self.config["separator"]: str = self.get("separator", default=os.path.sep)
-        self.config["fps"]: int = self.get("fps", default=60)
+        self.config["asset_path"]: str         = self.get("asset_path", default="./assets")
+        self.config["separator"]: str          = self.get("separator", default=os.path.sep)
+        self.config["fps"]: int                = self.get("fps", default=60)
         # The relative offset of note appearence
         self.config["rel_music_offset"]: float = self.get("rel_music_offset", default=-256)
-        self.config["full_screen"]: bool = self.get(
+        self.config["full_screen"]: bool       = self.get(
             "full_screen", default=False)
-        self.assets = assets.Assets(self.config["asset_path"], self.config["separator"])
+        self.assets                            = assets.Assets(self.config["asset_path"], self.config["separator"])
     def save(self):
         io.open(self.config_path, "w").write(json.dumps(self.config, indent=4))
     def get(self, key, default = None):

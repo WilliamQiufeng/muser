@@ -40,9 +40,9 @@ class MetaInput:
     def __init__(self, meta):
         self.meta = meta
     def proc(self):
-        sheets = []
-        root: str = self.meta["root"].replace("$asset_path", GLOB_CONFIG.assets.getSheets())
-        name = self.meta["name"]
+        sheets     = []
+        root: str  = self.meta["root"].replace("$asset_path", GLOB_CONFIG.assets.getSheets())
+        name       = self.meta["name"]
         abs_output = root + self.meta["output"]
         for sheet in self.meta["sheets"]:
             print(sheet)

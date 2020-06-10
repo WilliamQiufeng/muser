@@ -36,9 +36,9 @@ import numba
 class FrameEffect(Effect):
     def __init__(self, frame_note: StartFrame):
         super().__init__(identity=frame_note.identity)
-        self.frame_note = frame_note
-        self.note_prop  = self.frame_note.prop
-        self._frame     = self.note_prop["frame"]
+        self.frame_note          = frame_note
+        self.note_prop           = self.frame_note.prop
+        self._frame              = self.note_prop["frame"]
         self.size_x, self.size_y = self.note_prop["size"]
         # Try to optimise
         self.frame = [

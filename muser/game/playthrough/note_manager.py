@@ -67,18 +67,18 @@ class NoteManager:
         self.score        : int  = 0
         self.combo        : int  = 0
         
-        self.counter: Counter = Counter()
+        self.counter: Counter         = Counter()
         self.last_indicated_frame_pos = util.grid(
             Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
             16, 16,
             1, 1
         )
-        self.score_pos = util.grid(
+        self.score_pos                = util.grid(
             Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
             16, 16,
             12, 1
         )
-        self.indicator_circle_pos = Constants.Cast.center(
+        self.indicator_circle_pos     = Constants.Cast.center(
             Frames.PlayThrough.INDICATOR_CIRCLE.width, Frames.PlayThrough.INDICATOR_CIRCLE.height)
         self.perfect_note_score = Constants.PlayThrough.Score.TOTAL_SCORE / (len(self.notes) * Constants.PlayThrough.NoteIndicator.INDICATORS().index(Constants.PlayThrough.NoteIndicator.PERFECT))
     def prepare(self):

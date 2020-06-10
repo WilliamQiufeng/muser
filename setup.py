@@ -33,25 +33,25 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="muser",
-    version="1.4.0",
-    author="Qiufeng54321",
-    author_email="williamcraft@163.com",
-    description="A musical game made using pyxel",
-    long_description = long_description,
-    long_description_content_type='text/markdown',
-    license="GPLv3",
-    keywords="pyxel",
-    url="https://github.com/Qiufeng54321/muser",
-    install_requires=io.open("requirements.txt", "r").read().split("\n"),
-    packages=find_packages(),
-    zip_safe=False,
-    entry_points={
+    name                          = "muser",
+    version                       = "1.4.0",
+    author                        = "Qiufeng54321",
+    author_email                  = "williamcraft@163.com",
+    description                   = "A musical game made using pyxel",
+    long_description              = long_description,
+    long_description_content_type = 'text/markdown',
+    license                       = "GPLv3",
+    keywords                      = "pyxel",
+    url                           = "https://github.com/Qiufeng54321/muser",
+    install_requires              = io.open("requirements.txt", "r").read().split("\n"),
+    packages                      = find_packages(),
+    zip_safe                      = False,
+    entry_points                  = {
         'console_scripts': [
             'muser=muser:main',
         ],
     },
-    classifiers=[
+    classifiers                   =[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",

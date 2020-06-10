@@ -185,10 +185,10 @@ class Casts:
             Config.TOUCHED[side] = True
             #print(Config.TOUCHED)
         def __init__(self, sheet: SheetReader, music_source):
-            self.sheet: SheetReader = sheet
-            self.music_source = music_source
-            self.finished: bool = False
-            self.quit: bool = False
+            self.sheet: SheetReader        = sheet
+            self.music_source              = music_source
+            self.finished: bool            = False
+            self.quit: bool                = False
             pygame.mixer.music.set_volume(1.0)
             self.note_manager: NoteManager = NoteManager(self.sheet, Constants.PlayThrough.DISTANCES(), self.music_source)
             self.note_manager.prepare()
@@ -225,23 +225,23 @@ class Casts:
         @staticmethod
         def finish(obj):
             if not obj.animating:
-                obj.prefinished = True
+                obj.prefinished     = True
                 obj.prefinish_frame = pyxel.frame_count
-                obj.animating = True
+                obj.animating       = True
                 pygame.mixer.music.stop()
         def __init__(self, play_through):
-            self.play_through = play_through
-            self.finished = False
-            self.prefinished = False
-            self.animating = False
-            # self.animation_bitmap = [(x, y) for x in range(Constants.Cast.WIDTH) for y in range(Constants.Cast.HEIGHT)]
-            total_pixels = Constants.Cast.WIDTH * Constants.Cast.HEIGHT
+            self.play_through     = play_through
+            self.finished         = False
+            self.prefinished      = False
+            self.animating        = False
+            total_pixels          = Constants.Cast.WIDTH * Constants.Cast.HEIGHT
             self.animation_bitmap = random.sample(range(0, total_pixels), total_pixels)
             self.score_percentage = self.play_through.note_manager.score / Constants.PlayThrough.Score.TOTAL_SCORE * 100
-            self.grade_frame = Constants.Result.Grade.getGradeFrame(self.score_percentage)
-            self.count = self.play_through.note_manager.counter
-            self.tp = self.count.get_tp()
-            self.score = int(self.play_through.note_manager.score)
+            self.grade_frame      = Constants.Result.Grade.getGradeFrame(self.score_percentage)
+            self.count            = self.play_through.note_manager.counter
+            self.tp               = self.count.get_tp()
+            self.score            = int(self.play_through.note_manager.score)
+            
             if self.score_percentage >= Constants.Result.Grade.A:
                 Sounds.Grade.A.play()
             else:
@@ -255,8 +255,8 @@ class Casts:
                 pyxel.cls(2 if self.score_percentage >= Constants.Result.Grade.A else 3)
                 counter_positions = [util.grid(
                     Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 1 + (x % 2) * 2, 12 + (0 if x < 2 else 1)) for x in range(4)]
-                tp_pos = util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 2, 12.5)
-                score_pos = util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 2, 11)
+                tp_pos     = util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 2, 12.5)
+                score_pos  = util.grid(Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 2, 11)
                 count_prop = self.count.get_prop()
                 pyxel.text(*tp_pos, "TP: {0:.2f}%".format(self.tp), 13)
                 pyxel.text(*score_pos, f"Score: {self.score}", 14)
@@ -268,11 +268,11 @@ class Casts:
                 for i in range(Constants.Result.ANIMATION_SPEED):
                     if len(self.animation_bitmap) == 0:
                         self.animating = False
-                        self.finished = True
+                        self.finished  = True
                         break
                     rand = self.animation_bitmap.pop()
-                    x = rand % Constants.Cast.WIDTH
-                    pos = [(rand - x) / Constants.Cast.WIDTH, x]
+                    x    = rand % Constants.Cast.WIDTH
+                    pos  = [(rand - x) / Constants.Cast.WIDTH, x]
                     pyxel.pset(*pos, 0)
         def is_finished(self):
             return self.finished

@@ -102,8 +102,8 @@ def midifile_to_dict(mid, tempo_index: int, indexes: list, music_offset: int):
                 note_on_buffer[x["note"]].append(tick_sec)
             elif x["type"] == "note_off":
                 note_array: list = note_on_buffer[x["note"]]
-                offset: float = note_array[len(note_array) - 1]
-                length_sec = tick_sec - offset
+                offset: float    = note_array[len(note_array) - 1]
+                length_sec       = tick_sec - offset
                 track_res_array.append((offset, length_sec, x["note"]))
             # debug.write("------------------------------------------------\n")
         res[index] = track_res_array
@@ -133,16 +133,16 @@ def to_json(file, tempo_index = 0, indexes = [1], music_offset: int = 0, simulat
             # The Note number indicates the side
             
             note_number = tmp[INDEX_NOTE]
-            face = (note_number - 48) % 12 % 4 if operational_note else face_dict[tmp[INDEX_NOTE]]
-            pass_time = NoteSpeed.SPEEDS[math.floor((note_number - 48) / 12)] if operational_note else 2000
+            face        = (note_number - 48) % 12 % 4 if operational_note else face_dict[tmp[INDEX_NOTE]]
+            pass_time   = NoteSpeed.SPEEDS[math.floor((note_number - 48) / 12)] if operational_note else 2000
             
             abs_notes.append(
                 AbsNote({
-                    "offset": tmp[INDEX_OFFSET] * 1000 + music_offset - pass_time,
-                    "beat": 0,# tmp["length"],
-                    "pass_time": pass_time,
-                    "side": face,
-                    "absolutified": True}
+                    "offset"       : tmp[INDEX_OFFSET] * 1000 + music_offset - pass_time,
+                    "beat"         : 0,                                                   # tmp["length"],
+                    "pass_time"    : pass_time,
+                    "side"         : face,
+                    "absolutified" : True}
                 )
             )
     abs_notes.sort(key=lambda t: t.offset)
@@ -171,12 +171,12 @@ class MidiToAbsSheet:
     def __init__(self, filename, tempo_index = 0, indexes = [1], music_offset = 0, simulate = False, operational_note = False):
         self.abs_notes = to_json(filename, tempo_index, indexes, music_offset, simulate, operational_note)
     def to_abs_sheet(self, meta = {}):
-        effects               = meta["effects"] if "effects" in meta.keys() else []
-        effect_pool           = meta["effect_pool"] if "effect_pool" in meta.keys() else []
-        self.abs_notes        = add_effects(self.abs_notes, effect_pool, effects)
-        self.sheet            = SourceSheetInput()
-        self.sheet.preprocess = meta
+        effects                 = meta["effects"] if "effects" in meta.keys() else []
+        effect_pool             = meta["effect_pool"] if "effect_pool" in meta.keys() else []
+        self.abs_notes          = add_effects(self.abs_notes, effect_pool, effects)
+        self.sheet              = SourceSheetInput()
+        self.sheet.preprocess   = meta
         self.sheet.process()
-        self.sheet.abs_notes = self.abs_notes
+        self.sheet.abs_notes    = self.abs_notes
         self.sheet.music_offset = meta["music_offset"]
         return self.sheet.to_abs()

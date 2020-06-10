@@ -34,14 +34,14 @@ from game.playthrough.effect.fancy_effect import *
 
 class StartEffectNote(BaseNote):
     def __init__(self, effect_type: type, note):
-        self.note = note
+        self.note              = note
         self.effect_type: type = effect_type
-        self.finished = False
-        self.effect = effect_type(note)
+        self.finished          = False
+        self.effect            = effect_type(note)
         # Because access to notes will execute 'in' expr 2 times
         # For higher speed, I extracted it.
-        self.identity = self.note.identity
-        self.offset   = self.note.offset
+        self.identity          = self.note.identity
+        self.offset            = self.note.offset
     def update(self, total_time: int):
         if (not self.finished) and total_time >= self.offset:
             print(f"Effect Note {self.identity} In")
@@ -53,8 +53,8 @@ class StartEffectNote(BaseNote):
         pass
 class EndEffectNote(BaseNote):
     def __init__(self, end_fancy: EndEffect):
-        self.end_fancy: EndEffect = end_fancy
-        self.finished = False
+        self.end_fancy: EndEffect  = end_fancy
+        self.finished              = False
         self.identity, self.offset = self.end_fancy.identity, self.end_fancy.offset
     def update(self, total_time: int):
         if (not self.finished) and total_time >= self.offset:

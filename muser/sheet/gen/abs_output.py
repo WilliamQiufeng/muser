@@ -8,14 +8,14 @@ class AbsSheetOutput:
     def __repr__(self):
         NEWLINE = "\n"
         return  {
-                "author": self.rel_in.author,
-                "music_author": self.rel_in.music_author,
-                "version": self.rel_in.version,
-                "name": self.rel_in.name,
-                "music": self.rel_in.music,
-                "music_offset": self.rel_in.music_offset,
-                "level": self.rel_in.level,
-                "notes": [x.__repr__() for x in self.rel_in.abs_notes]
+                "author"       : self.rel_in.author,
+                "music_author" : self.rel_in.music_author,
+                "version"      : self.rel_in.version,
+                "name"         : self.rel_in.name,
+                "music"        : self.rel_in.music,
+                "music_offset" : self.rel_in.music_offset,
+                "level"        : self.rel_in.level,
+                "notes"        : [x.__repr__() for x in self.rel_in.abs_notes]
         }
 
 class BaseAbsNote:

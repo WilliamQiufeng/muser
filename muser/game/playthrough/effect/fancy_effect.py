@@ -42,7 +42,7 @@ class FancyEffect(Effect):
     def update(self, args, kwargs):
         total_time: float = kwargs["total_time"]
         int_total_time    = int(total_time)
-        col_range = (int_total_time - self.note_prop["offset"]) % (len(self.note_prop["colors"]) * self.note_prop["interval"])
+        col_range         = (int_total_time - self.note_prop["offset"]) % (len(self.note_prop["colors"]) * self.note_prop["interval"])
         for i in range(len(self.note_prop["colors"])):
             if i * self.note_prop["interval"] <= col_range and col_range < (i + 1) * self.note_prop["interval"]:
                 self.cur_color_index = i
