@@ -13,15 +13,14 @@ class SourceSheetInput:
     def process(self):
         if not isinstance(self.preprocess, dict): # The root value must be a dictionary
             raise NotImplementedError
-        self.author = self.preprocess["author"] if "author" in self.preprocess.keys() else "Unknown"
+        self.author       = self.preprocess["author"] if "author" in self.preprocess.keys() else "Unknown"
         self.music_author = self.preprocess["music_author"] if "music_author" in self.preprocess.keys() else "Unknown"
-        self.version = self.preprocess["version"] if "version" in self.preprocess.keys() else "0.0.0.0"
-        self.name = self.preprocess["name"] if "name" in self.preprocess.keys() else "Unknown"
-        self.level = self.preprocess["level"] if "level" in self.preprocess.keys() else "Normal"
-        self.music = self.preprocess["music"] if "music" in self.preprocess.keys(
-        ) else "/Unknown"
-        self.tempo = self.preprocess["tempo"] if "tempo" in self.preprocess.keys() else 60
-        self.effects = self.preprocess["effects"] if "effects" in self.preprocess.keys() else []
+        self.version      = self.preprocess["version"] if "version" in self.preprocess.keys() else "0.0.0.0"
+        self.name         = self.preprocess["name"] if "name" in self.preprocess.keys() else "Unknown"
+        self.level        = self.preprocess["level"] if "level" in self.preprocess.keys() else "Normal"
+        self.music        = self.preprocess["music"] if "music" in self.preprocess.keys() else "/Unknown"
+        self.tempo        = self.preprocess["tempo"] if "tempo" in self.preprocess.keys() else 60
+        self.effects      = self.preprocess["effects"] if "effects" in self.preprocess.keys() else []
         self.music_offset = self.preprocess["music_offset"] if "music_offset" in self.preprocess.keys() else 0
         
         # Calculate the length of a beat
