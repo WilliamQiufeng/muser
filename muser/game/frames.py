@@ -151,13 +151,13 @@ class Frames:
         AUTHOR = AUTHOR_FADEIN + AUTHOR_STAY + AUTHOR_FADEOUT
         WHOLE = TITLE + AUTHOR
     class LevelSelection:
-        LEFT_UNPRESSED = Frame(16, 24, 16, 16)
-        LEFT_PRESSED = Frame(48, 24, 16, 16)
+        LEFT_UNPRESSED  = Frame(16, 24, 16, 16)
+        LEFT_PRESSED    = Frame(48, 24, 16, 16)
         RIGHT_UNPRESSED = Frame(32, 24, 16, 16)
-        RIGHT_PRESSED = Frame(64, 24, 16, 16)
+        RIGHT_PRESSED   = Frame(64, 24, 16, 16)
         UP_UNPRESSED, DOWN_UNPRESSED, UP_PRESSED, DOWN_PRESSED = (Frame(80 + 16 * x, 24, 16, 16) for x in range(4))
         PLAY_UNPRESSED = Frame(0, 64, 16, 16)
-        PLAY_PRESSED = Frame(16, 64, 16, 16)
+        PLAY_PRESSED   = Frame(16, 64, 16, 16)
     class PlayThrough:
         # DIRECTIONS = [Frame(1 + x * 8, 5, 6, 6) for x in range(4)]
         DIRECTIONS = [ArrowFrame(x) for x in range(4)]

@@ -52,10 +52,10 @@ px/ms = l / t
 """
 class NoteSpeed:
     DOUBLE_SLOW = 4000
-    VERY_SLOW = 3000
-    SLOW = 2000
-    MEDIUM = 1000
-    FAST = 500
+    VERY_SLOW   = 3000
+    SLOW        = 2000
+    MEDIUM      = 1000
+    FAST        = 500
     
     SPEEDS = [DOUBLE_SLOW, VERY_SLOW, SLOW, MEDIUM, FAST]
 

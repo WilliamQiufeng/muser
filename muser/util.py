@@ -23,8 +23,8 @@ def timeit(within = (-1, -1), without = (-1, -1)):
         def wrapper(*args, **kwargs):
             cur = time.time()
             # print(f"{func.__qualname__} ( {args}, {kwargs} )")
-            res = func(*args, **kwargs)
-            dur = time.time() - cur
+            res    = func(*args, **kwargs)
+            dur    = time.time() - cur
             dur_ms = dur * 1000
             if ((within[0] == -1 or dur_ms >= within[0]) and (within[1] == -1 or dur_ms < within[1]) and
                 (without[0] == -1 or dur_ms < without[0]) and (without[1] == -1 or dur_ms >= without[1])):

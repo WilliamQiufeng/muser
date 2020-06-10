@@ -3,34 +3,34 @@ import math
 from game.config import *
 class Constants:
     class Cast:
-        WIDTH = 256
-        HEIGHT = 256
-        INTRO = 0
+        WIDTH           = 256
+        HEIGHT          = 256
+        INTRO           = 0
         MUSIC_SELECTION = 1
-        PLAY = 2
-        CENTER_X = WIDTH / 2
-        CENTER_Y = HEIGHT / 2
+        PLAY            = 2
+        CENTER_X        = WIDTH / 2
+        CENTER_Y        = HEIGHT / 2
         @staticmethod
         def center(w, h) -> tuple:
             return (Constants.Cast.WIDTH / 2 - w / 2, Constants.Cast.HEIGHT / 2 - h / 2)
     class PlayThrough:
-        UP = (0, -1)
-        DOWN = (0, 1)
-        LEFT = (-1, 0)
-        RIGHT = (1, 0)
+        UP         = (0, -1)
+        DOWN       = (0, 1)
+        LEFT       = (-1, 0)
+        RIGHT      = (1, 0)
         DIRECTIONS = [UP, DOWN, LEFT, RIGHT]
-        INITIALS = [(0.5, 1), (0.5, 0), (1, 0.5), (0, 0.5)]
-        OFFSETS = [(0, -16), (0, 0), (-16, 0), (0, 0)]
+        INITIALS   = [(0.5, 1), (0.5, 0), (1, 0.5), (0, 0.5)]
+        OFFSETS    = [(0, -16), (0, 0), (-16, 0), (0, 0)]
         
         class Score:
             TOTAL_SCORE = 100000
 
         class NoteIndicator:
-            PERFECT = 4
-            GREAT = 10
-            BAD = 16
-            MISS = 17
-            NOT_IN_BOUND = 18
+            PERFECT        = 4
+            GREAT          = 10
+            BAD            = 16
+            MISS           = 17
+            NOT_IN_BOUND   = 18
             INDICATOR_NAME = {4: "PERFECT", 10: "GREAT", 16: "BAD", 17: "MISS", 18: "Not In Bound"}
             @staticmethod
             def INDICATORS():

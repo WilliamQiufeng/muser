@@ -42,16 +42,16 @@ def int2rgb(n):
 
 pyxel.init(1, 1)
 
-frame_file = io.open(input("Input frame file: "))
-frame_data = json.loads(frame_file.read())
-frame_image= frame_data["frame"]
-size = frame_data["size"]
+frame_file  = io.open(input("Input frame file: "))
+frame_data  = json.loads(frame_file.read())
+frame_image = frame_data["frame"]
+size        = frame_data["size"]
 print("Data loaded.")
 
-substitution = frame_data["substitution"]
+substitution      = frame_data["substitution"]
 
 output_image_path = input("Output image path: ")
-output_image = io.open(output_image_path, "wb")
+output_image      = io.open(output_image_path, "wb")
 
 writer = png.Writer(*size, greyscale=False)
 writer.write(output_image, (

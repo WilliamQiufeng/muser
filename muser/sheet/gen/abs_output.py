@@ -41,10 +41,10 @@ class AbsNote(BaseAbsNote):
     # def __init__(self, offset, beat=0, pass_time=2000, side=random.randint(0, 3), absolutified=False):
     def absolutify(self, beat_interval):
         if not self.absolutified:
-            self.offset *= beat_interval
-            self.beat *= beat_interval
-            self.pass_time *= beat_interval
-            self.absolutified = True
+            self.offset       *= beat_interval
+            self.beat         *= beat_interval
+            self.pass_time    *= beat_interval
+            self.absolutified =  True
     # def __repr__(self):
     #     # return f"{NoteType.NOTE},{self.offset},{self.beat},{self.pass_time},{self.side}"
     #     return {

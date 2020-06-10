@@ -3,9 +3,9 @@ import pyxel, os
 import game_config as game_config
 
 pyxel.init(256, 256,
-           caption="Muser",
-           fps=game_config.GLOB_CONFIG.config["fps"],
-           fullscreen=game_config.GLOB_CONFIG.config["full_screen"])
+           caption    = "Muser",
+           fps        = game_config.GLOB_CONFIG.config["fps"],
+           fullscreen = game_config.GLOB_CONFIG.config["full_screen"])
 
 print("Window loaded")
 res_path = os.path.join(

@@ -87,9 +87,9 @@ def add_effects(abs_notes: list, effect_pool: list, effects: list):
     effect_list = []
     for effect in effects:
         identity: int = int(effect["id"])
-        effect_var = effect_vars[identity]
+        effect_var  = effect_vars[identity]
         effect_type = effect_vars[identity]["type"]
-        res = copy.copy(effect)
+        res         = copy.copy(effect)
         res.update(effect_var)
         end = {
             "offset": effect["offset"] + effect["length"],
@@ -99,24 +99,26 @@ def add_effects(abs_notes: list, effect_pool: list, effects: list):
             # start_fancy = StartFancy(
             #     effect["offset"], effect_var["colors"], effect_var["interval"], identity, offset_pos=effect_var["offset_pos"], size=effect_var["size"])
             # end_fancy = EndEffect(effect["offset"] + effect["length"], identity)
+            
             start_fancy = StartFancy(res)
-            end_fancy = EndEffect(end)
+            end_fancy   = EndEffect(end)
+            
             effect_list.append(start_fancy)
             effect_list.append(end_fancy)
         elif effect_type == "frame":
             start_frame = StartFrame(res)
             start_frame.flatten_frame()
-            end_frame = EndEffect(end)
+            end_frame   = EndEffect(end)
             effect_list.append(start_frame)
             effect_list.append(end_frame)
         elif effect_type == "move":
             start_move = StartMove(res)
-            end_move = EndEffect(end)
+            end_move   = EndEffect(end)
             effect_list.append(start_move)
             effect_list.append(end_move)
         elif effect_type == "criteria":
             start_criteria = StartCriteria(res)
-            end_criteria = EndEffect(end)
+            end_criteria   = EndEffect(end)
             effect_list.append(start_criteria)
             effect_list.append(end_criteria)
     res_list: list = abs_notes + effect_list

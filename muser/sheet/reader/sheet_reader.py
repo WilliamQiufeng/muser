@@ -9,28 +9,28 @@ Sheet Reader
 class SheetReader:
     @staticmethod
     def from_file(filename: str):
-        reader = SheetReader()
-        reader.file = io.open(filename, "r")
+        reader           = SheetReader()
+        reader.file      = io.open(filename, "r")
         reader.readinput = reader.file.read()
         reader.read_all()
         return reader
     @staticmethod
     def from_str(info: str):
-        reader = SheetReader()
+        reader           = SheetReader()
         reader.readinput = info
         reader.read_all()
         return reader
 
     @staticmethod
     def from_obj(info: dict):
-        reader = SheetReader()
+        reader      = SheetReader()
         reader.data = info
         reader.read_notes()
         reader.apply_relative_music_offset()
         return reader
     @staticmethod
     def from_sheets(filename: str) -> list:
-        file = io.open(filename, "r")
+        file         = io.open(filename, "r")
         sheets: list = [SheetReader.from_obj(info) for info in json.loads(file.read())]
         return sheets
     def __init__(self):

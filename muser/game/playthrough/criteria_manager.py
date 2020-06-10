@@ -60,8 +60,8 @@ def get_pos_in_progress(note_target, progress: float):
         coord (tuple): position calculated by the progress and the note's side
     """
     
-    side = note_target.prop["side"]
-    criteria = criterias[side]
+    side        = note_target.prop["side"]
+    criteria    = criterias[side]
     lock_effect = criteria[0]
     lock_effect_offset_x, lock_effect_offset_y = lock_effect.note_prop["offset_pos"]
     lock_effect_size_x, lock_effect_size_y = lock_effect.note_prop["size"]

@@ -13,24 +13,24 @@ pygame.mixer.init()
 
 class Counter:
     def __init__(self):
-        self.misses = 0
-        self.bads = 0
-        self.greats = 0
+        self.misses   = 0
+        self.bads     = 0
+        self.greats   = 0
         self.perfects = 0
     def get_prop(self):
         return {
-            "Perfects": self.perfects,
-            "Greats": self.greats,
-            "Bads": self.bads,
-            "Misses": self.misses
+            "Perfects" : self.perfects,
+            "Greats"   : self.greats,
+            "Bads"     : self.bads,
+            "Misses"   : self.misses
         }
     def get_total_notes(self):
         return self.misses + self.bads + self.greats + self.perfects
     def get_tp(self):
-        total_notes = self.get_total_notes()
+        total_notes  = self.get_total_notes()
         weight_count = self.misses * 0 + self.bads * 1 + self.greats * 2 + self.perfects * 3
-        avg_weight  = weight_count / total_notes
-        tp = avg_weight / 0.03
+        avg_weight   = weight_count / total_notes
+        tp           = avg_weight / 0.03
         return tp
 class NoteManager:
     # TODO: make the tp be shown while playing
@@ -50,22 +50,23 @@ class NoteManager:
     #             counter.misses += 1
     #     return counter
     def __init__(self, sheet: SheetReader, side_distances : list, music_source : str):
-        self.meta: dict = sheet.data
+        self.meta: dict             = sheet.data
         # print(self.meta)
-        self.notes: list = [ManagerActions.from_note(x) for x in sheet.notes]
+        self.notes: list            = [ManagerActions.from_note(x) for x in sheet.notes]
         # print("\n".join([str(x) for x in self.notes]))
-        self.side_distances: list = side_distances
-        self.music_source: str = music_source
-        buf_mus = pygame.mixer.Sound(self.music_source)
-        self.music_len: float = buf_mus.get_length()
+        self.side_distances: list   = side_distances
+        self.music_source  : str    = music_source
+        buf_mus                     = pygame.mixer.Sound(self.music_source)
+        self.music_len     : float  = buf_mus.get_length()
         del buf_mus
         self.music_started: bool = False
-        self.started: bool = False
-        self.initiate: bool = True
-        self.finished: bool = False
-        self.paused: bool = False
-        self.score: int = 0
-        self.combo: int = 0
+        self.started      : bool = False
+        self.initiate     : bool = True
+        self.finished     : bool = False
+        self.paused       : bool = False
+        self.score        : int  = 0
+        self.combo        : int  = 0
+        
         self.counter: Counter = Counter()
         self.last_indicated_frame_pos = util.grid(
             Constants.Cast.WIDTH, Constants.Cast.HEIGHT,

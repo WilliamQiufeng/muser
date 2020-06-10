@@ -41,7 +41,7 @@ class StartEffectNote(BaseNote):
         # Because access to notes will execute 'in' expr 2 times
         # For higher speed, I extracted it.
         self.identity = self.note.identity
-        self.offset = self.note.offset
+        self.offset   = self.note.offset
     def update(self, total_time: int):
         if (not self.finished) and total_time >= self.offset:
             print(f"Effect Note {self.identity} In")

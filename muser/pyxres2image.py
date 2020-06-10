@@ -52,8 +52,8 @@ pyxel.load(res_path)
 print("Res loaded")
 
 image_index = int(input("Image Index: "))
-offset_pos = (int(input("Offset X: ")), int(input("Offset Y: ")))
-size = (int(input("Size X: ")), int(input("Size Y: ")))
+offset_pos  = (int(input("Offset X: ")), int(input("Offset Y: ")))
+size        = (int(input("Size X: ")), int(input("Size Y: ")))
 
 
 out_path = input("Output Image Path: ")

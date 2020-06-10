@@ -70,9 +70,11 @@ class PositionedNote(BaseNote):
             if result != Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND:
                 # print(f"{self.note} {Config.TOUCHED}, {Constants.PlayThrough.NoteIndicator.INDICATOR_NAME[result]}")
                 if Config.TOUCHED[self.prop["side"]] or result == Constants.PlayThrough.NoteIndicator.MISS:
+                    
                     self.finished = True
                     self.in_scene = False
-                    self.result = result
+                    self.result   = result
+                    
                     Config.TOUCHED[self.prop["side"]] = False
                     # print(f"Note {str(self.note.__repr__())} finished at {self.pos}, {total_time}, {Constants.PlayThrough.NoteIndicator.INDICATOR_NAME[self.result]}")
                     return self.result

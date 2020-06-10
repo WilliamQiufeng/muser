@@ -66,7 +66,7 @@ class MoveEffect(Effect):
         super().__init__(identity=move_note.identity)
         self.move_note = move_note
         self.note_prop = self.move_note.prop
-        self.moves = [
+        self.moves     = [
             Move(element["pos1"], element["pos2"], self.note_prop["offset"] + element["offset"], element["time_length"], element["object_identity"])
             for element in self.note_prop["moves"]
         ]

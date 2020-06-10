@@ -35,13 +35,13 @@ class FancyEffect(Effect):
     
     def __init__(self, fancy_note: StartFancy):
         super().__init__(identity=fancy_note.identity)
-        self.fancy_note = fancy_note
+        self.fancy_note      = fancy_note
         self.cur_color_index = 0
-        self.note_prop = fancy_note.prop
+        self.note_prop       = fancy_note.prop
     # @util.timeit(within=(1, -1))
     def update(self, args, kwargs):
         total_time: float = kwargs["total_time"]
-        int_total_time = int(total_time)
+        int_total_time    = int(total_time)
         col_range = (int_total_time - self.note_prop["offset"]) % (len(self.note_prop["colors"]) * self.note_prop["interval"])
         for i in range(len(self.note_prop["colors"])):
             if i * self.note_prop["interval"] <= col_range and col_range < (i + 1) * self.note_prop["interval"]:

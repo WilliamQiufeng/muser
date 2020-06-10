@@ -34,12 +34,10 @@ pyxel.init(1, 1)
 
 print("Pyxel initialised")
 
-filename = input("Image path: ")
-
-reader = png.Reader(filename=filename)
-
-out_res = input("Output pyxres file: ")
-image = int(input("Image: "))
+filename   = input("Image path: ")
+reader     = png.Reader(filename=filename)
+out_res    = input("Output pyxres file: ")
+image      = int(input("Image: "))
 offset_pos = (int(input("Offset X: ")), int(input("Offset Y: ")))
 if os.path.exists(out_res):
     pyxel.load(out_res)
