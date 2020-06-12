@@ -13,3 +13,4 @@ file_list = os.listdir(sheet_path)
 for file in file_list:
     if file.endswith(".sheetmeta"):
         MetaInput.from_file(os.path.join(sheet_path, file)).proc()
+        

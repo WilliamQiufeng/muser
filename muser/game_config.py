@@ -52,14 +52,33 @@ class GameConfig:
             self.config_path = os.path.join(os.path.abspath("."), "muser_config.json")
             self.config: dict = {}
     def proc(self):
-        self.config["asset_path"]: str         = self.get("asset_path", default="./assets")
-        self.config["separator"]: str          = self.get("separator", default=os.path.sep)
-        self.config["fps"]: int                = self.get("fps", default=60)
-        # The relative offset of note appearence
-        self.config["rel_music_offset"]: float = self.get("rel_music_offset", default=-256)
-        self.config["full_screen"]: bool       = self.get(
-            "full_screen", default=False)
-        self.assets                            = assets.Assets(self.config["asset_path"], self.config["separator"])
+        self.config["asset_path"]: str            = self.get("asset_path", default="./assets")
+        self.config["separator"]: str             = self.get("separator", default=os.path.sep)
+        self.config["fps"]: int                   = self.get("fps", default=60)
+        self.config["rel_music_offset"]: float    = self.get("rel_music_offset", default=-256)
+        self.config["full_screen"]: bool          = self.get("full_screen", default=False)
+        self.config["control.up_arrow"]: bool     = self.get("control.up_arrow", default="w")
+        self.config["control.down_arrow"]: bool   = self.get("control.down_arrow", default="s")
+        self.config["control.left_arrow"]: bool   = self.get("control.left_arrow", default="a")
+        self.config["control.right_arrow"]: bool  = self.get("control.right_arrow", default="d")
+        self.config["control.up_arrow2"]: bool    = self.get("control.up_arrow2", default="i")
+        self.config["control.down_arrow2"]: bool  = self.get("control.down_arrow2", default="k")
+        self.config["control.left_arrow2"]: bool  = self.get("control.left_arrow2", default="j")
+        self.config["control.right_arrow2"]: bool = self.get("control.right_arrow2", default="l")
+        self.config["control.RD_arrow"]: bool     = self.get("control.RD_arrow", default="r")
+        self.config["control.LD_arrow"]: bool     = self.get("control.LD_arrow", default="t")
+        self.config["control.RU_arrow"]: bool     = self.get("control.RU_arrow", default="f")
+        self.config["control.LU_arrow"]: bool     = self.get("control.LU_arrow", default="g")
+        
+        import pyxel
+        self.controls = {
+            key[8:]: getattr(pyxel, f"KEY_{self.config[key].upper()}")
+            for key in self.config.keys()
+            if key.startswith("control.")
+        }
+        print(self.controls)
+        
+        self.assets = assets.Assets(self.config["asset_path"], self.config["separator"])
     def save(self):
         io.open(self.config_path, "w").write(json.dumps(self.config, indent=4))
     def get(self, key, default = None):

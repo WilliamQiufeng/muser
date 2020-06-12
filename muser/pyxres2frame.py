@@ -66,7 +66,15 @@ res = {
 
 image: pyxel.Image = pyxel.image(image_index)
 
-frame_image = ["".join([substitution_col_to_key[image.get(pos[0] + x, pos[1] + y)] for x in range(size[0])]) for y in range(size[1])]
+frame_image = [
+    "".join(
+        [
+            substitution_col_to_key[image.get(pos[0] + x, pos[1] + y)]
+            for x in range(size[0])
+        ]
+    ) 
+    for y in range(size[1])
+]
 
 scaled_frame = BitmapFrame.frameScaleUp(frame_image, *size, *scale)
 

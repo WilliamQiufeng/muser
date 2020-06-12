@@ -133,7 +133,7 @@ def to_json(file, tempo_index = 0, indexes = [1], music_offset: int = 0, simulat
             # The Note number indicates the side
             
             note_number = tmp[INDEX_NOTE]
-            face        = (note_number - 48) % 12 % 4 if operational_note else face_dict[tmp[INDEX_NOTE]]
+            face        = (note_number - 48) % 12 if operational_note else face_dict[tmp[INDEX_NOTE]]
             pass_time   = NoteSpeed.SPEEDS[math.floor((note_number - 48) / 12)] if operational_note else 2000
             
             abs_notes.append(

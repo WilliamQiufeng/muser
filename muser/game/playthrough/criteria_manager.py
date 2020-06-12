@@ -29,7 +29,7 @@
 from . import note
 import game.playthrough.effect.effect_controller as ec
 
-criterias = [None] * 8
+criterias = [None] * 12
 
 
 def set_criteria(lock_effect_identity: int, sides: list):

@@ -146,6 +146,10 @@ class Casts:
             for btn in Casts.LevelSelection.BUTTONS:
                 btn.update()
         def draw(self):
+            pyxel.text(0, 0,  "Hardness        [Up/Down]"   , 12)
+            pyxel.text(0, 6,  "Level Selection [Left/Right]", 12)
+            pyxel.text(0, 12, "Play            [Enter]"     , 12)
+            pyxel.text(0, 18, "Settings        [S]"         , 12)
             for btn in Casts.LevelSelection.BUTTONS:
                 if "draw" in dir(btn):
                     btn.draw()
@@ -164,21 +168,21 @@ class Casts:
     class PlayThrough(Cast):
         UPDATES = [
             KeyListener(
-                pyxel.KEY_S, on_touch=lambda: Casts.PlayThrough.touch(0)),
+                game_config.GLOB_CONFIG.controls["up_arrow"], on_touch=lambda: Casts.PlayThrough.touch(0)),
             KeyListener(
-                pyxel.KEY_W, on_touch=lambda: Casts.PlayThrough.touch(1)),
+                game_config.GLOB_CONFIG.controls["down_arrow"], on_touch=lambda: Casts.PlayThrough.touch(1)),
             KeyListener(
-                pyxel.KEY_D, on_touch=lambda: Casts.PlayThrough.touch(2)),
+                game_config.GLOB_CONFIG.controls["left_arrow"], on_touch=lambda: Casts.PlayThrough.touch(2)),
             KeyListener(
-                pyxel.KEY_A, on_touch=lambda: Casts.PlayThrough.touch(3)),
+                game_config.GLOB_CONFIG.controls["right_arrow"], on_touch=lambda: Casts.PlayThrough.touch(3)),
             KeyListener(
-                pyxel.KEY_K, on_touch=lambda: Casts.PlayThrough.touch(0)),
+                game_config.GLOB_CONFIG.controls["up_arrow2"], on_touch=lambda: Casts.PlayThrough.touch(4)),
             KeyListener(
-                pyxel.KEY_I, on_touch=lambda: Casts.PlayThrough.touch(1)),
+                game_config.GLOB_CONFIG.controls["down_arrow2"], on_touch=lambda: Casts.PlayThrough.touch(5)),
             KeyListener(
-                pyxel.KEY_L, on_touch=lambda: Casts.PlayThrough.touch(2)),
+                game_config.GLOB_CONFIG.controls["left_arrow2"], on_touch=lambda: Casts.PlayThrough.touch(6)),
             KeyListener(
-                pyxel.KEY_J, on_touch=lambda: Casts.PlayThrough.touch(3))
+                game_config.GLOB_CONFIG.controls["right_arrow2"], on_touch=lambda: Casts.PlayThrough.touch(7))
         ]
         @staticmethod
         def touch(side: int):
@@ -285,20 +289,35 @@ class Casts:
     class Settings(Cast):
         
         AVAILABLE_SETTINGS = [
-            ["fps", "FPS", "range", [1, 60]],
-            ["rel_music_offset", "Relative Music Offset", "range", [-1000, 1000]],
-            ["full_screen", "Fullscreen", "enum_options", [True, False]]
+            ["fps"                  , "FPS                      "   , "range"       , [1, 60]],
+            ["rel_music_offset"     , "Relative Music Offset    "   , "range"       , [-1000, 1000]],
+            ["full_screen"          , "Fullscreen               "   , "enum_options", [True, False]],
+            ["control.up_arrow"     , "Control: Up    Arrow     "   , "control"],
+            ["control.down_arrow"   , "Control: Down  Arrow     "   , "control"],
+            ["control.left_arrow"   , "Control: Left  Arrow     "   , "control"],
+            ["control.right_arrow"  , "Control: Right Arrow     "   , "control"],
+            ["control.up_arrow2"    , "Control: Up    Arrow 2   "   , "control"],
+            ["control.down_arrow2"  , "Control: Down  Arrow 2   "   , "control"],
+            ["control.left_arrow2"  , "Control: Left  Arrow 2   "   , "control"],
+            ["control.right_arrow2" , "Control: Right Arrow 2   "   , "control"],
+            ["control.RD_arrow"     , "Control: Right Down Arrow"   , "control"],
+            ["control.LD_arrow"     , "Control: Left  Down Arrow"   , "control"],
+            ["control.RU_arrow"     , "Control: Right Up   Arrow"   , "control"],
+            ["control.LU_arrow"     , "Control: Left  Up   Arrow"   , "control"]
         ]
         
         def __init__(self):
             self.current_setting = 0
             self.update_selection()
             self.finished = False
+            self.is_listening = False
 
         def update(self):
             if pyxel.btn(pyxel.KEY_Q):
                 game_config.GLOB_CONFIG.save()
                 self.finished = True  # Skip the starting screen
+                return None
+            if self.is_listening:
                 return None
             if pyxel.btnp(pyxel.KEY_LEFT) or pyxel.btnp(pyxel.KEY_RIGHT) or \
                 pyxel.btnp(pyxel.KEY_RIGHT, 30, 2) or pyxel.btnp(pyxel.KEY_LEFT, 30, 2):
@@ -325,12 +344,29 @@ class Casts:
                 elif self.current_setting >= len(Casts.Settings.AVAILABLE_SETTINGS):
                     self.current_setting = 0
                 self.update_selection()
+            if pyxel.btnp(pyxel.KEY_ENTER):
+                if not self.is_listening and self.current_setting_obj[2] == "control":
+                    from pynput import keyboard
+                    def on_press(key):
+                        try:
+                            k = key.char  # single-char keys
+                        except:
+                            k = key.name  # other keys
+                        Config.CAST.current_selection = k
+                        game_config.GLOB_CONFIG.config[Config.CAST.current_setting_obj[0]] = \
+                            Config.CAST.current_selection
+                        return False  # stop listener; remove this if want more keys
+
+
+                    listener = keyboard.Listener(on_press=on_press)
+                    listener.start()  # start to listen on a separate thread
                 
                 
 
         def draw(self):
             pyxel.text(0, 6, "Settings", 12)
-            index = 3
+            pyxel.text(0, 12, "Changes will be applied on restart", 12)
+            index = 4
             for settings in Casts.Settings.AVAILABLE_SETTINGS:
                 pyxel.text(0, index*6, f"{'> ' if self.current_setting_obj[0] == settings[0] else ''}{settings[1]}: {game_config.GLOB_CONFIG.config[settings[0]]}", 12)
                 index += 1
@@ -339,8 +375,10 @@ class Casts:
             self.current_setting_obj = Casts.Settings.AVAILABLE_SETTINGS[self.current_setting]
             self.current_selection = game_config.GLOB_CONFIG.config[self.current_setting_obj[0]]
             self.current_selection_index = self.current_setting_obj[-1].index(self.current_selection) \
-                if self.current_setting_obj[3] == "enum_options" else \
-                self.current_selection
+                if self.current_setting_obj[2] == "enum_options" else \
+                self.current_selection \
+                if self.current_setting_obj[2] == "range" else \
+                0
             
 
         def is_finished(self):

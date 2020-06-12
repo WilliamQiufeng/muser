@@ -19,7 +19,7 @@ class ArrowFrame(Frame):
     INITIALS = [(0.5, 1), (0.5, 0), (1, 0.5), (0, 0.5)]
     OFFSETS = [(0, -16), (0, 0), (-16, 0), (0, 0)]
     def __init__(self, side: int = 0, width: int = 6, height: int = 6):
-        self.side = side
+        self.side = side % 4
         self.width = width
         self.height = height
         self.col = Config.ARROW_COLORS[side]
@@ -126,6 +126,29 @@ class BitmapFrame(Frame):
         #             pyxel.pset(x + x_o, y + y_o, col)
         for x_o, y_o, pix in self._optimized:
             pyxel.pset(x + x_o, y + y_o, pix)
+    @staticmethod
+    def from_pyxel(pos, size, *, remove_color = 0, image_index = 0, scale = (1, 1)):
+        substitution_col_to_key: tuple = tuple(" ABCDEFGHIJKLMNO")
+        substitution: dict = {}
+        # Substitution Col to Key Index
+        for sctk_i in range(len(substitution_col_to_key)):
+            substitution[substitution_col_to_key[sctk_i]] = sctk_i
+        if remove_color != -1:
+            substitution[substitution_col_to_key[remove_color]] = -1
+        image: pyxel.Image = pyxel.image(image_index)
+        frame_image = [
+            "".join(
+                [
+                    substitution_col_to_key[image.get(pos[0] + x, pos[1] + y)]
+                    for x in range(size[0])
+                ]
+            )
+            for y in range(size[1])
+        ]
+        
+        scaled_frame = BitmapFrame(
+            *size, frame_image, substitution).scaleUp(*scale)
+        return scaled_frame
     def __repr__(self):
         return '\n'.join([','.join(x) for x in self.image])
 
@@ -160,7 +183,12 @@ class Frames:
         PLAY_PRESSED   = Frame(16, 64, 16, 16)
     class PlayThrough:
         # DIRECTIONS = [Frame(1 + x * 8, 5, 6, 6) for x in range(4)]
-        DIRECTIONS = [ArrowFrame(x) for x in range(4)]
+        # DIRECTIONS = [ArrowFrame(x) for x in range(12)]
+        DIRECTIONS =  [
+            BitmapFrame.from_pyxel((x * 8 + 1, y * 8 + 1), (6, 6))
+            for y in range(2)
+            for x in range(6)
+        ]
         ARROW_FADE = [Frame(56 + 8 * x, 4, 8, 8) for x in range(4)]
         # INDICATOR_CIRCLE = Frame(32, 48, 32, 32)
         INDICATOR_CIRCLE = BitmapFrame(32, 32, [

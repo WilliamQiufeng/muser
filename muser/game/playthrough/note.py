@@ -18,7 +18,7 @@ class PositionedNote(BaseNote):
         self.prop = self.note.prop
         self.initial_pos = Constants.PlayThrough.InitialPos(note.side)
         self.pos = copy.copy(self.initial_pos)
-        self.direction = Constants.PlayThrough.DIRECTIONS[note.side]
+        # self.direction = Constants.PlayThrough.DIRECTIONS[note.side]
         self.in_scene: bool = False
         self.finished: bool = False
         self.animation_finished: bool = False

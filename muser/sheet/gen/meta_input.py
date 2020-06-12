@@ -54,9 +54,9 @@ class MetaInput:
             effects          = sheet["effects"] if "effects" in sheet.keys() else []
             music_offset     = sheet["music_offset"] if "music_offset" in sheet.keys() else 2000
             operational_note = sheet["operational_note"] if "operational_note" in sheet.keys(
-            ) else False
-            mtas = MidiToAbsSheet(
-                abs_midi, tempo_index, indexes, music_offset, False, operational_note)
+                                ) else False
+            mtas             = MidiToAbsSheet(
+                                    abs_midi, tempo_index, indexes, music_offset, False, operational_note)
             abs_sheet = mtas.to_abs_sheet({
                 "author"       : sheet["author"],
                 "music_author" : sheet["music_author"],
