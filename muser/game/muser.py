@@ -6,6 +6,8 @@ from game.casts import *
 import traceback
 import time
 
+from pyglet import clock
+
 from pynput import keyboard
 
 
@@ -24,6 +26,7 @@ class Muser:
         try: 
             if Config.CAST.is_finished():
                 Config.CAST = Config.CAST.next_cast()
+            clock.tick()
             Config.CAST.update()
             # if pyxel.btn(pyxel.KEY_E):
             #     self.quit = True

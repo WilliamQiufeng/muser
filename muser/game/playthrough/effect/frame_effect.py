@@ -31,7 +31,7 @@ import pyxel, time, util
 from game.playthrough.effect.base_effect import *
 from game.constants import Constants
 from sheet.gen.abs_output import *
-import numba
+
 
 class FrameEffect(Effect):
     def __init__(self, frame_note: StartFrame):

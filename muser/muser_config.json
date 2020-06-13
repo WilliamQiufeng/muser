@@ -1,8 +1,8 @@
 {
-    "asset_path": "./assets",
+    "asset_path": "/Users/Shared/williamye/program/pyxel_projects/muser/muser/assets",
     "separator": "/",
     "fps": 60,
-    "rel_music_offset": -256,
+    "rel_music_offset": 0,
     "full_screen": false,
     "control.up_arrow": "s",
     "control.down_arrow": "w",

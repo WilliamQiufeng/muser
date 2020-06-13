@@ -30,7 +30,7 @@
 from sheet.reader.sheet_reader import *
 from sheet.gen.midi_converter import *
 from game_config import *
-import io, json
+import io, json, os
 
 class MetaInput:
     @staticmethod
@@ -42,12 +42,14 @@ class MetaInput:
     def proc(self):
         sheets     = []
         root: str  = self.meta["root"].replace("$asset_path", GLOB_CONFIG.assets.getSheets())
+        print(root)
         name       = self.meta["name"]
-        abs_output = root + self.meta["output"]
+        abs_output = os.path.join(root, self.meta["output"])
         for sheet in self.meta["sheets"]:
             print(sheet)
-            abs_midi         = root + sheet["midi"]
-            abs_music        = root + sheet["music"]
+            abs_midi         = os.path.join(root, sheet["midi"])
+            abs_music        = os.path.join(root, sheet["music"])
+            print(abs_music)
             tempo_index      = sheet["tempo_index"]
             indexes          = sheet["indexes"]
             effect_pool      = sheet["effect_pool"] if "effect_pool" in sheet.keys() else []

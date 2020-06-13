@@ -13,3 +13,4 @@ pyxel.load(res_path)
 print(f"Res loaded: {os.path.abspath(res_path)}")
 from game import *
 from game import muser
+

@@ -8,11 +8,9 @@ from game.sounds import *
 import game_config
 import util as util
 import pyxel
-import pygame
+from pyglet import media, clock
 import io, sys, os
 
-
-pygame.mixer.init()
 
 class Cast:
     def update(self):
@@ -107,15 +105,16 @@ class Casts:
                 obj.level_selection = len(obj.sheet) - 1
         @staticmethod
         def select(obj):
+            Config.release_player()
             obj.finished = True
 
         @staticmethod
-        def settings(obj):
-            pygame.mixer.music.stop()
+        def settings(obj): 
+            Config.release_player()
+            # pygame.mixer.music.stop()
             obj.finished = True
             obj.goto_settings = True
         def __init__(self):
-            self.volume = 0.0
             self.selection = 0
             self.level_selection = 0
             self.finished = False
@@ -124,25 +123,31 @@ class Casts:
             for path in Config.SHEET_PATHS:
                 for file in os.listdir(path):
                     if file.endswith(".sheet"):
-                        self.sheets.append(path + file)
+                        self.sheets.append(os.path.join(path, file))
             # print(self.sheets)
             self.update_meta()
         def update_meta(self):
-            self.volume = 0.0
             self.level_selection = 0
             self.sheet = SheetReader.from_sheets(self.sheets[self.selection])
             self.music_source = self.sheet[self.level_selection].data["music"]
-            pygame.mixer.music.stop()
-            pygame.mixer.music.load(self.music_source)
-            pygame.mixer.music.play()
+            self.music: media.Source = media.load(self.music_source)
+            Config.release_player()
+            Config.PLAYER = self.music.play()
+            
+
+            # pygame.mixer.music.stop()
+            # pygame.mixer.music.load(self.music_source)
+            # pygame.mixer.music.play()
         def update(self):
-            if self.volume >= 1.0:
-                self.volume = 1.0
-            else:
-                self.volume += 0.01
-                if self.volume > 1.0:
-                    self.volume = 1.0
-                pygame.mixer.music.set_volume(self.volume)
+            # if self.volume >= 1.0:
+            #     self.volume = 1.0
+            # else:
+            #     self.volume += 0.01
+            #     if self.volume > 1.0:
+            #         self.volume = 1.0
+            #     # pygame.mixer.music.set_volume(self.volume)
+            #     Config.PLAYER.volume = self.volume
+
             for btn in Casts.LevelSelection.BUTTONS:
                 btn.update()
         def draw(self):
@@ -164,6 +169,7 @@ class Casts:
         def is_finished(self):
             return self.finished
         def next_cast(self):
+            
             return Casts.Settings() if self.goto_settings else Casts.PlayThrough(self.sheet[self.level_selection], self.music_source)
     class PlayThrough(Cast):
         UPDATES = [
@@ -193,7 +199,6 @@ class Casts:
             self.music_source              = music_source
             self.finished: bool            = False
             self.quit: bool                = False
-            pygame.mixer.music.set_volume(1.0)
             self.note_manager: NoteManager = NoteManager(self.sheet, Constants.PlayThrough.DISTANCES(), self.music_source)
             self.note_manager.prepare()
             self.note_manager.start()
@@ -232,7 +237,7 @@ class Casts:
                 obj.prefinished     = True
                 obj.prefinish_frame = pyxel.frame_count
                 obj.animating       = True
-                pygame.mixer.music.stop()
+                # pygame.mixer.music.stop()
         def __init__(self, play_through):
             self.play_through     = play_through
             self.finished         = False

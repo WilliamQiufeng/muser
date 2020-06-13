@@ -52,10 +52,10 @@ class GameConfig:
             self.config_path = os.path.join(os.path.abspath("."), "muser_config.json")
             self.config: dict = {}
     def proc(self):
-        self.config["asset_path"]: str            = self.get("asset_path", default="./assets")
+        self.config["asset_path"]: str            = os.path.abspath(self.get("asset_path", default="assets"))
         self.config["separator"]: str             = self.get("separator", default=os.path.sep)
         self.config["fps"]: int                   = self.get("fps", default=60)
-        self.config["rel_music_offset"]: float    = self.get("rel_music_offset", default=-256)
+        self.config["rel_music_offset"]: float    = self.get("rel_music_offset", default=0)
         self.config["full_screen"]: bool          = self.get("full_screen", default=False)
         self.config["control.up_arrow"]: bool     = self.get("control.up_arrow", default="w")
         self.config["control.down_arrow"]: bool   = self.get("control.down_arrow", default="s")

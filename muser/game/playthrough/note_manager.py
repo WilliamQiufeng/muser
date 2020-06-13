@@ -1,14 +1,13 @@
 import copy
 import time
-import pygame
+# import pygame
 from sheet.reader.sheet_reader import *
 from game.playthrough.manager_actions import *
 from game.constants import *
 from game.playthrough.effect.effect_controller import *
 import util as util
-import numba
+from pyglet import media
 
-pygame.mixer.init()
 
 
 class Counter:
@@ -56,9 +55,8 @@ class NoteManager:
         # print("\n".join([str(x) for x in self.notes]))
         self.side_distances: list   = side_distances
         self.music_source  : str    = music_source
-        buf_mus                     = pygame.mixer.Sound(self.music_source)
-        self.music_len     : float  = buf_mus.get_length()
-        del buf_mus
+        self.music: media.Source    = media.load(self.music_source)
+        self.music_len     : float  = self.music.duration
         self.music_started: bool = False
         self.started      : bool = False
         self.initiate     : bool = True
@@ -82,8 +80,7 @@ class NoteManager:
             Frames.PlayThrough.INDICATOR_CIRCLE.width, Frames.PlayThrough.INDICATOR_CIRCLE.height)
         self.perfect_note_score = Constants.PlayThrough.Score.TOTAL_SCORE / (len(self.notes) * Constants.PlayThrough.NoteIndicator.INDICATORS().index(Constants.PlayThrough.NoteIndicator.PERFECT))
     def prepare(self):
-        pygame.mixer.music.stop()
-        pygame.mixer.music.load(self.music_source)
+        pass
     def start(self):
         self.initiate = True
     
@@ -94,13 +91,15 @@ class NoteManager:
         Bug exists
         """        
         if not self.paused:
-            pygame.mixer.music.pause()
-            self.last_pause_time = time.time()
+            pass
+            # pygame.mixer.music.pause()
+            # self.last_pause_time = time.time()
             # print(
             #     f"Game paused. Total Time: {self.total_time},  Start Time: {self.start_time}")
         else:
-            pygame.mixer.music.unpause()
-            self.start_time += time.time() - self.last_pause_time
+            pass
+            # pygame.mixer.music.unpause()
+            # self.start_time += time.time() - self.last_pause_time
             # print(
             #     f"Game continued. Total Time: {self.total_time}, Start Time: {self.start_time}")
         self.paused = not self.paused
@@ -108,7 +107,7 @@ class NoteManager:
         cur_time = time.time()
         if self.music_started:
             self.total_time = (
-                self.meta["music_offset"] + pygame.mixer.music.get_pos()) / 1000
+                self.meta["music_offset"] / 1000 + Config.PLAYER.time)
             cur_time = self.total_time
             #print(
             #    f"Total Time: {self.total_time}, Cur Time: {cur_time}, Interval: {interval}, Last Time: {self.last_time}")
@@ -119,11 +118,12 @@ class NoteManager:
         if (not self.music_started) and self.total_time * 1000 >= self.meta["music_offset"]:
             # pygame.mixer.music.set_pos(self.total_time * 1000 - self.meta["offset"])
             print(self.total_time)
-            pygame.mixer.music.play()
+            Config.release_player()
+            Config.PLAYER = self.music.play()
             self.music_started = True
-            cur_time = (self.meta["music_offset"] +
-                        pygame.mixer.music.get_pos()) / 1000
-            self.total_time = self.total_time
+            cur_time = (self.meta["music_offset"] / 1000 +
+                        Config.PLAYER.time) 
+            # self.total_time = self.total_time
             # print(
             #     f"Total Time: {self.total_time}, Cur Time: {cur_time}, Start Time: {self.start_time}")
         return cur_time
@@ -141,7 +141,7 @@ class NoteManager:
             self.last_indicator = Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
         cur_time: float = self.update_time()
         EffectController.update(total_time=self.total_time * 1000)
-        if self.music_started and not pygame.mixer.music.get_busy():
+        if self.music_started and not Config.PLAYER.playing:
             self.finished = True
             EffectController.clear_effects()
             return None
@@ -201,5 +201,5 @@ class NoteManager:
             
         # Draw progress
         if self.music_started:
-            progess: int = int(pygame.mixer.music.get_pos() / (self.music_len * 1000) * Constants.Cast.WIDTH)
+            progess: int = int((Config.PLAYER.time / self.music_len) * Constants.Cast.WIDTH)
             pyxel.rect(0, 0, progess, 2, 7)

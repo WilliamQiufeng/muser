@@ -1,6 +1,6 @@
 import os, io, sys
 os.system("rm muser_main.py muser_main.c")
-inp = io.open("main.py", "r")
+inp = io.open("muser/main.py", "r")
 out = io.open("muser_main.py", "w")
 out.write("# cython: language_level=3\n")
 out.write(inp.read())

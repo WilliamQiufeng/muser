@@ -27,16 +27,17 @@
 '''
 
 
-import pygame.mixer_music
+from pyglet import media
 import game_config as game_config
-pygame.mixer.init()
+from game.config import *
 class Sound:
     def __init__(self, path):
         self.path = path
+        self.sound = media.load(self.path, streaming=False)
     def play(self):
         try:
-            pygame.mixer.music.load(self.path)
-            pygame.mixer.music.play()
+            config.PLAYER.release_player()
+            config.PLAYER.play(self.sound)
         except:
             print("Error loading sound")
 

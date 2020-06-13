@@ -30,7 +30,7 @@ import pyxel, util
 from game.playthrough.effect.base_effect import *
 from game.constants import Constants
 from sheet.gen.abs_output import *
-import numba
+
 class FancyEffect(Effect):
     
     def __init__(self, fancy_note: StartFancy):
