@@ -34,7 +34,7 @@ import assets as assets
 
 def find(name, path):
     for root, dirs, files in os.walk(path):
-        if name in files:
+        if name in files or name in dirs:
             return os.path.join(root, name)
     return None
 
@@ -42,17 +42,18 @@ class GameConfig:
     def __init__(self):
         print(os.system("pwd"))
         self.config_path = find("muser_config.json", ".")
+        print("Config path:", self.config_path)
         success: bool = True
         if self.config_path != None:
             try:
                 self.config: dict = json.loads(io.open(self.config_path, "r").read())
             except:
                 success = False
-        if not success:
+        if self.config_path == None or not success:
             self.config_path = os.path.join(os.path.abspath("."), "muser_config.json")
             self.config: dict = {}
     def proc(self):
-        self.config["asset_path"]: str            = os.path.abspath(self.get("asset_path", default="assets"))
+        self.config["asset_path"]: str            = os.path.abspath(self.get("asset_path", default=find("assets", ".")))
         self.config["separator"]: str             = self.get("separator", default=os.path.sep)
         self.config["fps"]: int                   = self.get("fps", default=60)
         self.config["rel_music_offset"]: float    = self.get("rel_music_offset", default=0)

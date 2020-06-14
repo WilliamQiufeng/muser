@@ -1,5 +1,13 @@
 import time
 import functools
+import subprocess
+import sys
+
+# https://stackoverflow.com/a/50255019/11225486
+def pip_install(package: list):
+    args = [sys.executable, "-m", "pip", "install", *package]
+    print(" ".join(args))
+    subprocess.check_call(args)
 
 def grid(sw, sh, gw, gh, x, y):
     gridw = sw / gw

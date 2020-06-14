@@ -160,5 +160,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-package_sheets.sh
