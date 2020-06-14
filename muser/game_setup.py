@@ -36,8 +36,7 @@ def sprint(text):
 sprint("----Game setup wizard----")
 sprint("Welcome to the installation setup wizard for muser.\n")
 sprint("The game consists of two parts: game itself and the music sheets which is the 'maps' of the game.")
-sprint("It is optional to have default sheets installed, but it is recommended because you can")
-sprint("first try them out and get other sheets later. Note that if there are no sheets installed")
+sprint("It is optional to have default sheets installed. Note that if there are no sheets installed")
 sprint("on run, The game will crash until you have installed at least one sheet.")
 
 sprint("This setup wizard will setup the following things (All optional)")
@@ -65,3 +64,5 @@ if install_game_config:
     print("Game config written.")
     
 # TODO: Install default sheets
+
+print("Setup wizard complete. You may now try the game by running main.py!")
