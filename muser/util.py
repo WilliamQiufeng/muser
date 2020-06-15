@@ -1,13 +1,34 @@
+import re
 import time
 import functools
 import subprocess
 import sys
+
+
+version = "1.5"
+
+# GEEZ A LOT OF COPYING LOL
 
 # https://stackoverflow.com/a/50255019/11225486
 def pip_install(package: list):
     args = [sys.executable, "-m", "pip", "install", *package]
     print(" ".join(args))
     subprocess.check_call(args)
+
+# Copied and modified from https://stackoverflow.com/a/8217646/11225486
+def cmd(args: list):
+    p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=None)
+    text = p.stdout.read()
+    retcode = p.wait()
+    return (str(text.decode('utf-8')), retcode)
+
+# https://geeksforgeeks.org/python-check-url-string/
+def find_links(string):
+    # findall() has been used
+    # with valid conditions for urls in string
+    regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+    url = re.findall(regex, string)
+    return [x[0] for x in url]
 
 def grid(sw, sh, gw, gh, x, y):
     gridw = sw / gw

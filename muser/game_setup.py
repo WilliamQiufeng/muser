@@ -28,7 +28,7 @@
 
 
 import util
-import os, io, sys, time
+import os, io, sys, time, subprocess
 
 def sprint(text):
     return input(text)
@@ -64,5 +64,16 @@ if install_game_config:
     print("Game config written.")
     
 # TODO: Install default sheets
+command = ['git', 'describe', '--abbrev=0']
+latest_tag = util.cmd(command)[0][:-1]
+tag_desc = util.cmd(["git", "cat-file", "-p", latest_tag])[0]
+tmp = io.open('.tmpdesc', 'w')
+tmp.write(tag_desc)
+tmp.close()
+message = util.cmd(['tail', '-n', '+6', '.tmpdesc'])[0]
+os.remove('.tmpdesc')
+
+links = util.find_links(message)
+print("Links found:", links)
 
 print("Setup wizard complete. You may now try the game by running main.py!")
