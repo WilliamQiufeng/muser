@@ -31,7 +31,7 @@ import util
 import os, io, sys, time, subprocess
 
 def sprint(text):
-    return input(text)
+    return print(text)
 
 sprint("----Game setup wizard----")
 sprint("Welcome to the installation setup wizard for muser.\n")
@@ -46,15 +46,15 @@ sprint("+ Default sheets (Sheets made along with the game but is separated in ca
 
 sprint("Setup will start now.")
 
-install_required_libraries : bool = sprint("1. Do you want to install the required libraries? [any/n]") != "n"
-install_game_config        : bool = sprint("2. Do you want to install the game config? [any/n]")        != "n"
-install_default_sheets     : bool = sprint("3. Do you want to install the default sheet pack? [any/n]") != "n"
+install_required_libraries : bool = input("1. Do you want to install the required libraries? [any/n]") != "n"
+install_game_config        : bool = input("2. Do you want to install the game config? [any/n]")        != "n"
+install_default_sheets     : bool = input("3. Do you want to install the default sheet pack? [any/n]") != "n"
 
 print("Got it.")
 
 if install_required_libraries:
     print("Installing required libraries...")
-    util.pip_install("pyxel>=1.4 mido pyglet pynput".split(" "))
+    util.pip_install("pyxel>=1.4 mido pyglet pynput requests".split(" "))
     print("Library installation complete.")
 
 if install_game_config:
@@ -64,16 +64,84 @@ if install_game_config:
     print("Game config written.")
     
 # TODO: Install default sheets
-command = ['git', 'describe', '--abbrev=0']
-latest_tag = util.cmd(command)[0][:-1]
-tag_desc = util.cmd(["git", "cat-file", "-p", latest_tag])[0]
-tmp = io.open('.tmpdesc', 'w')
-tmp.write(tag_desc)
-tmp.close()
-message = util.cmd(['tail', '-n', '+6', '.tmpdesc'])[0]
-os.remove('.tmpdesc')
+if install_default_sheets:
+    try:
+        import requests
+    except:
+        print("[ERROR] 'requests' lib not installed. Please install this lib.")
+        exit()
+    # git cat-file -p `git describe --abbrev=0` | tail -n +6
+    # expands into:
+    #   $a = git describe --abbrev=0
+    #   git cat-file -p $a > .tmpdesc
+    #   tail -n +6 .tmpdesc
+    #   rm .tmpdesc
+    
+    # command = ['git', 'describe', '--abbrev=0']
+    # latest_tag = util.cmd(command)[0][:-1]
+    # # tag_desc = util.cmd(["git", "cat-file", "-p", latest_tag])[0]
+    # tag_desc = util.cmd(["git", "cat-file", "-p", util.version])[0]
+    # tmp = io.open('.tmpdesc', 'w')
+    # tmp.write(tag_desc)
+    # tmp.close()
+    # message = util.cmd(['tail', '-n', '+6', '.tmpdesc'])[0]
+    # os.remove('.tmpdesc')
 
-links = util.find_links(message)
-print("Links found:", links)
+    # links = util.find_links(message)
+    # print("Links found:", links)
+    # print("Choosing the first link:", links[0])
+    origin_link = "https://github.com/QiuFeng54321/muser/releases/download/v1.5-pre1/muser_sheets.zip"
+    mirror_link = f"https://fr-1.offcloud.com:3010/download/5ee74cefe634e2482ea4ecb2/5ee74e1ae634e2482ea4ecc2/muser_sheets.zip"
+    #retrieving data from the URL using get method
+    path = input("Do you want to download or use you own? [path/n]: ")
+    if path == "n":
+        link = mirror_link if input("Do you want to use a mirror link? [any/n]:") != "n" else origin_link
+        print(f"Using link: {link}")
+        r = requests.get(link, stream=True)
+        path = ".muser_sheets.zip"
+        print("Downloading", link, "to", path)
+        with open(path, 'wb') as f:
+            #giving a name and saving it in any required format
+            #opening the file in write mode
+            size = int(r.headers['content-length'])
+            print("File size:", util.humanbytes(size))
+            written = 0
+            last_percentage: int = 0
+            sys.stdout.write("|" + ' ' * 100 + "| 0%       0.0 B")
+            sys.stdout.flush()
+            for chunk in r.iter_content(chunk_size=512):
+                f.write(chunk)
+                written += len(chunk)
+                percentage: int = int(written / size * 100)
+                if percentage != last_percentage:
+                    sys.stdout.write('\b' * 117)
+                    sys.stdout.write("|" + ('-' * (percentage - 1) + '>' if percentage > 0 else '') + ' ' * (100 - percentage) + "| ")
+                    sys.stdout.write((str(percentage) + "%").ljust(4))
+                    sys.stdout.write(util.humanbytes(written).rjust(10))
+                    sys.stdout.flush()
+                    last_percentage = percentage
+                else:
+                    sys.stdout.write('\b' * 10)
+                    sys.stdout.write(util.humanbytes(written).rjust(10))
+                    sys.stdout.flush()
+            print("Sheets downloaded.")
+    path = os.path.abspath(path)
+    print("Extracting", path, "to '.muser_sheets'...")
+    util.unzip_files(path, ".muser_sheets")
+    print("Extracted.")
+    
+    print("Copying to assets...")
+    import shutil
+    shutil.rmtree("assets/sheets/")
+    util.copy(".muser_sheets/muser_sheets/sheets/", "assets/sheets/")
+    print("Copy complete. Removing temp extracted directory...")
+    shutil.rmtree(".muser_sheets/")
+    print("Removed temp extracted directory")
+    
+    print("Generating sheets...")
+    import meta2sheet
+    meta2sheet.generate()
+    print("Generation complete.")
+    
 
 print("Setup wizard complete. You may now try the game by running main.py!")
