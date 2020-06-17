@@ -131,23 +131,11 @@ class Casts:
             self.sheet = SheetReader.from_sheets(self.sheets[self.selection])
             self.music_source = self.sheet[self.level_selection].data["music"]
             self.music: media.Source = media.load(self.music_source)
+            
             Config.release_player()
             Config.PLAYER = self.music.play()
             
-
-            # pygame.mixer.music.stop()
-            # pygame.mixer.music.load(self.music_source)
-            # pygame.mixer.music.play()
         def update(self):
-            # if self.volume >= 1.0:
-            #     self.volume = 1.0
-            # else:
-            #     self.volume += 0.01
-            #     if self.volume > 1.0:
-            #         self.volume = 1.0
-            #     # pygame.mixer.music.set_volume(self.volume)
-            #     Config.PLAYER.volume = self.volume
-
             for btn in Casts.LevelSelection.BUTTONS:
                 btn.update()
         def draw(self):
@@ -155,6 +143,7 @@ class Casts:
             pyxel.text(0, 6,  "Level Selection [Left/Right]", 12)
             pyxel.text(0, 12, "Play            [Enter]"     , 12)
             pyxel.text(0, 18, "Settings        [S]"         , 12)
+            pyxel.text(0, 24, "Quit            [Q]"         , 12)
             for btn in Casts.LevelSelection.BUTTONS:
                 if "draw" in dir(btn):
                     btn.draw()
@@ -216,7 +205,7 @@ class Casts:
                 self.note_manager.pause()
             self.quit = pyxel.btn(pyxel.KEY_Q)
             if self.quit:
-                # print("Quit playthrough.")
+                print("Quit playthrough.")
                 EffectController.clear_effects()
                 # print("Effects cleared")
 
@@ -308,7 +297,9 @@ class Casts:
             ["control.RD_arrow"     , "Control: Right Down Arrow"   , "control"],
             ["control.LD_arrow"     , "Control: Left  Down Arrow"   , "control"],
             ["control.RU_arrow"     , "Control: Right Up   Arrow"   , "control"],
-            ["control.LU_arrow"     , "Control: Left  Up   Arrow"   , "control"]
+            ["control.LU_arrow"     , "Control: Left  Up   Arrow"   , "control"],
+            ["control.SEL_L"        , "Control: Left  Select    "   , "control"],
+            ["control.SEL_R"        , "Control: Right Select    "   , "control"]
         ]
         
         def __init__(self):

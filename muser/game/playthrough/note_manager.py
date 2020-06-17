@@ -115,6 +115,7 @@ class NoteManager:
             print(self.total_time)
             Config.release_player()
             Config.PLAYER = self.music.play()
+            Config.PLAYER.loop = False
             self.music_started = True
             cur_time = (self.meta["music_offset"] / 1000 +
                         Config.PLAYER.time) 
@@ -134,6 +135,7 @@ class NoteManager:
         cur_time: float = self.update_time()
         EffectController.update(total_time=self.total_time * 1000)
         if self.music_started and not Config.PLAYER.playing:
+            print("Finished")
             self.finished = True
             EffectController.clear_effects()
             return None
