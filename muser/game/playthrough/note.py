@@ -34,7 +34,11 @@ class PositionedNote(BaseNote):
             return False
     def move(self, total_time: float):
         progress = (total_time - self.prop["offset"]) / self.prop["pass_time"]
-        self.pos = cm.get_pos_in_progress(self, progress)
+        try:
+            self.pos = cm.get_pos_in_progress(self, progress)
+        except TypeError as e:
+            print(e)
+            print("Move failed because of the error above...")
         
         # pixels = Constants.PlayThrough.DISTANCES()[self.prop["side"]] * (total_time - self.prop["offset"]) / self.prop["pass_time"]
         # # pixels = Constants.PlayThrough.DISTANCES()[self.prop["side"]] * (2000) / self.prop["pass_time"]
