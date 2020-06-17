@@ -48,14 +48,11 @@ class FrameEffect(Effect):
             for pix in [self._frame[y][x]]
             if pix != -1
         ]
-        # print(self.frame_note.frame)
     def update(self, args, kwargs):
         pass
 
     @util.timeit(without=(-1, 30))
-    # @numba.jit()
     def draw(self, args, kwargs):
-        # pyxel.text(0, 250, f"{self.note_prop['offset_pos']}", 12)
         offset_pos_x, offset_pos_y = self.note_prop["offset_pos"]
         # If the frame is outside of the screen then don't draw
         if offset_pos_x > 256 or offset_pos_y > 256 or \

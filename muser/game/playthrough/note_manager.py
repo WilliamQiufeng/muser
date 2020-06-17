@@ -109,23 +109,15 @@ class NoteManager:
             self.total_time = (
                 self.meta["music_offset"] / 1000 + Config.PLAYER.time)
             cur_time = self.total_time
-            #print(
-            #    f"Total Time: {self.total_time}, Cur Time: {cur_time}, Interval: {interval}, Last Time: {self.last_time}")
         else:
             self.total_time = cur_time - self.start_time
-            #print(
-            #    f"Total Time: {self.total_time}, Cur Time: {cur_time}, Interval: {interval}, Last Time: {self.last_time}")
         if (not self.music_started) and self.total_time * 1000 >= self.meta["music_offset"]:
-            # pygame.mixer.music.set_pos(self.total_time * 1000 - self.meta["offset"])
             print(self.total_time)
             Config.release_player()
             Config.PLAYER = self.music.play()
             self.music_started = True
             cur_time = (self.meta["music_offset"] / 1000 +
                         Config.PLAYER.time) 
-            # self.total_time = self.total_time
-            # print(
-            #     f"Total Time: {self.total_time}, Cur Time: {cur_time}, Start Time: {self.start_time}")
         return cur_time
     @util.timeit(without=(-1, 30))
     # @numba.jit()
@@ -184,13 +176,6 @@ class NoteManager:
         pyxel.text(*self.score_pos, f"Score: {int(self.score)}", 12)
         
         pyxel.text(128, 8, f"{self.combo}", 12)
-        
-        # # Draw indicator
-        # Frames.PlayThrough.INDICATOR_CIRCLE.draw(*self.indicator_circle_pos)
-        # indicator_res = Constants.PlayThrough.NoteIndicator.getFrame(
-        #     self.last_indicator)
-        # indicator_res.draw(
-        #     *Constants.Cast.center(indicator_res.width, indicator_res.height))
         
         # Draw last indicator result
         self.last_indicated_frame.draw(*self.last_indicated_frame_pos)

@@ -15,6 +15,7 @@ version = "v1.5-pre1"
 def copy_multiple(src: list, dest: str):
     for path in src:
         copy(path, dest)
+
 # https://www.pythoncentral.io/how-to-recursively-copy-a-directory-folder-in-python/
 def copy(src, dest):
     try:
@@ -74,7 +75,6 @@ def combine_files(files: list, out_file: str):
     for piece in files:
         file.write(io.open(piece, "rb").read())
     file.close()
-# GEEZ A LOT OF COPYING LOL
 
 # https://stackoverflow.com/a/50255019/11225486
 def pip_install(package: list):
@@ -101,6 +101,7 @@ def grid(sw, sh, gw, gh, x, y):
     gridw = sw / gw
     gridh = sh / gh
     return (gridw * x, gridh * y)
+
 class AttrDict:
     def __init__(self, obj: dict):
         self.obj = obj
@@ -118,7 +119,6 @@ def timeit(within = (-1, -1), without = (-1, -1)):
     def actual_decorator(func):
         def wrapper(*args, **kwargs):
             cur = time.time()
-            # print(f"{func.__qualname__} ( {args}, {kwargs} )")
             res    = func(*args, **kwargs)
             dur    = time.time() - cur
             dur_ms = dur * 1000
