@@ -349,7 +349,7 @@ class Casts:
                 elif self.current_setting >= len(Casts.Settings.AVAILABLE_SETTINGS):
                     self.current_setting = 0
                 self.update_selection()
-            if pyxel.btnp(pyxel.KEY_ENTER):
+            if pyxel.btnr(pyxel.KEY_ENTER):
                 if not self.is_listening and self.current_setting_obj[2] == "control":
                     from pynput import keyboard
                     def on_press(key):
@@ -364,6 +364,9 @@ class Casts:
 
 
                     listener = keyboard.Listener(on_press=on_press)
+                    
+                    # FIXME: ??? Raises system error [1]     illegal hardware instruction
+                    # This was supposed to be fine? What???
                     listener.start()  # start to listen on a separate thread
                 
                 

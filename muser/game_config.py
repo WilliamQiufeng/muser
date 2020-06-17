@@ -70,6 +70,8 @@ class GameConfig:
         self.config["control.LD_arrow"]: bool     = self.get("control.LD_arrow", default="t")
         self.config["control.RU_arrow"]: bool     = self.get("control.RU_arrow", default="f")
         self.config["control.LU_arrow"]: bool     = self.get("control.LU_arrow", default="g")
+        self.config["control.SEL_L"]: bool = self.get("control.SEL_L", default="left")
+        self.config["control.SEL_R"]: bool = self.get("control.SEL_R", default="right")
         
         import pyxel
         self.controls = {
