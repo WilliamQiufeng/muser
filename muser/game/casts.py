@@ -366,7 +366,15 @@ class Casts:
                     listener = keyboard.Listener(on_press=on_press)
                     
                     # FIXME: ??? Raises system error [1]     illegal hardware instruction
-                    # This was supposed to be fine? What???
+                    # This had been tested well before commit 2173962eab28343659bf4c8a0c4f64ba1decd7bc (or maybe even earlier)
+                    # This somehow starts to raise a system error?
+                    # It happens not only in this commit, but straight to c2f58b56fbec71906336f3f4f8dbaaee9e7b4323 this appears.
+                    # However it hadn't been....
+                    # Is it my system's thing or what??????????
+                    
+                    # P.S.: separating code L354-L377 in this commit and run it doesn't raise any errors.
+                    # There may be some compatibility issues with other libs...???
+                    
                     listener.start()  # start to listen on a separate thread
                 
                 
