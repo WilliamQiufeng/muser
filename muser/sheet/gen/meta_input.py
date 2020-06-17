@@ -42,14 +42,14 @@ class MetaInput:
     def proc(self):
         sheets     = []
         root: str  = self.meta["root"].replace("$asset_path", GLOB_CONFIG.assets.getSheets())
-        print(root)
+        # print(root)
         name       = self.meta["name"]
         abs_output = os.path.join(root, self.meta["output"])
         for sheet in self.meta["sheets"]:
-            print(sheet)
+            # print(sheet)
             abs_midi         = os.path.join(root, sheet["midi"])
             abs_music        = os.path.join(root, sheet["music"])
-            print(abs_music)
+            # print(abs_music)
             tempo_index      = sheet["tempo_index"]
             indexes          = sheet["indexes"]
             effect_pool      = sheet["effect_pool"] if "effect_pool" in sheet.keys() else []

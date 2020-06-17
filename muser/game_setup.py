@@ -91,7 +91,8 @@ if install_default_sheets:
     # print("Links found:", links)
     # print("Choosing the first link:", links[0])
     origin_link = "https://github.com/QiuFeng54321/muser/releases/download/v1.5-pre1/muser_sheets.zip"
-    mirror_link = f"https://fr-1.offcloud.com:3010/download/5ee74cefe634e2482ea4ecb2/5ee74e1ae634e2482ea4ecc2/muser_sheets.zip"
+    
+    mirror_link = "https://main.williamcraft.workers.dev/?target=get_latest_version"
     #retrieving data from the URL using get method
     path = input("Do you want to download or use you own? [path/n]: ")
     if path == "n":
@@ -132,8 +133,12 @@ if install_default_sheets:
     
     print("Copying to assets...")
     import shutil
-    shutil.rmtree("assets/sheets/")
-    util.copy(".muser_sheets/muser_sheets/sheets/", "assets/sheets/")
+    os.makedirs("assets/sheets", exist_ok=True)
+    extracted = ".muser_sheets/muser_sheets/sheets/"
+    util.copy_multiple([
+        os.path.join(extracted, name)
+        for name in os.listdir(extracted)
+    ], "assets/sheets/")
     print("Copy complete. Removing temp extracted directory...")
     shutil.rmtree(".muser_sheets/")
     print("Removed temp extracted directory")

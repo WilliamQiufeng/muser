@@ -27,62 +27,24 @@
 '''
 
 
-from sheet.gen.abs_output import *
+import sheet.gen.abs_output as ao
 import copy
 
 def add_effects(abs_notes: list, effect_pool: list, effects: list):
     # print(effect_pool)
     effect_vars = {}
     for effect_var in effect_pool:
-        if effect_var["type"] == "fancy":
-            identity: int = int(effect_var["id"])
-            offset_pos: list = effect_var["offset_pos"] if "offset_pos" in effect_var.keys() else [
-                0, 0]
-            size: list = effect_var["size"] if "size" in effect_var.keys() else [
-                256, 256]
-            effect = {
-                "identity": identity,
-                "type": effect_var["type"],
-                "colors": effect_var["colors"],
-                "interval": effect_var["interval"],
-                "offset_pos": offset_pos,
-                "size": size
-            }
-            effect_vars[identity] = effect
-        elif effect_var["type"] == "frame":
-            identity: int = int(effect_var["id"])
-            offset_pos: list = effect_var["offset_pos"] if "offset_pos" in effect_var.keys() else [
-                0, 0]
-            effect = copy.copy(effect_var)
-            effect.update({
-                "identity": identity,
-                "type": effect_var["type"],
-                "offset_pos": offset_pos
-            })
-            effect_vars[identity] = effect
-        elif effect_var["type"] == "move":
-            identity: int = int(effect_var["id"])
-            offset_pos: list = effect_var["offset_pos"] if "offset_pos" in effect_var.keys() else [
-                0, 0]
-            effect = copy.copy(effect_var)
-            effect.update({
-                "identity": identity,
-                "type": effect_var["type"],
-                "offset_pos": offset_pos
-            })
-            effect_vars[identity] = effect
-        elif effect_var["type"] == "criteria":
-            identity: int = int(effect_var["id"])
-            offset_pos: list = effect_var["offset_pos"] if "offset_pos" in effect_var.keys() else [
-                0, 0]
-            effect = copy.copy(effect_var)
-            effect.update({
-                "identity": identity,
-                "type": effect_var["type"],
-                "offset_pos": offset_pos
-            })
-            effect_vars[identity] = effect
-            # print(effect)
+        identity: int = int(effect_var["id"])
+        offset_pos: list = effect_var["offset_pos"] if "offset_pos" in effect_var.keys() else [
+            0, 0]
+        effect = copy.copy(effect_var)
+        effect.update({
+            "identity": identity,
+            "type": effect_var["type"],
+            "offset_pos": offset_pos
+        })
+        effect_vars[identity] = effect
+        # print(effect)
     # print(effect_vars)
     effect_list = []
     for effect in effects:
@@ -95,32 +57,37 @@ def add_effects(abs_notes: list, effect_pool: list, effects: list):
             "offset": effect["offset"] + effect["length"],
             "identity": identity
         }
-        if effect_type == "fancy":
-            # start_fancy = StartFancy(
-            #     effect["offset"], effect_var["colors"], effect_var["interval"], identity, offset_pos=effect_var["offset_pos"], size=effect_var["size"])
-            # end_fancy = EndEffect(effect["offset"] + effect["length"], identity)
+        start_effect = getattr(ao, "Start" + effect_type.capitalize())(res)
+        end_effect = ao.EndEffect(end)
+        start_effect.do_func()
+        effect_list.append(start_effect)
+        effect_list.append(end_effect)
+        # if effect_type == "fancy":
+        #     # start_fancy = StartFancy(
+        #     #     effect["offset"], effect_var["colors"], effect_var["interval"], identity, offset_pos=effect_var["offset_pos"], size=effect_var["size"])
+        #     # end_fancy = EndEffect(effect["offset"] + effect["length"], identity)
             
-            start_fancy = StartFancy(res)
-            end_fancy   = EndEffect(end)
+        #     start_fancy = StartFancy(res)
+        #     end_fancy   = EndEffect(end)
             
-            effect_list.append(start_fancy)
-            effect_list.append(end_fancy)
-        elif effect_type == "frame":
-            start_frame = StartFrame(res)
-            start_frame.flatten_frame()
-            end_frame   = EndEffect(end)
-            effect_list.append(start_frame)
-            effect_list.append(end_frame)
-        elif effect_type == "move":
-            start_move = StartMove(res)
-            end_move   = EndEffect(end)
-            effect_list.append(start_move)
-            effect_list.append(end_move)
-        elif effect_type == "criteria":
-            start_criteria = StartCriteria(res)
-            end_criteria   = EndEffect(end)
-            effect_list.append(start_criteria)
-            effect_list.append(end_criteria)
+        #     effect_list.append(start_fancy)
+        #     effect_list.append(end_fancy)
+        # elif effect_type == "frame":
+        #     start_frame = StartFrame(res)
+        #     start_frame.flatten_frame()
+        #     end_frame   = EndEffect(end)
+        #     effect_list.append(start_frame)
+        #     effect_list.append(end_frame)
+        # elif effect_type == "move":
+        #     start_move = StartMove(res)
+        #     end_move   = EndEffect(end)
+        #     effect_list.append(start_move)
+        #     effect_list.append(end_move)
+        # elif effect_type == "criteria":
+        #     start_criteria = StartCriteria(res)
+        #     end_criteria   = EndEffect(end)
+        #     effect_list.append(start_criteria)
+        #     effect_list.append(end_criteria)
     res_list: list = abs_notes + effect_list
     res_list.sort(key=lambda n: n.offset)
     return res_list

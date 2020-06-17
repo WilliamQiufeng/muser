@@ -22,6 +22,8 @@ class BaseAbsNote:
     def __init__(self, prop: dict):
         self.prop = prop
         self.prop["type"] = self.__class__.__name__
+    def do_func(self):
+        pass
     def __getattr__(self, name):
         if name in dir(self):
             return self.__dict__[name]
@@ -86,7 +88,7 @@ class StartFrame(BaseAbsNote):
     # def __repr__(self):
     #     return f"{NoteType.START_FRAME},{self.offset},{';'.join([str(x) for x in self.size])},"\
     #             f"{';'.join([';'.join([str(col) for col in line]) for line in self.frame])},{';'.join([str(x) for x in self.offset_pos])},{self.identity}"
-    def flatten_frame(self):
+    def do_func(self):
         self.frame = [[self.substitution[self.frame[line][char_i]]
                        for char_i in range(self.size[0])] for line in range(self.size[1])]
         

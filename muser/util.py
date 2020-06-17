@@ -12,6 +12,9 @@ import shutil
 
 version = "v1.5-pre1"
 
+def copy_multiple(src: list, dest: str):
+    for path in src:
+        copy(path, dest)
 # https://www.pythoncentral.io/how-to-recursively-copy-a-directory-folder-in-python/
 def copy(src, dest):
     try:
@@ -21,7 +24,7 @@ def copy(src, dest):
         if e.errno == errno.ENOTDIR:
             shutil.copy(src, dest)
         else:
-            print('Directory not copied. Error: %s' % e)
+            print(f'Directory {src} not copied. Error: %s' % e)
             
 
 def move(src, dest):
