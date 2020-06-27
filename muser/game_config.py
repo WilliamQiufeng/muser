@@ -83,7 +83,9 @@ class GameConfig:
         
         self.assets = assets.Assets(self.config["asset_path"], self.config["separator"])
     def save(self):
-        io.open(self.config_path, "w").write(json.dumps(self.config, indent=4))
+        f = io.open(self.config_path, "w")
+        f.write(json.dumps(self.config, indent=4))
+        f.close()
     def get(self, key, default = None):
         return self.config[key] if key in self.config.keys() else default
 

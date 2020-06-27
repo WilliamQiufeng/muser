@@ -27,7 +27,8 @@ This method is more recommendable than **Installation** because the **Installati
 
 ```bash
 git clone https://github.com/Qiufeng54321/muser
-cd muser
+cd muser/muser
+python game_setup.py # Only when first run
 python main.py
 ```
 

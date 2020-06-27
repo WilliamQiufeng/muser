@@ -233,7 +233,7 @@ class Casts:
             self.prefinished      = False
             self.animating        = False
             total_pixels          = Constants.Cast.WIDTH * Constants.Cast.HEIGHT
-            self.animation_bitmap = random.sample(range(0, total_pixels), total_pixels)
+            self.animation_bitmap = random.sample(range(total_pixels), total_pixels)
             self.score_percentage = self.play_through.note_manager.score / Constants.PlayThrough.Score.TOTAL_SCORE * 100
             self.grade_frame      = Constants.Result.Grade.getGradeFrame(self.score_percentage)
             self.count            = self.play_through.note_manager.counter
