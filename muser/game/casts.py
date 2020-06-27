@@ -141,7 +141,7 @@ class Casts:
         def draw(self):
             pyxel.text(0, 0,  "Hardness        [Up/Down]"   , 12)
             pyxel.text(0, 6,  "Level Selection [Left/Right]", 12)
-            pyxel.text(0, 12, "Play            [Enter]"     , 12)
+            pyxel.text(0, 12, "Play            [Space]"     , 12)
             pyxel.text(0, 18, "Settings        [S]"         , 12)
             pyxel.text(0, 24, "Quit            [Q]"         , 12)
             for btn in Casts.LevelSelection.BUTTONS:

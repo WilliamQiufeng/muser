@@ -191,43 +191,44 @@ class Frames:
         ]
         ARROW_FADE = [Frame(56 + 8 * x, 4, 8, 8) for x in range(4)]
         # INDICATOR_CIRCLE = Frame(32, 48, 32, 32)
-        INDICATOR_CIRCLE = BitmapFrame(32, 32, [
-            "            H      H            ",
-            "            H      H            ",
-            "                                ",
-            "                                ",
-            "            H      H            ",
-            "            H      H            ",
-            "            H      H            ",
-            "       HHHHHH      HHHHHH       ",
-            "       HHHHH        HHHHH       ",
-            "       HH              HH       ",
-            "       HH              HH       ",
-            "       HH              HH       ",
-            "HH  HHHH                HHHH  HH",
-            "                                ",
-            "                                ",
-            "                                ",
-            "                                ",
-            "                                ",
-            "                                ",
-            "HH  HHHH                HHHH  HH",
-            "       HH              HH       ",
-            "       HH              HH       ",
-            "       HH              HH       ",
-            "       HHHHH        HHHHH       ",
-            "       HHHHHH      HHHHHH       ",
-            "            H      H            ",
-            "            H      H            ",
-            "            H      H            ",
-            "                                ",
-            "                                ",
-            "            H      H            ",
-            "            H      H            "
-        ], {
-            " ": -1,
-            "H": 8,
-        })
+        INDICATOR_CIRCLE = BitmapFrame.from_pyxel((32, 48), (32, 32))
+        # INDICATOR_CIRCLE = BitmapFrame(32, 32, [
+        #     "            H      H            ",
+        #     "            H      H            ",
+        #     "                                ",
+        #     "                                ",
+        #     "            H      H            ",
+        #     "            H      H            ",
+        #     "            H      H            ",
+        #     "       HHHHHH      HHHHHH       ",
+        #     "       HHHHH        HHHHH       ",
+        #     "       HH              HH       ",
+        #     "       HH              HH       ",
+        #     "       HH              HH       ",
+        #     "HH  HHHH                HHHH  HH",
+        #     "                                ",
+        #     "                                ",
+        #     "                                ",
+        #     "                                ",
+        #     "                                ",
+        #     "                                ",
+        #     "HH  HHHH                HHHH  HH",
+        #     "       HH              HH       ",
+        #     "       HH              HH       ",
+        #     "       HH              HH       ",
+        #     "       HHHHH        HHHHH       ",
+        #     "       HHHHHH      HHHHHH       ",
+        #     "            H      H            ",
+        #     "            H      H            ",
+        #     "            H      H            ",
+        #     "                                ",
+        #     "                                ",
+        #     "            H      H            ",
+        #     "            H      H            "
+        # ], {
+        #     " ": -1,
+        #     "H": 8,
+        # })
         # INDICATOR_RES = [Frame(x * 8, 16, 8, 8) for x in range(5)]
         INDICATOR_SCALE = (2, 2)
         INDICATOR_RES = [
