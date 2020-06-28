@@ -90,7 +90,7 @@ if install_default_sheets:
     # links = util.find_links(message)
     # print("Links found:", links)
     # print("Choosing the first link:", links[0])
-    origin_link = "https://github.com/QiuFeng54321/muser/releases/download/v1.5-pre1/muser_sheets.zip"
+    origin_link = "https://github.com/QiuFeng54321/muser/releases/download/v1.5-pre2/muser_sheets.zip"
     
     mirror_link = "https://main.williamcraft.workers.dev/?target=get_latest_version"
     #retrieving data from the URL using get method
