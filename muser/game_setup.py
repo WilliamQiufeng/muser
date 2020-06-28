@@ -90,13 +90,18 @@ if install_default_sheets:
     # links = util.find_links(message)
     # print("Links found:", links)
     # print("Choosing the first link:", links[0])
-    origin_link = "https://github.com/QiuFeng54321/muser/releases/download/v1.5.0/muser_sheets.zip"
+    origin_link = "https://api.github.com/repos/Qiufeng54321/muser/releases/latest"
     
     mirror_link = "https://main.williamcraft.workers.dev/?target=get_latest_version"
     #retrieving data from the URL using get method
     path = input("Do you want to download or use you own? [path/n]: ")
     if path == "n":
         link = mirror_link if input("Do you want to use a mirror link? [any/n]:") != "n" else origin_link
+        if link == origin_link:
+            print("Getting latest sheets asset link from github...")
+            import json
+            latest_release = json.loads(requests.get(origin_link).text)
+            link = latest_release["assets"][0]["browser_download_url"]
         print(f"Using link: {link}")
         r = requests.get(link, stream=True)
         path = ".muser_sheets.zip"
