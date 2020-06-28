@@ -148,11 +148,6 @@ if install_default_sheets:
     shutil.rmtree(".muser_sheets/")
     print("Removed temp extracted directory")
     
-    print("Generating sheets...")
-    import meta2sheet
-    meta2sheet.generate()
-    print("Generation complete.")
-    
     print("Linking to assets/sheets...")
     target_dir = "assets/sheets"
     if os.path.abspath(sheet_install_path) != os.path.abspath(target_dir):
@@ -165,6 +160,11 @@ if install_default_sheets:
                     shutil.rmtree(target_dir)
         os.symlink(sheet_install_path, target_dir, True)
     print("Linked", sheet_install_path, "->", target_dir)
+
+    print("Generating sheets...")
+    import meta2sheet
+    meta2sheet.generate()
+    print("Generation complete.")
     
 
 print("Setup wizard complete. You may now try the game by running main.py!")
