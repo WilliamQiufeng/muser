@@ -132,13 +132,18 @@ if install_default_sheets:
     print("Extracted.")
     
     print("Copying to assets...")
+    sheet_install_path: str = input("Where do you want to install the sheets[path/n/empty(../../muser_sheets/)]: ")
+    if sheet_install_path == "n" or sheet_install_path.isspace() or len(sheet_install_path) == 0 or \
+                            not os.path.exists(sheet_install_path):
+        sheet_install_path = "../../muser_sheets/"
+    sheet_install_path = os.path.abspath(sheet_install_path)
     import shutil
-    os.makedirs("assets/sheets", exist_ok=True)
-    extracted = ".muser_sheets/muser_sheets/sheets/"
+    os.makedirs(sheet_install_path, exist_ok=True)
+    extracted = ".muser_sheets/"
     util.copy_multiple([
         os.path.join(extracted, name)
         for name in os.listdir(extracted)
-    ], "assets/sheets/")
+    ], sheet_install_path)
     print("Copy complete. Removing temp extracted directory...")
     shutil.rmtree(".muser_sheets/")
     print("Removed temp extracted directory")
@@ -148,5 +153,30 @@ if install_default_sheets:
     meta2sheet.generate()
     print("Generation complete.")
     
+    print("Linking to assets/sheets...")
+    target_dir = "assets/sheets"
+    if os.path.abspath(sheet_install_path) != os.path.abspath(target_dir):
+        if os.path.exists(target_dir):
+            remove_origin: bool = input("Do you want to remove assets/sheets? [any/n]: ") != "n"
+            if remove_origin:
+                if os.path.islink(target_dir):
+                    os.unlink(target_dir)
+                else:
+                    shutil.rmtree(target_dir)
+        os.symlink(sheet_install_path, target_dir, True)
+    print("Linked", sheet_install_path, "->", target_dir)
+    
 
 print("Setup wizard complete. You may now try the game by running main.py!")
+print("To run main.py: ")
+print("Method 1: Double click main.py to run it")
+print("Method 2: Shell: ")
+cwd = os.path.dirname(os.path.abspath(__file__)) if __file__ is not None else os.curdir
+us_len: int = len(cwd) + 3
+if us_len < 20:
+    us_len = 20
+print(" ___" + "_" * us_len                   + "_ ")
+print("|   " + " " * us_len                   + " |")
+print("| > " + ("cd " + cwd).ljust(us_len)    + " |")
+print("| > " + "python main.py".ljust(us_len) + " |")
+print("|___" + "_" * us_len                   + "_|")
