@@ -149,7 +149,7 @@ if install_default_sheets:
     print("Removed temp extracted directory")
     
     print("Linking to assets/sheets...")
-    target_dir = os.path.join("assets", "sheets")
+    target_dir = "assets/sheets"
     if os.path.abspath(sheet_install_path) != os.path.abspath(target_dir):
         if os.path.exists(target_dir):
             remove_origin: bool = input("Do you want to remove assets/sheets? [any/n]: ") != "n"
@@ -175,8 +175,8 @@ cwd = os.path.dirname(os.path.abspath(__file__)) if __file__ is not None else os
 us_len: int = len(cwd) + 3
 if us_len < 20:
     us_len = 20
-print(" ___"  + "_" * us_len                   +  "_ ")
-print("/   "  + " " * us_len                   + " \\")
-print("| > "  + ("cd " + cwd).ljust(us_len)    +  " |")
-print("| > "  + "python main.py".ljust(us_len) +  " |")
-print("\\___" + "_" * us_len                   +  "_/")
+print(" ___" + "_" * us_len                   + "_ ")
+print("|   " + " " * us_len                   + " |")
+print("| > " + ("cd " + cwd).ljust(us_len)    + " |")
+print("| > " + "python main.py".ljust(us_len) + " |")
+print("|___" + "_" * us_len                   + "_|")
