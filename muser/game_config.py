@@ -75,9 +75,10 @@ class GameConfig:
         
         import pyxel
         self.controls = {
-            key[8:]: getattr(pyxel, f"KEY_{self.config[key].upper()}")
+            key[8:]: getattr(pyxel, name) if hasattr(pyxel, name) else pyxel.KEY_NONE
             for key in self.config.keys()
             if key.startswith("control.")
+            for name in [f"KEY_{self.config[key].upper()}"]
         }
         print(self.controls)
         
