@@ -4,7 +4,9 @@ import time
 from sheet.reader.sheet_reader import *
 from game.playthrough.manager_actions import *
 from game.constants import *
+from game.frames import Frames
 from game.playthrough.effect.effect_controller import *
+import game.playthrough.criteria_manager as criteria_manager
 import util as util
 from pyglet import media
 
@@ -53,17 +55,18 @@ class NoteManager:
         # print(self.meta)
         self.notes: list            = [ManagerActions.from_note(x) for x in sheet.notes]
         # print("\n".join([str(x) for x in self.notes]))
-        self.side_distances: list   = side_distances
-        self.music_source  : str    = music_source
-        self.music: media.Source    = media.load(self.music_source)
-        self.music_len     : float  = self.music.duration
-        self.music_started: bool = False
-        self.started      : bool = False
-        self.initiate     : bool = True
-        self.finished     : bool = False
-        self.paused       : bool = False
-        self.score        : int  = 0
-        self.combo        : int  = 0
+        self.side_distances        : list         = side_distances
+        self.music_source          : str          = music_source
+        self.music                 : media.Source = media.load(self.music_source)
+        self.music_len             : float        = self.music.duration
+        self.music_started         : bool         = False
+        self.started               : bool         = False
+        self.initiate              : bool         = True
+        self.finished              : bool         = False
+        self.paused                : bool         = False
+        self.score                 : int          = 0
+        self.combo                 : int          = 0
+        self.draw_default_criteria : bool         = True
         
         self.counter: Counter         = Counter()
         self.last_indicated_frame_pos = util.grid(
@@ -134,6 +137,15 @@ class NoteManager:
             self.last_indicator = Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
         cur_time: float = self.update_time()
         EffectController.update(total_time=self.total_time * 1000)
+        
+        # Test if the default criteria should be drawn
+        
+        self.draw_default_criteria = False
+        for crit in criteria_manager.criterias:
+            if crit is not None and crit[0] == criteria_manager.CenterNote:
+                self.draw_default_criteria = True
+                break
+        
         if self.music_started and not Config.PLAYER.playing:
             print("Finished")
             self.finished = True
@@ -173,6 +185,10 @@ class NoteManager:
     def draw(self):
         # Draw effects first
         EffectController.draw(total_time=self.total_time)
+        
+        # Draw criteria if default
+        if self.draw_default_criteria:
+            Frames.PlayThrough.INDICATOR_CIRCLE.draw(*Constants.Cast.center(32, 32))
         
         # Draw score
         pyxel.text(*self.score_pos, f"Score: {int(self.score)}", 12)

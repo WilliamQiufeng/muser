@@ -29,8 +29,14 @@
 from . import note
 import game.playthrough.effect.effect_controller as ec
 
-criterias = [None] * 12
+criterias = [None] * 8
 
+
+class CenterNote:
+    note_prop = {
+        "offset_pos": [128, 128],
+        "size": [0, 0]
+    }
 
 def set_criteria(lock_effect_identity: int, sides: list):
     """
@@ -44,7 +50,19 @@ def set_criteria(lock_effect_identity: int, sides: list):
         sides (list): [side_id, start position relative to the center position]
     """
     for side in sides:
-        criterias[side[0]] = [ec.EffectController.pool[lock_effect_identity], side[1]]
+        criterias[side[0]] = [
+            CenterNote 
+                if lock_effect_identity == -1 
+                else ec.EffectController.pool[lock_effect_identity],
+            side[1]
+        ]
+
+set_criteria(-1, [
+    [0, [0, -128]],
+    [1, [0, 128]],
+    [2, [-128, 0]],
+    [3, [128, 0]]
+])
 
 def get_pos_in_progress(note_target, progress: float):
     """
