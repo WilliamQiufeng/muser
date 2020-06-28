@@ -54,14 +54,15 @@ def set_criteria(lock_effect_identity: int, sides: list):
             CenterNote 
                 if lock_effect_identity == -1 
                 else ec.EffectController.pool[lock_effect_identity],
-            side[1]
+            side[1],
+            side[2] if len(side) >= 3 else 5
         ]
 
 set_criteria(-1, [
-    [0, [0, -128]],
-    [1, [0, 128]],
-    [2, [-128, 0]],
-    [3, [128, 0]]
+    [0, [0    , -128]],
+    [1, [0    , 128]],
+    [2, [-128 , 0]],
+    [3, [128  , 0]]
 ])
 
 def get_pos_in_progress(note_target, progress: float):
@@ -97,4 +98,13 @@ def get_pos_in_progress(note_target, progress: float):
     
     return progress_position
     
+def get_color(note_target):
+    """
+    get_color Returns the color of the note
+
+    Args:
+        note_target ([Note]): note to get color
+    """
+
+    return criterias[note_target.prop["side"]][2]
     

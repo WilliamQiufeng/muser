@@ -1,4 +1,3 @@
-from game.frames import *
 import math
 from game.config import *
 class Constants:
@@ -37,7 +36,8 @@ class Constants:
             def INDICATORS():
                 return [Constants.PlayThrough.NoteIndicator.MISS, Constants.PlayThrough.NoteIndicator.BAD, Constants.PlayThrough.NoteIndicator.GREAT, Constants.PlayThrough.NoteIndicator.PERFECT]
             @staticmethod
-            def getFrame(indicator: int) -> Frame:
+            def getFrame(indicator: int):
+                from game.frames import Frames
                 order = [Constants.PlayThrough.NoteIndicator.PERFECT, Constants.PlayThrough.NoteIndicator.GREAT,
                         Constants.PlayThrough.NoteIndicator.BAD, Constants.PlayThrough.NoteIndicator.MISS,
                         Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND]
@@ -121,7 +121,8 @@ class Constants:
             A = 90
             S = 95
             @staticmethod
-            def getGradeFrame(score: int) -> Frame:
+            def getGradeFrame(score: int): 
+                from game.frames import Frames
                 res = Frames.Result.F
                 if score >= Constants.Result.Grade.FAIL:
                     res = Frames.Result.F

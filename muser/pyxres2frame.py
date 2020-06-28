@@ -30,9 +30,7 @@
 import pyxel, json.decoder
 import io
 import game_config as game_config
-import argparse
-from game.frames import BitmapFrame
-
+# import game.frame
 
 pyxel.init(256, 256,
            caption="Muser", scale=48)
@@ -76,7 +74,11 @@ frame_image = [
     for y in range(size[1])
 ]
 
-scaled_frame = BitmapFrame.frameScaleUp(frame_image, *size, *scale)
+# scaled_frame = BitmapFrame.frameScaleUp(frame_image, *size, *scale)
+scaled_frame = {
+    "new_image": frame_image,
+    "new_size": size
+}
 
 frame_image = ["".join(x) for x in scaled_frame["new_image"]]
 

@@ -64,5 +64,9 @@ class PositionedNote(BaseNote):
         return Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
     def draw(self):
         if (not self.finished) and self.in_scene:
+            color = cm.get_color(self)
             frame = Frames.PlayThrough.DIRECTIONS[self.prop["side"]]
-            frame.draw(self.pos[0] - frame.width / 2, self.pos[1] - frame.height / 2)
+            frame.draw(self.pos[0] - frame.width / 2, self.pos[1] - frame.height / 2, {
+                5: color,
+                6: color
+            })
