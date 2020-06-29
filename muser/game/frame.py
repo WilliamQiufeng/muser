@@ -27,6 +27,8 @@
 '''
 
 import pyxel
+from game.config import *
+import math
 
 class Frame:
     def __init__(self, x, y, width, height, image=0):
