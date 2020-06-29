@@ -138,7 +138,7 @@ def to_json(file, tempo_index = 0, indexes = [1], music_offset: int = 0, simulat
             
             abs_notes.append(
                 AbsNote({
-                    "offset"       : tmp[INDEX_OFFSET] * 1000 + music_offset - pass_time,
+                    "offset"       : int(tmp[INDEX_OFFSET] * 1000 + music_offset - pass_time),
                     "beat"         : 0,                                                   # tmp["length"],
                     "pass_time"    : pass_time,
                     "side"         : face,

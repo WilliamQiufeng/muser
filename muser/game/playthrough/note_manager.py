@@ -146,7 +146,7 @@ class NoteManager:
                 self.draw_default_criteria = True
                 break
         
-        if self.music_started and not Config.PLAYER.playing:
+        if self.music_started and Config.PLAYER.time >= self.music_len:
             print("Finished")
             self.finished = True
             EffectController.clear_effects()

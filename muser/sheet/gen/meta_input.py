@@ -72,5 +72,5 @@ class MetaInput:
             })
             #print(abs_sheet)
             sheets.append(abs_sheet)
-        io.open(abs_output, "w").write(json.dumps(sheets, indent=4))
+        io.open(abs_output, "w").write(json.dumps(sheets))
         
