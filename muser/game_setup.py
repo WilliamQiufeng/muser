@@ -54,7 +54,7 @@ print("Got it.")
 
 if install_required_libraries:
     print("Installing required libraries...")
-    util.pip_install("pyxel>=1.4 mido pyglet pynput requests".split(" "))
+    util.pip_install("--user pyxel>=1.4 mido pyglet pynput requests".split(" "))
     print("Library installation complete.")
 
 if install_game_config:
