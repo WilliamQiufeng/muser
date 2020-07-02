@@ -27,19 +27,13 @@
 '''
 
 
-import pyxel
-import time
-import util
-import math
-from game.playthrough.effect.base_effect import *
-from game.constants import Constants
-from sheet.gen.abs_output import *
-
-
+from game.playthrough.effect.base_effect import Effect
+from sheet.gen.abs_output import StartMove
 
 
 class Move:
-    def __init__(self, pos1: tuple, pos2: tuple, offset: float, time_length: float, object_identity: int):
+    def __init__(self, pos1: tuple, pos2: tuple, offset: float,
+                 time_length: float, object_identity: int):
         self.pos1 = pos1
         self.pos2 = pos2
         self.offset = offset
@@ -47,7 +41,7 @@ class Move:
         self.object_identity = object_identity
         self.started = False
         self.finish = False
-        
+
     def get_current_pos(self, total_time: float):
         self.progress = self.get_progress(total_time)
         if self.progress >= 1:
@@ -55,21 +49,28 @@ class Move:
         # From math stackexchange: https://math.stackexchange.com/a/1269705
         return ((1 - self.progress) * self.pos1[0] + self.progress * self.pos2[0],
                 (1 - self.progress) * self.pos1[1] + self.progress * self.pos2[1])
-    
+
     def get_progress(self, total_time: float):
         return (total_time - self.offset) / self.time_length
+
     def finished(self, total_time: float):
         return self.get_progress(total_time) >= 1
+
 
 class MoveEffect(Effect):
     def __init__(self, move_note: StartMove):
         super().__init__(identity=move_note.identity)
         self.move_note = move_note
         self.note_prop = self.move_note.prop
-        self.moves     = [
-            Move(element["pos1"], element["pos2"], self.note_prop["offset"] + element["offset"], element["time_length"], element["object_identity"])
-            for element in self.note_prop["moves"]
-        ]
+        self.moves = [
+            Move(
+                element["pos1"],
+                element["pos2"],
+                self.note_prop["offset"] + element["offset"],
+                element["time_length"],
+                element["object_identity"])
+            for element in self.note_prop["moves"]]
+
     def update(self, args, kwargs):
         from game.playthrough.effect.effect_controller import EffectController
         total_time: float = kwargs["total_time"]
@@ -82,8 +83,10 @@ class MoveEffect(Effect):
                 move.finish = True
                 continue
             if move.started and not move.finish:
-                EffectController.pool[move.object_identity].note_prop["offset_pos"] = move.get_current_pos(total_time)
+                EffectController.pool[move.object_identity].note_prop["offset_pos"] = move.get_current_pos(
+                    total_time)
                 # print(f"Update: {EffectController.pool[move.object_identity].note_prop}")
         pass
+
     def draw(self, args, kwargs):
         pass

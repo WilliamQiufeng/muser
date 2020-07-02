@@ -26,11 +26,8 @@
 *------------------------------------------------------------------------------*
 '''
 
-import pyxel
-import util
-from game.playthrough.effect.base_effect import *
-from game.constants import Constants
-from sheet.gen.abs_output import *
+from game.playthrough.effect.base_effect import Effect
+from sheet.gen.abs_output import StartCriteria
 
 import game.playthrough.criteria_manager as cm
 
@@ -39,11 +36,11 @@ class CriteriaEffect(Effect):
 
     def __init__(self, criteria_note: StartCriteria):
         super().__init__(identity=criteria_note.identity)
-        self.criteria_note             = criteria_note
-        self.note_prop                 = criteria_note.prop
+        self.criteria_note = criteria_note
+        self.note_prop = criteria_note.prop
         self.lock_effect_identity: int = self.note_prop["lock_effect_identity"]
-        self.sides: list               = self.note_prop["sides"]
-        self.done: bool                = False
+        self.sides: list = self.note_prop["sides"]
+        self.done: bool = False
     # @util.timeit(within=(1, -1))
 
     def update(self, args, kwargs):

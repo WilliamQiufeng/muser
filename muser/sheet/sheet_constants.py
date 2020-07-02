@@ -35,28 +35,32 @@ class NoteType:
     STOP_EFFECT = 4
     START_FRAME = 5
 
+
 class NoteAction:
     IN = 0
     OUT = 1
+
 
 # Length from the note to the center: l (px)
 # Beat: b (beat)
 # Time: t (ms)
 # Beat Interval: s (ms / beat)
 # t = b * s
-# 
+#
 # Note Speed stores the time (beat)
 """
 To calculate how many pixels per millisecond:
 px/ms = l / t
 """
+
+
 class NoteSpeed:
     DOUBLE_SLOW = 4000
-    VERY_SLOW   = 3000
-    SLOW        = 2000
-    MEDIUM      = 1000
-    FAST        = 500
-    
+    VERY_SLOW = 3000
+    SLOW = 2000
+    MEDIUM = 1000
+    FAST = 500
+
     SPEEDS = [DOUBLE_SLOW, VERY_SLOW, SLOW, MEDIUM, FAST]
 
     @staticmethod

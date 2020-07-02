@@ -29,17 +29,22 @@
 
 from pyglet import media
 import game_config as game_config
-from game.config import *
+from game.config import Config
+import logger
+
+
 class Sound:
     def __init__(self, path):
         self.path = path
         self.sound = media.load(self.path, streaming=False)
+
     def play(self):
         try:
-            config.PLAYER.release_player()
-            config.PLAYER.play(self.sound)
-        except:
-            print("Error loading sound")
+            Config.release_player()
+            Config.PLAYER = self.sound.play()
+        except Exception:
+            logger.print("Error loading sound", exc_info=True)
+
 
 class Sounds:
     class Grade:

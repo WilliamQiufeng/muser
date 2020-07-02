@@ -30,5 +30,6 @@
 class BaseNote:
     def update(self, total_time: int):
         raise NotImplementedError
+
     def draw(self):
         raise NotImplementedError

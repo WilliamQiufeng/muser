@@ -26,28 +26,35 @@
 *------------------------------------------------------------------------------*
 '''
 
-from .base_effect import *
+from .base_effect import Effect
 import util
+
+
 class EffectController:
     pool: dict = {}
+
     @staticmethod
     def add_effect(effect: Effect):
         EffectController.pool[effect.identity] = effect
+
     @staticmethod
     def remove_effect(identity: int):
         if identity in EffectController.pool.keys():
             del EffectController.pool[identity]
+
     @staticmethod
     def clear_effects():
         EffectController.pool.clear()
+
     @staticmethod
     def update(*args, **kwargs):
         for effect in EffectController.pool.values():
             effect.update(args, kwargs)
+
     @staticmethod
     @util.timeit(without=(-1, 30))
     def draw(*args, **kwargs):
-        # print("Start drawing")
+        # logger.print("Start drawing")
         for effect_key in sorted(EffectController.pool.keys()):
-            # print(effect_key)
+            # logger.print(effect_key)
             EffectController.pool[effect_key].draw(args, kwargs)

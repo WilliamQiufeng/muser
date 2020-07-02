@@ -27,9 +27,11 @@
 '''
 
 
-import pyxel, json.decoder
+import pyxel
+import json.decoder
 import io
 import game_config as game_config
+import logger
 # import game.frame
 
 pyxel.init(256, 256,
@@ -39,14 +41,16 @@ res_file = input("Resource File[path/n]: ")
 if res_file == "n":
     res_file = f"{game_config.GLOB_CONFIG.assets.root}/resources.pyxres"
 pyxel.load(res_file)
-print("Res loaded")
+logger.print("Res loaded")
 image_index: int = int(input("Image index: "))
 pos: tuple = (int(input("The offset x: ")), int(input("The offset y: ")))
-display_pos: tuple = (int(input("Display offset x: ")), int(input("Display offset y: ")))
+display_pos: tuple = (int(input("Display offset x: ")),
+                      int(input("Display offset y: ")))
 size: tuple = (int(input("Size width: ")), int(input("Size height: ")))
 scale: tuple = (int(input("Scale X: ")), int(input("Scale Y: ")))
 remove_color_input = input("Remove color: [0-15/n]: ")
-remove_color: int = -1 if remove_color_input == "n" else int(remove_color_input)
+remove_color: int = - \
+    1 if remove_color_input == "n" else int(remove_color_input)
 substitution_col_to_key: tuple = tuple(" ABCDEFGHIJKLMNO")
 substitution: dict = {}
 # Substitution Col to Key Index
@@ -70,7 +74,7 @@ frame_image = [
             substitution_col_to_key[image.get(pos[0] + x, pos[1] + y)]
             for x in range(size[0])
         ]
-    ) 
+    )
     for y in range(size[1])
 ]
 
@@ -93,9 +97,9 @@ res_str = json.dumps(res, indent=4)
 output = input("Output[file/stdout]: ")
 
 if output == "stdout":
-    print(res_str)
+    logger.print(res_str)
 else:
     file = io.open(output, "w")
     file.write(res_str)
     file.close()
-print("Done")
+logger.print("Done")

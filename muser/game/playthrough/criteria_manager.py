@@ -26,7 +26,6 @@
 *------------------------------------------------------------------------------*
 '''
 
-from . import note
 import game.playthrough.effect.effect_controller as ec
 
 criterias = [None] * 8
@@ -37,6 +36,7 @@ class CenterNote:
         "offset_pos": [128, 128],
         "size": [0, 0]
     }
+
 
 def set_criteria(lock_effect_identity: int, sides: list):
     """
@@ -51,19 +51,21 @@ def set_criteria(lock_effect_identity: int, sides: list):
     """
     for side in sides:
         criterias[side[0]] = [
-            CenterNote 
-                if lock_effect_identity == -1 
-                else ec.EffectController.pool[lock_effect_identity],
+            CenterNote
+            if lock_effect_identity == -1
+            else ec.EffectController.pool[lock_effect_identity],
             side[1],
             side[2] if len(side) >= 3 else 5
         ]
 
+
 set_criteria(-1, [
-    [0, [0    , -128]],
-    [1, [0    , 128]],
-    [2, [-128 , 0]],
-    [3, [128  , 0]]
+    [0, [0, -128]],
+    [1, [0, 128]],
+    [2, [-128, 0]],
+    [3, [128, 0]]
 ])
+
 
 def get_pos_in_progress(note_target, progress: float):
     """
@@ -78,26 +80,26 @@ def get_pos_in_progress(note_target, progress: float):
     Returns:
         coord (tuple): position calculated by the progress and the note's side
     """
-    
-    side        = note_target.prop["side"]
-    criteria    = criterias[side]
+
+    side = note_target.prop["side"]
+    criteria = criterias[side]
     lock_effect = criteria[0]
     lock_effect_offset_x, lock_effect_offset_y = lock_effect.note_prop["offset_pos"]
     lock_effect_size_x, lock_effect_size_y = lock_effect.note_prop["size"]
     center_x, center_y = lock_effect_offset_x + lock_effect_size_x / 2, \
-                            lock_effect_offset_y + lock_effect_size_y / 2
-                            
-    
+        lock_effect_offset_y + lock_effect_size_y / 2
+
     note_offset_x, note_offset_y = criteria[1]
     note_offset_x = center_x - note_offset_x
     note_offset_y = center_y - note_offset_y
-    
+
     # From math stackexchange: https://math.stackexchange.com/a/1269705
     progress_position = ((1 - progress) * note_offset_x + progress * center_x,
-                        (1 - progress) * note_offset_y + progress * center_y)
-    
+                         (1 - progress) * note_offset_y + progress * center_y)
+
     return progress_position
-    
+
+
 def get_color(note_target):
     """
     get_color Returns the color of the note
@@ -107,4 +109,3 @@ def get_color(note_target):
     """
 
     return criterias[note_target.prop["side"]][2]
-    

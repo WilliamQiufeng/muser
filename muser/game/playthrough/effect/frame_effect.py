@@ -27,18 +27,18 @@
 '''
 
 
-import pyxel, time, util
-from game.playthrough.effect.base_effect import *
-from game.constants import Constants
-from sheet.gen.abs_output import *
+import pyxel
+import util
+from game.playthrough.effect.base_effect import Effect
+from sheet.gen.abs_output import StartFrame
 
 
 class FrameEffect(Effect):
     def __init__(self, frame_note: StartFrame):
         super().__init__(identity=frame_note.identity)
-        self.frame_note          = frame_note
-        self.note_prop           = self.frame_note.prop
-        self._frame              = self.note_prop["frame"]
+        self.frame_note = frame_note
+        self.note_prop = self.frame_note.prop
+        self._frame = self.note_prop["frame"]
         self.size_x, self.size_y = self.note_prop["size"]
         # Try to optimise
         self.frame = [
@@ -48,6 +48,7 @@ class FrameEffect(Effect):
             for pix in [self._frame[y][x]]
             if pix != -1
         ]
+
     def update(self, args, kwargs):
         pass
 
@@ -55,8 +56,9 @@ class FrameEffect(Effect):
     def draw(self, args, kwargs):
         offset_pos_x, offset_pos_y = self.note_prop["offset_pos"]
         # If the frame is outside of the screen then don't draw
-        if offset_pos_x > 256 or offset_pos_y > 256 or \
-            offset_pos_x < (0 - self.size_x) or offset_pos_y < (0 - self.size_y):
-                return None
+        if offset_pos_x > 256 or offset_pos_y > 256 or offset_pos_x < (
+                0 - self.size_x) or offset_pos_y < (
+                0 - self.size_y):
+            return None
         for x, y, pix in self.frame:
             pyxel.pset(offset_pos_x + x, offset_pos_y + y, pix)

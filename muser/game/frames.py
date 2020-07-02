@@ -1,7 +1,6 @@
-import pyxel
-import math
-from game.config import *
-from game.frame import *
+import game_config
+from game.frame import Frame, BitmapFrame
+
 
 class Frames:
     class Init:
@@ -9,10 +8,12 @@ class Frames:
         FILE = Frame(16, 216, 16, 16)
         BACK = Frame(32, 216, 16, 16)
         ENTER = Frame(48, 216, 16, 16)
+
     class Intro:
         EMPTY = [Frame(80, 136, 79, 16)]
         TITLE_PRE = EMPTY * 20
-        TITLE_FADEIN = [Frame(0, 136 + 16 * x, 79, 16) for x in range(0, 5) for _ in range(int(game_config.GLOB_CONFIG.config["fps"] / 15))]
+        TITLE_FADEIN = [Frame(0, 136 + 16 * x, 79, 16) for x in range(0, 5)
+                        for _ in range(int(game_config.GLOB_CONFIG.config["fps"] / 15))]
         TITLE_STAY = [Frame(0, 200, 79, 16)] * \
             int(game_config.GLOB_CONFIG.config["fps"] * 2)
         TITLE_FADEOUT = TITLE_FADEIN[::-1]
@@ -24,18 +25,21 @@ class Frames:
         AUTHOR_FADEOUT = AUTHOR_FADEIN[::-1] + EMPTY
         AUTHOR = AUTHOR_FADEIN + AUTHOR_STAY + AUTHOR_FADEOUT
         WHOLE = TITLE + AUTHOR
+
     class LevelSelection:
-        LEFT_UNPRESSED  = Frame(16, 24, 16, 16)
-        LEFT_PRESSED    = Frame(48, 24, 16, 16)
+        LEFT_UNPRESSED = Frame(16, 24, 16, 16)
+        LEFT_PRESSED = Frame(48, 24, 16, 16)
         RIGHT_UNPRESSED = Frame(32, 24, 16, 16)
-        RIGHT_PRESSED   = Frame(64, 24, 16, 16)
-        UP_UNPRESSED, DOWN_UNPRESSED, UP_PRESSED, DOWN_PRESSED = (Frame(80 + 16 * x, 24, 16, 16) for x in range(4))
+        RIGHT_PRESSED = Frame(64, 24, 16, 16)
+        UP_UNPRESSED, DOWN_UNPRESSED, UP_PRESSED, DOWN_PRESSED = (
+            Frame(80 + 16 * x, 24, 16, 16) for x in range(4))
         PLAY_UNPRESSED = Frame(0, 64, 16, 16)
-        PLAY_PRESSED   = Frame(16, 64, 16, 16)
+        PLAY_PRESSED = Frame(16, 64, 16, 16)
+
     class PlayThrough:
         # DIRECTIONS = [Frame(1 + x * 8, 5, 6, 6) for x in range(4)]
         # DIRECTIONS = [ArrowFrame(x) for x in range(12)]
-        DIRECTIONS =  [
+        DIRECTIONS = [
             BitmapFrame.from_pyxel((x * 8 + 1, y * 8 + 1), (6, 6))
             for y in range(2)
             for x in range(6)
@@ -139,9 +143,10 @@ class Frames:
                 'O': 8
             }).scaleUp(*INDICATOR_SCALE)
         ]
+
     class Result:
         S, A, B, C, D, F = (Frame(x * 16, 112, 16, 16) for x in range(6))
-        
+
         @staticmethod
         def GRADES():
             return [
@@ -152,4 +157,3 @@ class Frames:
                 Frames.Result.D,
                 Frames.Result.F
             ]
-

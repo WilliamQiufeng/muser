@@ -105,12 +105,12 @@ if install_default_sheets:
         print(f"Using link: {link}")
         r = requests.get(link, stream=True)
         path = ".muser_sheets.zip"
-        print("Downloading", link, "to", path)
+        print("Downloading " + link + " to " + path)
         with open(path, 'wb') as f:
             #giving a name and saving it in any required format
             #opening the file in write mode
             size = int(r.headers['content-length'])
-            print("File size:", util.humanbytes(size))
+            print("File size: " + util.humanbytes(size))
             written = 0
             last_percentage: int = 0
             sys.stdout.write("|" + ' ' * 100 + "| 0%       0.0 B")
@@ -132,7 +132,7 @@ if install_default_sheets:
                     sys.stdout.flush()
             print("Sheets downloaded.")
     path = os.path.abspath(path)
-    print("Extracting", path, "to '.muser_sheets'...")
+    print("Extracting "+ path + " to '.muser_sheets'...")
     util.unzip_files(path, ".muser_sheets")
     print("Extracted.")
     
@@ -164,7 +164,7 @@ if install_default_sheets:
                 else:
                     shutil.rmtree(target_dir)
         os.symlink(sheet_install_path, target_dir, True)
-    print("Linked", sheet_install_path, "->", target_dir)
+    print("Linked " + sheet_install_path + " -> " + target_dir)
 
     print("Generating sheets...")
     import meta2sheet

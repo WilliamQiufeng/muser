@@ -27,10 +27,13 @@
 '''
 
 
+import sheet.sheet_constants as sc
 
-from .sheet_constants import *
+
 class Note:
-    def __init__(self, type = NoteType.NOTE, length = 0, action = NoteAction.IN, speed = NoteSpeed.MEDIUM, tempo = 120):
+    def __init__(
+            self, type=sc.NoteType.NOTE, length=0, action=sc.NoteAction.IN,
+            speed=sc.NoteSpeed.MEDIUM, tempo=120):
         self.type = type
         self.length = length
         self.action = action

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
+# flake8: noqa: E501
 '''
 *------------------------------------------------------------------------------*
 # File: /Users/Shared/williamye/program/pyxel_projects/muser/muser/frame2image.py #
@@ -32,6 +33,7 @@ import pyxel
 from game.frames import BitmapFrame
 import json
 import png
+import logger
 
 
 def int2rgb(n):
@@ -40,18 +42,20 @@ def int2rgb(n):
     r = int(((n-b)/256**2) - g/256)  # ditto
     return (r, g, b)
 
+
 pyxel.init(1, 1)
 
-frame_file  = io.open(input("Input frame file: "))
-frame_data  = json.loads(frame_file.read())
-frame_image = frame_data["frame"]
-size        = frame_data["size"]
-print("Data loaded.")
 
-substitution      = frame_data["substitution"]
+frame_file = io.open(input("Input frame file: "))
+frame_data = json.loads(frame_file.read())
+frame_image = frame_data["frame"]
+size = frame_data["size"]
+logger.print("Data loaded.")
+
+substitution = frame_data["substitution"]
 
 output_image_path = input("Output image path: ")
-output_image      = io.open(output_image_path, "wb")
+output_image = io.open(output_image_path, "wb")
 
 writer = png.Writer(*size, greyscale=False)
 writer.write(output_image, (
@@ -63,4 +67,4 @@ writer.write(output_image, (
 ))
 output_image.close()
 
-print("Done")
+logger.print("Done")

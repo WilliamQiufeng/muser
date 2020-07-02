@@ -27,50 +27,57 @@
 '''
 
 
-from sheet.reader.sheet_reader import *
-from sheet.gen.midi_converter import *
-from game_config import *
-import io, json, os
+from sheet.gen.midi_converter import MidiToAbsSheet
+from game_config import GLOB_CONFIG
+import io
+import json
+import os
+
 
 class MetaInput:
     @staticmethod
     def from_file(file_name):
         file = io.open(file_name, "r")
         return MetaInput(json.loads(file.read()))
+
     def __init__(self, meta):
         self.meta = meta
+
     def proc(self):
-        sheets     = []
-        root: str  = self.meta["root"].replace("$asset_path", GLOB_CONFIG.assets.getSheets())
+        sheets = []
+        root: str = self.meta["root"].replace(
+            "$asset_path", GLOB_CONFIG.assets.getSheets())
         # print(root)
-        name       = self.meta["name"]
+        name = self.meta["name"]
         abs_output = os.path.join(root, self.meta["output"])
         for sheet in self.meta["sheets"]:
             # print(sheet)
-            abs_midi         = os.path.join(root, sheet["midi"])
-            abs_music        = os.path.join(root, sheet["music"])
+            abs_midi = os.path.join(root, sheet["midi"])
+            abs_music = os.path.join(root, sheet["music"])
             # print(abs_music)
-            tempo_index      = sheet["tempo_index"]
-            indexes          = sheet["indexes"]
-            effect_pool      = sheet["effect_pool"] if "effect_pool" in sheet.keys() else []
-            effects          = sheet["effects"] if "effects" in sheet.keys() else []
-            music_offset     = sheet["music_offset"] if "music_offset" in sheet.keys() else 2000
+            tempo_index = sheet["tempo_index"]
+            indexes = sheet["indexes"]
+            effect_pool = sheet["effect_pool"] if "effect_pool" in sheet.keys() else [
+            ]
+            effects = sheet["effects"] if "effects" in sheet.keys() else []
+            music_offset = sheet["music_offset"] if "music_offset" in sheet.keys(
+            ) else 2000
             operational_note = sheet["operational_note"] if "operational_note" in sheet.keys(
-                                ) else False
-            mtas             = MidiToAbsSheet(
-                                    abs_midi, tempo_index, indexes, music_offset, False, operational_note)
+            ) else False
+            mtas = MidiToAbsSheet(
+                abs_midi, tempo_index, indexes, music_offset, False,
+                operational_note)
             abs_sheet = mtas.to_abs_sheet({
-                "author"       : sheet["author"],
-                "music_author" : sheet["music_author"],
-                "version"      : sheet["version"],
-                "name"         : name,
-                "music"        : abs_music,
-                "level"        : sheet["level"],
-                "effect_pool"  : effect_pool,
-                "effects"      : effects,
-                "music_offset" : music_offset
+                "author": sheet["author"],
+                "music_author": sheet["music_author"],
+                "version": sheet["version"],
+                "name": name,
+                "music": abs_music,
+                "level": sheet["level"],
+                "effect_pool": effect_pool,
+                "effects": effects,
+                "music_offset": music_offset
             })
-            #print(abs_sheet)
+            # print(abs_sheet)
             sheets.append(abs_sheet)
         io.open(abs_output, "w").write(json.dumps(sheets))
-        

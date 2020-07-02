@@ -1,38 +1,44 @@
-import copy
 import time
-# import pygame
-from sheet.reader.sheet_reader import *
-from game.playthrough.manager_actions import *
-from game.constants import *
+import pyxel
+from game.config import Config
+from sheet.reader.sheet_reader import SheetReader
+from game.playthrough.manager_actions import ManagerActions
+from game.constants import Constants
 from game.frames import Frames
-from game.playthrough.effect.effect_controller import *
+from game.playthrough.effect.effect_controller import EffectController
+from game.playthrough.note import PositionedNote
 import game.playthrough.criteria_manager as criteria_manager
 import util as util
 from pyglet import media
-
+import logger
 
 
 class Counter:
     def __init__(self):
-        self.misses   = 0
-        self.bads     = 0
-        self.greats   = 0
+        self.misses = 0
+        self.bads = 0
+        self.greats = 0
         self.perfects = 0
+
     def get_prop(self):
         return {
-            "Perfects" : self.perfects,
-            "Greats"   : self.greats,
-            "Bads"     : self.bads,
-            "Misses"   : self.misses
+            "Perfects": self.perfects,
+            "Greats": self.greats,
+            "Bads": self.bads,
+            "Misses": self.misses
         }
+
     def get_total_notes(self):
         return self.misses + self.bads + self.greats + self.perfects
+
     def get_tp(self):
-        total_notes  = self.get_total_notes()
+        total_notes = self.get_total_notes()
         weight_count = self.misses * 0 + self.bads * 1 + self.greats * 2 + self.perfects * 3
-        avg_weight   = weight_count / total_notes
-        tp           = avg_weight / 0.03
+        avg_weight = weight_count / total_notes
+        tp = avg_weight / 0.03
         return tp
+
+
 class NoteManager:
     # TODO: make the tp be shown while playing
     # @staticmethod
@@ -50,79 +56,77 @@ class NoteManager:
     #         elif note.result == Constants.PlayThrough.NoteIndicator.MISS:
     #             counter.misses += 1
     #     return counter
-    def __init__(self, sheet: SheetReader, side_distances : list, music_source : str):
-        self.meta: dict             = sheet.data
-        # print(self.meta)
-        self.notes: list            = [ManagerActions.from_note(x) for x in sheet.notes]
-        # print("\n".join([str(x) for x in self.notes]))
-        self.side_distances        : list         = side_distances
-        self.music_source          : str          = music_source
-        self.music                 : media.Source = media.load(self.music_source)
-        self.music_len             : float        = self.music.duration
-        self.music_started         : bool         = False
-        self.started               : bool         = False
-        self.initiate              : bool         = True
-        self.finished              : bool         = False
-        self.paused                : bool         = False
-        self.score                 : int          = 0
-        self.combo                 : int          = 0
-        self.draw_default_criteria : bool         = True
-        
-        self.counter: Counter         = Counter()
+    def __init__(self, sheet: SheetReader, side_distances: list, music_source: str):
+        self.meta: dict = sheet.data
+        # logger.print(self.meta)
+        self.notes: list = [ManagerActions.from_note(x) for x in sheet.notes]
+        # logger.print("\n".join([str(x) for x in self.notes]))
+        self.side_distances: list = side_distances
+        self.music_source: str = music_source
+        self.music: media.Source = media.load(self.music_source)
+        self.music_len: float = self.music.duration
+        self.music_started: bool = False
+        self.started: bool = False
+        self.initiate: bool = True
+        self.finished: bool = False
+        self.paused: bool = False
+        self.score: int = 0
+        self.combo: int = 0
+        self.draw_default_criteria: bool = True
+
+        self.counter: Counter = Counter()
         self.last_indicated_frame_pos = util.grid(
             Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
             16, 16,
             1, 1
         )
-        self.score_pos                = util.grid(
+        self.score_pos = util.grid(
             Constants.Cast.WIDTH, Constants.Cast.HEIGHT,
             16, 16,
             12, 1
         )
-        self.indicator_circle_pos     = Constants.Cast.center(
+        self.indicator_circle_pos = Constants.Cast.center(
             Frames.PlayThrough.INDICATOR_CIRCLE.width, Frames.PlayThrough.INDICATOR_CIRCLE.height)
         self.perfect_note_score = Constants.PlayThrough.Score.TOTAL_SCORE / (len(self.notes) * Constants.PlayThrough.NoteIndicator.INDICATORS().index(Constants.PlayThrough.NoteIndicator.PERFECT))
+
     def prepare(self):
         pass
+
     def start(self):
         self.initiate = True
-    
+
     def pause(self):
         """
         pauses the music and the sheet
 
         Bug exists
-        """        
+        """
         if not self.paused:
             pass
             # pygame.mixer.music.pause()
             # self.last_pause_time = time.time()
-            # print(
+            # logger.print(
             #     f"Game paused. Total Time: {self.total_time},  Start Time: {self.start_time}")
         else:
             pass
             # pygame.mixer.music.unpause()
             # self.start_time += time.time() - self.last_pause_time
-            # print(
+            # logger.print(
             #     f"Game continued. Total Time: {self.total_time}, Start Time: {self.start_time}")
         self.paused = not self.paused
-    def update_time(self) -> float:
-        cur_time = time.time()
+
+    def update_time(self) -> None:
         if self.music_started:
             self.total_time = (
                 self.meta["music_offset"] / 1000 + Config.PLAYER.time)
-            cur_time = self.total_time
         else:
-            self.total_time = cur_time - self.start_time
+            self.total_time = time.time() - self.start_time
         if (not self.music_started) and self.total_time * 1000 >= self.meta["music_offset"]:
-            print(self.total_time)
             Config.release_player()
             Config.PLAYER = self.music.play()
             Config.PLAYER.loop = False
             self.music_started = True
-            cur_time = (self.meta["music_offset"] / 1000 +
-                        Config.PLAYER.time) 
-        return cur_time
+
     @util.timeit(without=(-1, 30))
     # @numba.jit()
     def update(self):
@@ -135,19 +139,19 @@ class NoteManager:
             self.started = True
             self.finished = False
             self.last_indicator = Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
-        cur_time: float = self.update_time()
+        self.update_time()
         EffectController.update(total_time=self.total_time * 1000)
-        
+
         # Test if the default criteria should be drawn
-        
+
         self.draw_default_criteria = False
         for crit in criteria_manager.criterias:
             if crit is not None and crit[0] == criteria_manager.CenterNote:
                 self.draw_default_criteria = True
                 break
-        
+
         if self.music_started and Config.PLAYER.time >= self.music_len:
-            print("Finished")
+            logger.print("Finished")
             self.finished = True
             EffectController.clear_effects()
             return None
@@ -181,27 +185,28 @@ class NoteManager:
         self.last_indicated_frame = Constants.PlayThrough.NoteIndicator.getFrame(
             self.last_indicator)
     # @util.timeit(within=(40, -1))
+
     @util.timeit(without=(-1, 30))
     def draw(self):
         # Draw effects first
         EffectController.draw(total_time=self.total_time)
-        
+
         # Draw criteria if default
         if self.draw_default_criteria:
             Frames.PlayThrough.INDICATOR_CIRCLE.draw(*Constants.Cast.center(32, 32))
-        
+
         # Draw score
         pyxel.text(*self.score_pos, f"Score: {int(self.score)}", 12)
-        
+
         pyxel.text(128, 8, f"{self.combo}", 12)
-        
+
         # Draw last indicator result
         self.last_indicated_frame.draw(*self.last_indicated_frame_pos)
-        
+
         # Draw notes
         for note in self.notes:
             note.draw()
-            
+
         # Draw progress
         if self.music_started:
             progess: int = int((Config.PLAYER.time / self.music_len) * Constants.Cast.WIDTH)

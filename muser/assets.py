@@ -27,15 +27,20 @@
 '''
 
 import os
+import logger
+
 
 class Assets:
     def __init__(self, path: str, separator: str = "/"):
         self.root = path
         self.separator = separator
-        print("Asset root: ", self.root)
+        logger.print("Asset root: " + self.root)
+
     def get(self, path: str) -> str:
         return os.path.join(self.root, path)
+
     def getSheets(self) -> str:
         return os.path.join(self.root, "sheets")
+
     def getSheet(self, path: str) -> str:
         return os.path.join(self.root, "sheets", path)

@@ -30,30 +30,32 @@
 import png
 import pyxel
 import io
-from itertools import chain
+import logger
 
 
 res_path = input(
     "Path to resource[/Users/Shared/williamye/program/pyxel_projects/muser/muser/assets/buf.pyxres]: ")
 if res_path.isspace() or len(res_path) == 0:
     res_path = "/Users/Shared/williamye/program/pyxel_projects/muser/muser/assets/buf.pyxres"
-print(res_path)
+logger.print(res_path)
+
 
 def int2rgb(n):
     b = n % 256
-    g = int(((n-b)/256) % 256)      # always an integer
-    r = int(((n-b)/256**2) - g/256)  # ditto
+    g = int(((n - b) / 256) % 256)      # always an integer
+    r = int(((n - b) / 256 ** 2) - g / 256)  # ditto
     return (r, g, b)
 
+
 pyxel.init(1, 1)
-print("Pyxel initialised")
+logger.print("Pyxel initialised")
 pyxel.load(res_path)
 
-print("Res loaded")
+logger.print("Res loaded")
 
 image_index = int(input("Image Index: "))
-offset_pos  = (int(input("Offset X: ")), int(input("Offset Y: ")))
-size        = (int(input("Size X: ")), int(input("Size Y: ")))
+offset_pos = (int(input("Offset X: ")), int(input("Offset Y: ")))
+size = (int(input("Size X: ")), int(input("Size Y: ")))
 
 
 out_path = input("Output Image Path: ")
@@ -70,4 +72,4 @@ writer.write(out, (
 ))
 out.close()
 
-print("Done")
+logger.print("Done")

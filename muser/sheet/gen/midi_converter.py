@@ -28,16 +28,15 @@
 '''
 
 
-import sys
-import json
 import mido
 import math
 from mido import MidiFile
-import io
-from sheet.gen.abs_output import *
-from sheet.gen.effector import *
+from sheet.gen.abs_output import AbsNote
+from sheet.gen.effector import add_effects
 import time
-from .rel_input import *
+from .rel_input import SourceSheetInput
+import sheet.sheet_constants as sc
+import logger
 
 # out = io.open("/williamye/program/pyxel_projects/muser/test/out.txt", "w")
 # debug = io.open("/williamye/program/pyxel_projects/muser/test/debug.txt", "w")
@@ -46,12 +45,13 @@ INDEX_OFFSET = 0
 INDEX_LENGTH = 1
 INDEX_NOTE = 2
 
+
 def midifile_to_dict(mid, tempo_index: int, indexes: list, music_offset: int):
     tracks = []
     for track in mid.tracks:
         tracks.append([vars(msg).copy() for msg in track])
-    res            = {}
-    tempo_changes  = []
+    res = {}
+    tempo_changes = []
     tempo_tick_buf = 0
     for x in tracks[tempo_index]:
         tempo_tick_buf += x["time"]
@@ -59,12 +59,12 @@ def midifile_to_dict(mid, tempo_index: int, indexes: list, music_offset: int):
             tempo_changes.append((tempo_tick_buf, x["tempo"]))
     res[tempo_index] = tempo_changes
     for index in indexes:
-        tick               = 0
-        tick_sec           = 0
+        tick = 0
+        tick_sec = 0
         tempo_change_index = -1
-        cur_tempo          = 500000
-        track_res_array    = []
-        note_on_buffer     = {}
+        cur_tempo = 500000
+        track_res_array = []
+        note_on_buffer = {}
         for x in tracks[index]:
             # debug.write("------------------------------------------------\n")
             # debug.write(f"{x}\n")
@@ -75,18 +75,21 @@ def midifile_to_dict(mid, tempo_index: int, indexes: list, music_offset: int):
                 if tick >= tempo_changes[tempo_change_index + 1][0]:
                     tempo_change_index += 1
                     cur_tempo = tempo_changes[tempo_change_index][1]
-                    tempo_change_interval_tick = tick - tempo_changes[tempo_change_index][0]
+                    tempo_change_interval_tick = tick - \
+                        tempo_changes[tempo_change_index][0]
                     # debug.write(f"Changed tempo from {before_tempo} to {cur_tempo}\n")
                     # debug.write(f"  Tempo Change Tick: {tempo_change_interval_tick}\n")
                 else:
                     break
             if "time" in x.keys():
-                note_change_interval_tick =  x["time"] - tempo_change_interval_tick
-                tempo_change_interval_sec =  mido.tick2second(tempo_change_interval_tick, mid.ticks_per_beat, before_tempo)
-                note_change_interval_sec  =  mido.tick2second(note_change_interval_tick, mid.ticks_per_beat, cur_tempo)
-                total_interval_sec        =  tempo_change_interval_sec + note_change_interval_sec
-                tick_sec                  += total_interval_sec
-                tick                      += x["time"]
+                note_change_interval_tick = x["time"] - tempo_change_interval_tick
+                tempo_change_interval_sec = mido.tick2second(
+                    tempo_change_interval_tick, mid.ticks_per_beat, before_tempo)
+                note_change_interval_sec = mido.tick2second(
+                    note_change_interval_tick, mid.ticks_per_beat, cur_tempo)
+                total_interval_sec = tempo_change_interval_sec + note_change_interval_sec
+                tick_sec += total_interval_sec
+                tick += x["time"]
                 # debug.write(f"Time Change:               {x['time']}\n")
                 # debug.write(f"Note Change Interval Tick: {note_change_interval_tick}\n")
                 # debug.write(f"Tempo Change Interval Tick:{tempo_change_interval_tick}\n")
@@ -102,22 +105,24 @@ def midifile_to_dict(mid, tempo_index: int, indexes: list, music_offset: int):
                 note_on_buffer[x["note"]].append(tick_sec)
             elif x["type"] == "note_off":
                 note_array: list = note_on_buffer[x["note"]]
-                offset: float    = note_array[len(note_array) - 1]
-                length_sec       = tick_sec - offset
+                offset: float = note_array[len(note_array) - 1]
+                length_sec = tick_sec - offset
                 track_res_array.append((offset, length_sec, x["note"]))
             # debug.write("------------------------------------------------\n")
         res[index] = track_res_array
     return res
 
 
-def to_json(file, tempo_index = 0, indexes = [1], music_offset: int = 0, simulate = False, operational_note = False):
+def to_json(
+        file, tempo_index=0, indexes=[1],
+        music_offset: int = 0, simulate=False, operational_note=False):
     mid = mido.MidiFile(file)
     res: dict = midifile_to_dict(mid, tempo_index, indexes, music_offset)
     # out.write(json.dumps(res, indent=4))
-    face_dict    = {}
+    face_dict = {}
     face_gen_ind = 0
-    abs_notes    = []
-    #print(json.dumps(res, indent=2))
+    abs_notes = []
+    # logger.print(json.dumps(res, indent=2))
     for ind in indexes:
         x = res[ind]
         for tmp in x:
@@ -127,35 +132,38 @@ def to_json(file, tempo_index = 0, indexes = [1], music_offset: int = 0, simulat
                 face_gen_ind += 1
                 if face_gen_ind > 3:
                     face_gen_ind = 0
-                    
-            # For operational note: 
+
+            # For operational note:
             # The notes range between Octave 4 to 6, speed slow to fast
             # The Note number indicates the side
-            
+
             note_number = tmp[INDEX_NOTE]
-            face        = (note_number - 48) % 12 if operational_note else face_dict[tmp[INDEX_NOTE]]
-            pass_time   = NoteSpeed.SPEEDS[math.floor((note_number - 48) / 12)] if operational_note else 2000
-            
+            face = (
+                note_number - 48) % 12 if operational_note else face_dict[tmp[INDEX_NOTE]]
+            pass_time = sc.NoteSpeed.SPEEDS[math.floor(
+                (note_number - 48) / 12)] if operational_note else 2000
+
             abs_notes.append(
                 AbsNote({
-                    "offset"       : int(tmp[INDEX_OFFSET] * 1000 + music_offset - pass_time),
-                    "beat"         : 0,                                                   # tmp["length"],
-                    "pass_time"    : pass_time,
-                    "side"         : face,
-                    "absolutified" : True}
+                    "offset": int(tmp[INDEX_OFFSET] * 1000 + music_offset - pass_time),
+                    # tmp["length"],
+                    "beat": 0,
+                    "pass_time": pass_time,
+                    "side": face,
+                    "absolutified": True}
                 )
             )
     abs_notes.sort(key=lambda t: t.offset)
     if simulate:
-        #NEWLINE = "\n"
-        #print(NEWLINE.join([str(x) for x in abs_notes]))
-        print("Start simulating...")
+        # NEWLINE = "\n"
+        # logger.print(NEWLINE.join([str(x) for x in abs_notes]))
+        logger.print("Start simulating...")
         for x in range(len(abs_notes)):
-            print(abs_notes[x])
+            logger.print(abs_notes[x])
             if x < len(abs_notes) - 1:
-                time.sleep((abs_notes[x + 1].offset - abs_notes[x].offset) / 1000)
+                time.sleep(
+                    (abs_notes[x + 1].offset - abs_notes[x].offset) / 1000)
     return abs_notes
-
 
 
 def print_json(file):
@@ -163,20 +171,27 @@ def print_json(file):
     midi_file = MidiFile(file)
 
     for i, track in enumerate(midi_file.tracks):
-        print('=== Track {}'.format(i))
+        logger.print('=== Track {}'.format(i))
         for message in track:
-            print('  {!r}'.format(message))
+            logger.print('  {!r}'.format(message))
+
 
 class MidiToAbsSheet:
-    def __init__(self, filename, tempo_index = 0, indexes = [1], music_offset = 0, simulate = False, operational_note = False):
-        self.abs_notes = to_json(filename, tempo_index, indexes, music_offset, simulate, operational_note)
-    def to_abs_sheet(self, meta = {}):
-        effects                 = meta["effects"] if "effects" in meta.keys() else []
-        effect_pool             = meta["effect_pool"] if "effect_pool" in meta.keys() else []
-        self.abs_notes          = add_effects(self.abs_notes, effect_pool, effects)
-        self.sheet              = SourceSheetInput()
-        self.sheet.preprocess   = meta
+    def __init__(
+            self, filename, tempo_index=0, indexes=[1],
+            music_offset=0, simulate=False, operational_note=False):
+        self.abs_notes = to_json(
+            filename, tempo_index, indexes, music_offset, simulate,
+            operational_note)
+
+    def to_abs_sheet(self, meta={}):
+        effects = meta["effects"] if "effects" in meta.keys() else []
+        effect_pool = meta["effect_pool"] if "effect_pool" in meta.keys() else [
+        ]
+        self.abs_notes = add_effects(self.abs_notes, effect_pool, effects)
+        self.sheet = SourceSheetInput()
+        self.sheet.preprocess = meta
         self.sheet.process()
-        self.sheet.abs_notes    = self.abs_notes
+        self.sheet.abs_notes = self.abs_notes
         self.sheet.music_offset = meta["music_offset"]
         return self.sheet.to_abs()
