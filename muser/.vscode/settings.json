@@ -3,6 +3,7 @@
         "python": "python3",
         "shellscript": "bash"
     },
-    "code-runner.customCommand": "",
-    "code-runner.cwd": "/Users/Shared/williamye/program/pyxel_projects/muser/muser"
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true
 }
