@@ -44,7 +44,7 @@ def find(name, path):
 class GameConfig:
     def __init__(self):
         self.config_path = find("muser_config.json", ".")
-        logger.print("Config path:" + self.config_path)
+        logger.print("Config path:" + str(self.config_path))
         success: bool = True
         if self.config_path is not None:
             try:
