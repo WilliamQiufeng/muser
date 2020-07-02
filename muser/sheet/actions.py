@@ -26,13 +26,13 @@
 *------------------------------------------------------------------------------*
 '''
 
-from sheet.gen.abs_output import *
-from sheet.sheet_constants import *
+import sheet.gen.abs_output as abs_output
+
 
 class Actions:
     @staticmethod
     def fromArgs(args):
-        return eval(args["type"])(args)
+        return getattr(abs_output, args["type"])(args)
         # note_type = int(args[0])
         # if note_type == NoteType.NOTE:
         #     return AbsNote(*[float(x) for x in args[1:]], absolutified=True)
