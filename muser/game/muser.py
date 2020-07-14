@@ -7,6 +7,8 @@ from pyglet import clock
 
 class Muser:
     def __init__(self):
+        from game.casts import Casts
+        Config.CAST = Casts.Intro()
         pyxel.run(self.update, self.draw)
 
     def update(self):

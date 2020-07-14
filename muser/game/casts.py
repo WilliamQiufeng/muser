@@ -495,6 +495,3 @@ class Casts:
 
         def next_cast(self):
             return Casts.LevelSelection()
-
-
-Config.CAST = Casts.Intro()

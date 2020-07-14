@@ -1,8 +1,8 @@
-from game import muser
 import pyxel
 import os
 import game_config as game_config
 import logger
+import game.muser as muser
 
 pyxel.init(256, 256,
            caption="Muser",
