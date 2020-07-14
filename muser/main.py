@@ -1,3 +1,4 @@
+from game import muser
 import pyxel
 import os
 import game_config as game_config
@@ -13,4 +14,4 @@ res_path = os.path.join(
     game_config.GLOB_CONFIG.assets.root, "resources.pyxres")
 pyxel.load(res_path)
 logger.print(f"Res loaded: {os.path.abspath(res_path)}")
-from game import muser  # noqa: E402, F401
+muser.Muser()  # Start the update and draw loop

@@ -28,8 +28,3 @@ class Muser:
     def draw(self):
         Config.CAST.clear_screen()
         Config.CAST.draw()
-
-
-Muser()
-
-logger.print("Finished")
