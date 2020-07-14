@@ -19,9 +19,6 @@ class Muser:
                     "Scene " + type(Config.CAST).__name__ + " in.")
             clock.tick()
             Config.CAST.update()
-            # if pyxel.btn(pyxel.KEY_E):
-            #     self.quit = True
-            #     logger.print("Quit")
         except BaseException as e:
             logger.print(e)
             traceback.print_exc()
