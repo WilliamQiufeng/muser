@@ -216,31 +216,13 @@ class Casts:
             return Casts.Settings() if self.goto_settings else Casts.PlayThrough(self.sheet[self.level_selection], self.music_source)
 
     class PlayThrough(Cast):
-        UPDATES = [
-            KeyListener(
-                game_config.GLOB_CONFIG.controls["up_arrow"],
-                on_touch=lambda: Casts.PlayThrough.touch(0)),
-            KeyListener(
-                game_config.GLOB_CONFIG.controls["down_arrow"],
-                on_touch=lambda: Casts.PlayThrough.touch(1)),
-            KeyListener(
-                game_config.GLOB_CONFIG.controls["left_arrow"],
-                on_touch=lambda: Casts.PlayThrough.touch(2)),
-            KeyListener(
-                game_config.GLOB_CONFIG.controls["right_arrow"],
-                on_touch=lambda: Casts.PlayThrough.touch(3)),
-            KeyListener(
-                game_config.GLOB_CONFIG.controls["up_arrow2"],
-                on_touch=lambda: Casts.PlayThrough.touch(4)),
-            KeyListener(
-                game_config.GLOB_CONFIG.controls["down_arrow2"],
-                on_touch=lambda: Casts.PlayThrough.touch(5)),
-            KeyListener(
-                game_config.GLOB_CONFIG.controls["left_arrow2"],
-                on_touch=lambda: Casts.PlayThrough.touch(6)),
-            KeyListener(
-                game_config.GLOB_CONFIG.controls["right_arrow2"],
-                on_touch=lambda: Casts.PlayThrough.touch(7))]
+        UPDATES = []
+        controls = game_config.GLOB_CONFIG.controls
+        keys = list(controls.keys())
+        for n in range(len(keys) - 2):
+            lamb = lambda n=n: Casts.PlayThrough.touch(n)
+            UPDATES.append(KeyListener(controls[keys[n]], on_touch=lamb))
+
 
         @staticmethod
         def touch(side: int):
