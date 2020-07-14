@@ -17,6 +17,10 @@
 		"editor.fontFamily": "'Cascadia Code', Consolas, 'Courier New', monospace",
 		"python.linting.flake8Args": [
 			"--ignore=E501,E265"
-		]
+		],
+		"python.testing.pytestArgs": [
+			"--capture=tee-sys"
+		],
+		"python.testing.pytestEnabled": true
 	}
 }
