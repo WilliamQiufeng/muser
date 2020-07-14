@@ -49,7 +49,9 @@ class BitmapFrame(Frame):
         self.optimize()
 
     @staticmethod
-    def frameScaleUp(image: list, width: int = 16, height: int = 16, scale_x: int = 1, scale_y: int = 1):
+    def frameScaleUp(
+            image: list, width: int = 16, height: int = 16, scale_x: int = 1,
+            scale_y: int = 1):
         new_size = (width * scale_x, height * scale_y)
         new_image = [[' '] * new_size[0] for _ in range(new_size[1])]
         # y_o and x_o: y and x offsets
@@ -97,9 +99,14 @@ class BitmapFrame(Frame):
         #         col = self.substitution[self.image[y_o][x_o]]
         #         if col != -1:
         #             pyxel.pset(x + x_o, y + y_o, col)
-        for x_o, y_o, pix in self._optimized:
-            pyxel.pset(x + x_o, y + y_o,
-                       subs[pix] if pix in subs.keys() else pix)
+        if len(subs.keys()) == 0:
+            for x_o, y_o, pix in self._optimized:
+                pyxel.pset(x + x_o, y + y_o,
+                           pix)
+        else:
+            for x_o, y_o, pix in self._optimized:
+                pyxel.pset(x + x_o, y + y_o,
+                           subs[pix] if pix in subs.keys() else pix)
 
     @staticmethod
     def from_pyxel(pos, size, *, remove_color=0, image_index=0, scale=(1, 1)):
