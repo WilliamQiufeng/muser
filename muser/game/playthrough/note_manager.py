@@ -22,10 +22,10 @@ class Counter:
 
     def get_prop(self):
         return {
-            "Perfects": self.perfects,
-            "Greats": self.greats,
-            "Bads": self.bads,
-            "Misses": self.misses
+            "Perfect": self.perfects,
+            "Great": self.greats,
+            "Bad": self.bads,
+            "Miss": self.misses
         }
 
     def get_total_notes(self):
@@ -37,6 +37,19 @@ class Counter:
         avg_weight = weight_count / total_notes
         tp = avg_weight / 0.03
         return tp
+
+    def get_avg_acc(self):
+        total_notes = self.get_total_notes()
+        weight_count = self.misses * Constants.TOLERANCE[0] + self.bads * Constants.TOLERANCE[1] + self.greats * Constants.TOLERANCE[2] + self.perfects * Constants.TOLERANCE[3]
+        avg_weight = weight_count / total_notes
+        return avg_weight
+
+    def get_avg_dev(self):
+        count_list = [self.misses, self.bads, self.greats, self.perfects]
+        tp: float = self.get_avg_acc()
+        abs_dev = [abs((Constants.TOLERANCE[n - 1] if n != 0 else 0) - tp) * count_list[n] for n in range(4)]
+        avg_dev = sum(abs_dev) / self.get_total_notes()
+        return avg_dev
 
 
 class NoteManager:

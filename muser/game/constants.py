@@ -22,6 +22,7 @@ class Constants:
         LEFT = (-1, 0)
         RIGHT = (1, 0)
         DIRECTIONS = [UP, DOWN, LEFT, RIGHT]
+
         INITIALS = [
             (0.5, 1),
             (0.5, 0),
@@ -68,7 +69,8 @@ class Constants:
         @staticmethod
         def DistanceToCenter(pos: list) -> int:
             center: tuple = Constants.PlayThrough.CENTER()
-            return math.sqrt((pos[0] - center[0]) ** 2 + (pos[1] - center[1]) ** 2)
+            return math.sqrt(
+                (pos[0] - center[0]) ** 2 + (pos[1] - center[1]) ** 2)
 
         @staticmethod
         def CENTER() -> tuple:
@@ -103,18 +105,15 @@ class Constants:
             expected_time: float = offset + pass_time
             time_diff: float = abs(expected_time - total_time)
             touched: bool = Config.TOUCHED[side]
-            tolerance: list = [
-                dist * 20
-                for dist in Constants.PlayThrough.NoteIndicator.INDICATORS()
-                [:: -1]]
+
             if touched:
-                if time_diff <= tolerance[0]:
+                if time_diff <= Constants.TOLERANCE[0]:
                     return Constants.PlayThrough.NoteIndicator.PERFECT
-                elif time_diff <= tolerance[1]:
+                elif time_diff <= Constants.TOLERANCE[1]:
                     return Constants.PlayThrough.NoteIndicator.GREAT
-                elif time_diff <= tolerance[2]:
+                elif time_diff <= Constants.TOLERANCE[2]:
                     return Constants.PlayThrough.NoteIndicator.BAD
-            if total_time - expected_time > tolerance[2]:
+            if total_time - expected_time > Constants.TOLERANCE[2]:
                 return Constants.PlayThrough.NoteIndicator.MISS
             return Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
 
@@ -165,3 +164,9 @@ class Constants:
                 if score >= Constants.Result.Grade.S:
                     res = Frames.Result.S
                 return res
+
+
+Constants.TOLERANCE: list = [
+    dist * 20
+    for dist in Constants.PlayThrough.NoteIndicator.INDICATORS()
+    [:: -1]]

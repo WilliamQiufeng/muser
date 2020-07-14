@@ -259,7 +259,7 @@ class Casts:
 
         @util.timeit(without=(-1, 30))
         def update(self):
-            Config.TOUCHED = [False for _ in range(4)]
+            Config.TOUCHED = [False] * 16
             for upd in Casts.PlayThrough.UPDATES:
                 upd.update()
             # logger.print(f"last: {Config.TOUCHED}")
@@ -335,7 +335,8 @@ class Casts:
                 score_pos = util.grid(
                     Constants.Cast.WIDTH, Constants.Cast.HEIGHT, 5, 16, 2, 11)
                 count_prop = self.count.get_prop()
-                pyxel.text(*tp_pos, "TP: {0:.2f}%".format(self.tp), 13)
+                # Average Accuracy
+                pyxel.text(*tp_pos, "AA: {0:.2f}%".format(self.tp), 13)
                 pyxel.text(*score_pos, f"Score: {self.score}", 14)
                 for x in range(4):
                     key = list(count_prop.keys())[x]
