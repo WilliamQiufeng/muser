@@ -5,8 +5,8 @@ from pyglet import media
 
 class Config:
     SHEET_PATHS = [game_config.GLOB_CONFIG.assets.get("sheets")]
-    TOUCHED = [False] * 12
-    ARROW_COLORS_DEFAULT = [5] * 12
+    TOUCHED = [False] * 16
+    ARROW_COLORS_DEFAULT = [5] * 16
     ARROW_COLORS = copy.copy(ARROW_COLORS_DEFAULT)
     PLAYER: media.Player = media.Player()
 
