@@ -54,7 +54,13 @@ class PositionedNote(BaseNote):
                 self.prop["pass_time"], total_time
             )
             if result != Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND:
-                if Config.TOUCHED[self.prop["side"]] or result == Constants.PlayThrough.NoteIndicator.MISS:
+                if Config.MOD_AUTO:
+                    if result == Constants.PlayThrough.NoteIndicator.PERFECT:
+                        self.finished = True
+                        self.in_scene = False
+                        self.result = Constants.PlayThrough.NoteIndicator.PERFECT
+                        return self.result
+                elif Config.TOUCHED[self.prop["side"]] or result == Constants.PlayThrough.NoteIndicator.MISS:
 
                     self.finished = True
                     self.in_scene = False

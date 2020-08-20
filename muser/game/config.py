@@ -9,6 +9,7 @@ class Config:
     ARROW_COLORS_DEFAULT = [5] * 16
     ARROW_COLORS = copy.copy(ARROW_COLORS_DEFAULT)
     PLAYER: media.Player = media.Player()
+    MOD_AUTO: bool = False
 
     @staticmethod
     def release_player():

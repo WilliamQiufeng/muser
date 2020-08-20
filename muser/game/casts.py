@@ -123,7 +123,15 @@ class Casts:
             KeyListener(
                 pyxel.KEY_S,
                 on_click=lambda: Casts.LevelSelection.settings(
-                    Config.CAST))]
+                    Config.CAST)),
+            KeyListener(
+                pyxel.KEY_A,
+                on_click=lambda: Casts.LevelSelection.toggle_auto_mod()
+            )]
+        
+        @staticmethod
+        def toggle_auto_mod():
+            Config.MOD_AUTO = not Config.MOD_AUTO
 
         @staticmethod
         def increase(obj, inc):
@@ -186,6 +194,7 @@ class Casts:
             pyxel.text(0, 12, "Play            [Space]", 12)
             pyxel.text(0, 18, "Settings        [S]", 12)
             pyxel.text(0, 24, "Quit            [Q]", 12)
+            pyxel.text(0, 30, f"Auto: {str(Config.MOD_AUTO).ljust(5)}     [A]", 12)
             for btn in Casts.LevelSelection.BUTTONS:
                 if "draw" in dir(btn):
                     btn.draw()
@@ -241,7 +250,8 @@ class Casts:
 
         @util.timeit(without=(-1, 30))
         def update(self):
-            Config.TOUCHED = [False] * 16
+            # If Config.MOD_AUTO, all touched is set to true
+            Config.TOUCHED = [Config.MOD_AUTO] * 16
             for upd in Casts.PlayThrough.UPDATES:
                 upd.update()
             # logger.print(f"last: {Config.TOUCHED}")
@@ -259,6 +269,8 @@ class Casts:
         @util.timeit(without=(-1, 30))
         def draw(self):
             self.note_manager.draw()
+            if Config.MOD_AUTO:
+                pyxel.text(232, 250, "AUTO", 12)
 
         def is_finished(self):
             return self.finished or self.quit
