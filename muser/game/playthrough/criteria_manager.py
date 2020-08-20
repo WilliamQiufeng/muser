@@ -82,6 +82,9 @@ def get_pos_in_progress(note_target, progress: float):
     """
 
     side = note_target.prop["side"]
+    if len(criterias) - 1 < side:
+        print("???", side, criterias)
+        return (128, 128)
     criteria = criterias[side]
     lock_effect = criteria[0]
     lock_effect_offset_x, lock_effect_offset_y = lock_effect.note_prop["offset_pos"]
