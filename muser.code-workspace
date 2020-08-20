@@ -13,7 +13,7 @@
 	"settings": {
 		"code-runner.cwd": "/Users/Shared/williamye/program/pyxel_projects/muser/muser",
 		"code-runner.fileDirectoryAsCwd": true,
-		"python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python37_64\\python.exe",
+		"python.pythonPath": "C:\\Users\\1\\AppData\\Local\\Programs\\Python\\Python38\\python.exe",
 		"editor.fontFamily": "'Cascadia Code', Consolas, 'Courier New', monospace",
 		"python.linting.flake8Args": [
 			"--ignore=E501,E265"
@@ -21,6 +21,10 @@
 		"python.testing.pytestArgs": [
 			"--capture=tee-sys"
 		],
-		"python.testing.pytestEnabled": true
+		"python.testing.pytestEnabled": true,
+		"files.associations": {
+			"*.sheetmeta": "json",
+			"*.sheet": "json"
+		}
 	}
 }
