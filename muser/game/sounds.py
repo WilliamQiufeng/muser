@@ -29,8 +29,9 @@
 
 from pyglet import media
 import game_config as game_config
-from game.config import Config
+# from game.config import Config
 import logger
+# from pyglet import media
 
 
 class Sound:
@@ -40,13 +41,23 @@ class Sound:
 
     def play(self):
         try:
-            Config.release_player()
-            Config.PLAYER = self.sound.play()
+            Sounds.release_player()
+            Sounds.SOUND_PLAYER = self.sound.play()
         except Exception:
             logger.print("Error loading sound", exc_info=True)
 
 
 class Sounds:
+    SOUND_PLAYER: media.Player = media.Player()
+
+    @staticmethod
+    def release_player():
+        Sounds.SOUND_PLAYER.pause()
+        Sounds.SOUND_PLAYER.delete()
+
+    class PlayThrough:
+        hit = Sound(game_config.GLOB_CONFIG.assets.get("sounds/Hat Basic.wav"))
+
     class Grade:
         A = Sound(
             game_config.GLOB_CONFIG.assets.get("sounds/A.flac"))

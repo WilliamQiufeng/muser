@@ -236,6 +236,7 @@ class Casts:
         @staticmethod
         def touch(side: int):
             Config.TOUCHED[side] = True
+            Sounds.PlayThrough.hit.play()
             # logger.print(Config.TOUCHED)
 
         def __init__(self, sheet: SheetReader, music_source):

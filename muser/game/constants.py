@@ -116,6 +116,21 @@ class Constants:
             if total_time - expected_time > Constants.TOLERANCE[2]:
                 return Constants.PlayThrough.NoteIndicator.MISS
             return Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
+    
+        @staticmethod
+        def AutoIsPerfect(
+                side: int, offset: float, pass_time: float, total_time: float):
+            expected_time: float = offset + pass_time
+            time_diff: float = abs(expected_time - total_time)
+            touched: bool = Config.TOUCHED[side]
+
+            if touched:
+                if time_diff <= 20:
+                    return Constants.PlayThrough.NoteIndicator.PERFECT
+            # Auto can't handle this!!! WTF!!!!
+            if total_time - expected_time > Constants.TOLERANCE[2]:
+                return Constants.PlayThrough.NoteIndicator.MISS
+            return Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND
 
         @staticmethod
         def IndicatorRange(side: int, pos: list) -> int:

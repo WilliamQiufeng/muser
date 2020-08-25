@@ -86,6 +86,10 @@ class NoteManager:
         self.score: int = 0
         self.combo: int = 0
         self.draw_default_criteria: bool = True
+        # Basically, when a note is finished, this is used to draw a rect around it for a frame
+        # since there should only be two frames, we dont need to generalise it
+        self.res_frames: list = []
+        self.res_frames2: list = []
 
         self.counter: Counter = Counter()
         self.last_indicated_frame_pos = util.grid(
@@ -192,6 +196,8 @@ class NoteManager:
                     self.counter.misses += 1
                 to_be_removed.append(note)
         for tbr_element in to_be_removed:
+            tbr_element: PositionedNote = tbr_element
+            self.res_frames.append([tbr_element.pos, tbr_element.result])
             self.notes.remove(tbr_element)
         if res != Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND:
             self.last_indicator = res
@@ -215,6 +221,14 @@ class NoteManager:
 
         # Draw last indicator result
         self.last_indicated_frame.draw(*self.last_indicated_frame_pos)
+
+        # Draw note finish frames
+        for tbr in self.res_frames:
+            pyxel.rectb(tbr[0][0] - 4, tbr[0][1] - 4, 8, 8, 6)
+        for tbr in self.res_frames2:
+            pyxel.rectb(tbr[0][0] - 4, tbr[0][1] - 4, 8, 8, 6)
+        self.res_frames2 = list(self.res_frames)
+        self.res_frames.clear()
 
         # Draw notes
         for note in self.notes:

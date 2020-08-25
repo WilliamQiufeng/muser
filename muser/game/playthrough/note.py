@@ -3,6 +3,7 @@ from game.constants import Constants
 from game.config import Config
 from game.frames import Frames
 from game.playthrough.base_note import BaseNote
+from game.sounds import Sounds
 import game.playthrough.criteria_manager as cm
 import math
 import copy
@@ -55,10 +56,15 @@ class PositionedNote(BaseNote):
             )
             if result != Constants.PlayThrough.NoteIndicator.NOT_IN_BOUND:
                 if Config.MOD_AUTO:
+                    result = Constants.PlayThrough.AutoIsPerfect(
+                        self.prop["side"], self.prop["offset"],
+                        self.prop["pass_time"], total_time
+                    )
                     if result == Constants.PlayThrough.NoteIndicator.PERFECT:
                         self.finished = True
                         self.in_scene = False
                         self.result = Constants.PlayThrough.NoteIndicator.PERFECT
+                        Sounds.PlayThrough.hit.play()
                         return self.result
                 elif Config.TOUCHED[self.prop["side"]] or result == Constants.PlayThrough.NoteIndicator.MISS:
 
