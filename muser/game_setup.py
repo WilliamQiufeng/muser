@@ -61,7 +61,7 @@ print("Got it.")
 if install_required_libraries:
     print("Installing required libraries...")
     util.pip_install(
-        "--user pyxel>=1.4 mido pyglet pynput requests".split(" "))
+        "--user pyxel>=1.4 mido pysdl2-dll pyglet pynput requests".split(" "))
     print("Library installation complete.")
 
 if install_game_config:
@@ -77,26 +77,6 @@ if install_default_sheets:
     except Exception:
         print("[ERROR] 'requests' lib not installed. Please install this lib.")
         exit()
-    # git cat-file -p `git describe --abbrev=0` | tail -n +6
-    # expands into:
-    #   $a = git describe --abbrev=0
-    #   git cat-file -p $a > .tmpdesc
-    #   tail -n +6 .tmpdesc
-    #   rm .tmpdesc
-
-    # command = ['git', 'describe', '--abbrev=0']
-    # latest_tag = util.cmd(command)[0][:-1]
-    # # tag_desc = util.cmd(["git", "cat-file", "-p", latest_tag])[0]
-    # tag_desc = util.cmd(["git", "cat-file", "-p", util.version])[0]
-    # tmp = io.open('.tmpdesc', 'w')
-    # tmp.write(tag_desc)
-    # tmp.close()
-    # message = util.cmd(['tail', '-n', '+6', '.tmpdesc'])[0]
-    # os.remove('.tmpdesc')
-
-    # links = util.find_links(message)
-    # print("Links found:", links)
-    # print("Choosing the first link:", links[0])
     origin_link = "https://api.github.com/repos/Qiufeng54321/muser/releases/latest"
 
     mirror_link = "https://main.williamcraft.workers.dev/?target=get_latest_version"
