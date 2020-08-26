@@ -10,7 +10,7 @@ import shutil
 import logger
 
 
-version = "v1.5-pre1"
+version = "v1.5.1"
 
 
 def copy_multiple(src: list, dest: str):
