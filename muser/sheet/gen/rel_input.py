@@ -46,40 +46,5 @@ class SourceSheetInput:
         #   self.tempo (beat)
         self.beat_interval = 60000 / self.tempo
 
-    # def process_all(self):
-    #     self.pre()
-    #     self.process()
-    #     self.process_notes(
-    #         self.preprocess["notes"]
-    #         if "notes" in self.preprocess.keys() else[])
-
-    # def process_notes(self, note_sets):
-    #     cur_beat = 0
-    #     self.abs_notes = []
-    #     tempo = self.tempo
-    #     beat_interval = self.beat_interval
-    #     min_offset = 100000000
-    #     for note_set in note_sets:
-    #         for note in note_set:
-    #             if note.type == NoteType.WAIT:
-    #                 cur_beat += note.length
-    #             elif note.type == NoteType.NOTE:
-    #                 abs_note = AbsNote(cur_beat - note.speed,
-    #                                    note.length, note.speed)
-    #                 abs_note.absolutify(beat_interval)
-    #                 min_offset = min(min_offset, abs_note.offset)
-    #                 self.abs_notes.append(abs_note)
-    #             elif note.type == NoteType.TEMPO:
-    #                 #abs_note = ChangeTempo(note.tempo, cur_beat * beat_interval)
-    #                 # self.abs_notes.append(abs_note)
-    #                 beat_interval = 60000 / note.tempo
-    #                 tempo = note.tempo
-    #     self.music_offset = -min_offset if min_offset < 0 else 0
-    #     if min_offset < 0:
-    #         for note in self.abs_notes:
-    #             if isinstance(note, AbsNote):
-    #                 note.offset -= min_offset
-    #     self.abs_notes.sort(key=lambda t: t.offset)
-
     def to_abs(self):
         return AbsSheetOutput(self).__repr__()

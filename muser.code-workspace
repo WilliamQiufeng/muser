@@ -13,7 +13,7 @@
 	"settings": {
 		"code-runner.cwd": "/Users/Shared/williamye/program/pyxel_projects/muser/muser",
 		"code-runner.fileDirectoryAsCwd": true,
-		"python.pythonPath": "C:\\Users\\1\\AppData\\Local\\Programs\\Python\\Python38\\python.exe",
+		"python.pythonPath": "/usr/local/opt/python@3.8/bin/python3.8",
 		"editor.fontFamily": "'Cascadia Code', Consolas, 'Courier New', monospace",
 		"python.linting.flake8Args": [
 			"--ignore=E501,E265"

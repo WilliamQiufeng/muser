@@ -58,42 +58,42 @@ class GameConfig:
             self.config: dict = {}
 
     def proc(self):
-        self.config["asset_path"]: str = os.path.abspath(
+        self.config["asset_path"] = os.path.abspath(
             self.get("asset_path", default=find("assets", ".")))
-        self.config["separator"]: str = self.get(
+        self.config["separator"] = self.get(
             "separator", default=os.path.sep)
-        self.config["fps"]: int = self.get("fps", default=60)
-        self.config["rel_music_offset"]: float = self.get(
+        self.config["fps"] = self.get("fps", default=60)
+        self.config["rel_music_offset"] = self.get(
             "rel_music_offset", default=0)
-        self.config["full_screen"]: bool = self.get(
+        self.config["full_screen"] = self.get(
             "full_screen", default=False)
-        self.config["control.up_arrow"]: bool = self.get(
+        self.config["control.up_arrow"] = self.get(
             "control.up_arrow", default="w")
-        self.config["control.down_arrow"]: bool = self.get(
+        self.config["control.down_arrow"] = self.get(
             "control.down_arrow", default="s")
-        self.config["control.left_arrow"]: bool = self.get(
+        self.config["control.left_arrow"] = self.get(
             "control.left_arrow", default="a")
-        self.config["control.right_arrow"]: bool = self.get(
+        self.config["control.right_arrow"] = self.get(
             "control.right_arrow", default="d")
-        self.config["control.up_arrow2"]: bool = self.get(
+        self.config["control.up_arrow2"] = self.get(
             "control.up_arrow2", default="i")
-        self.config["control.down_arrow2"]: bool = self.get(
+        self.config["control.down_arrow2"] = self.get(
             "control.down_arrow2", default="k")
-        self.config["control.left_arrow2"]: bool = self.get(
+        self.config["control.left_arrow2"] = self.get(
             "control.left_arrow2", default="j")
-        self.config["control.right_arrow2"]: bool = self.get(
+        self.config["control.right_arrow2"] = self.get(
             "control.right_arrow2", default="l")
-        self.config["control.RD_arrow"]: bool = self.get(
+        self.config["control.RD_arrow"] = self.get(
             "control.RD_arrow", default="r")
-        self.config["control.LD_arrow"]: bool = self.get(
+        self.config["control.LD_arrow"] = self.get(
             "control.LD_arrow", default="t")
-        self.config["control.RU_arrow"]: bool = self.get(
+        self.config["control.RU_arrow"] = self.get(
             "control.RU_arrow", default="f")
-        self.config["control.LU_arrow"]: bool = self.get(
+        self.config["control.LU_arrow"] = self.get(
             "control.LU_arrow", default="g")
-        self.config["control.SEL_L"]: bool = self.get(
+        self.config["control.SEL_L"] = self.get(
             "control.SEL_L", default="left")
-        self.config["control.SEL_R"]: bool = self.get(
+        self.config["control.SEL_R"] = self.get(
             "control.SEL_R", default="right")
 
         import pyxel
